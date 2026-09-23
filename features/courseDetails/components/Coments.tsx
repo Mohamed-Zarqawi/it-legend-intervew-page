@@ -32,9 +32,9 @@ const Comments = () => {
   return (
     <div>
       {/* Comments */}
-      <div className="bg-card mt-8 flex flex-col gap-2 px-4 md:mt-12 md:gap-5 md:px-0">
+      <div className="mt-8 flex flex-col gap-2 px-4 md:mt-12 md:gap-5 md:px-0">
         <div className="text-xl font-medium md:text-2xl">Comments</div>
-        <div className="flex flex-col justify-between divide-y">
+        <div className="bg-card flex flex-col justify-between divide-y md:px-6">
           {/* card */}
 
           {commentsMenu.map((comment, i) => {

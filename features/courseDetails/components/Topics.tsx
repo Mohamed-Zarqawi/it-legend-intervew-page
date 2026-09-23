@@ -82,7 +82,10 @@ const Topics = () => {
         {/* Card */}
         {courseDetailsMenu.map((card, i) => {
           return (
-            <div key={i} className="border-chart-1 mt-12 w-sm border px-4 py-6">
+            <div
+              key={i}
+              className="border-chart-1 mt-12 w-sm rounded-sm border px-4 py-6"
+            >
               <div className="flex flex-col gap-2">
                 <div className="font-medium">Week {card.week}</div>
                 <div className="text-chart-2 text-sm">{card.description}</div>
