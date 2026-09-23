@@ -5,7 +5,7 @@ import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
 import { FileText, Lock } from "lucide-react";
 
-const Topics = () => {
+const Topics = ({ fullScreen }: { fullScreen?: boolean }) => {
   const courseDetailsMenu = [
     {
       week: "1 - 4",
@@ -67,7 +67,9 @@ const Topics = () => {
   return (
     <div>
       {/* Right Side */}
-      <div className="hidden w-full max-w-fit min-w-fit md:block md:pl-14">
+      <div
+        className={`hidden w-full max-w-fit min-w-fit md:pl-14 ${fullScreen == true ? "md:hidden" : "md:block"} `}
+      >
         {/* header */}
         <div>
           <div className="text-xl font-medium">Topics for This Course</div>
@@ -82,10 +84,7 @@ const Topics = () => {
         {/* Card */}
         {courseDetailsMenu.map((card, i) => {
           return (
-            <div
-              key={i}
-              className="border-chart-1 mt-12 w-sm rounded-sm border px-4 py-6"
-            >
+            <div key={i} className="bg-card mt-12 w-sm rounded-sm px-4 py-6">
               <div className="flex flex-col gap-2">
                 <div className="font-medium">Week {card.week}</div>
                 <div className="text-chart-2 text-sm">{card.description}</div>
