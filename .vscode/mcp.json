@@ -1,0 +1,14 @@
+{
+	"servers": {
+		"console-ninja": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"-c",
+				"node ~/.console-ninja/mcp/"
+			]
+		}
+	},
+	"inputs": []
+}

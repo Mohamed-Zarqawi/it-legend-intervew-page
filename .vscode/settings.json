@@ -1,0 +1,21 @@
+// {
+//   "editor.codeActionsOnSave": {
+//     "source.organizeImports": "always"
+//   }
+// }
+
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "tailwindSorter.sortOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "always"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "js/ts.experimental.useTsgo": false
+}
