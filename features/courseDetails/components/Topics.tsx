@@ -76,6 +76,7 @@ const Topics = ({ fullScreen }: { fullScreen?: boolean }) => {
 
           <Slider
             defaultValue={[63]}
+            disabled
             max={100}
             className="mx-auto mt-10 w-full min-w-xs"
           />

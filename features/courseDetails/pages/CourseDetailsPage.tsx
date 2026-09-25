@@ -17,7 +17,7 @@ import {
   MessageCircleQuestionMark,
   MessageSquarePlus,
 } from "lucide-react";
-import Comments from "../components/Coments";
+import Comments from "../components/Comments";
 import LeaderBoard from "../components/LeaderBoard";
 import Materials from "../components/Materials";
 import MobileTopics from "../components/MobileTopics";
@@ -116,14 +116,6 @@ const CourseDetailsPage = () => {
               <MessageCircleQuestionMark strokeWidth={2} />
             </Button>
 
-            {/* <Button
-              variant={"ghost"}
-              size={"icon-lg"}
-              className="bg-card border-border rounded-full!"
-              // onClick={}
-            >
-              <Podium strokeWidth={2} />
-            </Button> */}
             <LeaderBoard />
           </div>
 

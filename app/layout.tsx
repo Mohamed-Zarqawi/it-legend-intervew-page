@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
+import Providers from "./providers";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -34,7 +36,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         "scroll-smooth",
       )}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Providers>
+          {children}
+          <Toaster
+            position="bottom-right"
+            richColors
+            className="hidden md:block"
+          />
+        </Providers>
+      </body>
     </html>
   );
 }
