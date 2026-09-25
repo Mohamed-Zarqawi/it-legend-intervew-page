@@ -16,9 +16,9 @@ import {
   LaptopMinimal,
   MessageCircleQuestionMark,
   MessageSquarePlus,
-  Podium,
 } from "lucide-react";
 import Comments from "../components/Coments";
+import LeaderBoard from "../components/LeaderBoard";
 import Materials from "../components/Materials";
 import MobileTopics from "../components/MobileTopics";
 import Topics from "../components/Topics";
@@ -116,14 +116,15 @@ const CourseDetailsPage = () => {
               <MessageCircleQuestionMark strokeWidth={2} />
             </Button>
 
-            <Button
+            {/* <Button
               variant={"ghost"}
               size={"icon-lg"}
               className="bg-card border-border rounded-full!"
               // onClick={}
             >
               <Podium strokeWidth={2} />
-            </Button>
+            </Button> */}
+            <LeaderBoard />
           </div>
 
           {/* Course Materials */}
