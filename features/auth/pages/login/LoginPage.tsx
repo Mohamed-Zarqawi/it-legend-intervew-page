@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/types/auth/login";
 import { useFormik } from "formik";
@@ -31,12 +32,12 @@ const LoginPage = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="border-primary md:bg-card flex h-fit w-130 flex-col items-center justify-center gap-7 rounded-3xl md:border md:p-12"
+          className="border-border bg-card text-card-foreground flex h-fit w-130 flex-col items-center justify-center gap-7 rounded-3xl md:border md:p-12 md:shadow-sm"
           noValidate
         >
           {/* 1 */}
           <div className="flex flex-col items-center justify-center gap-3 md:gap-4">
-            <div className="text-primary text-center text-2xl md:text-4xl">
+            <div className="text-foreground text-center text-2xl font-bold md:text-4xl">
               WELCOME BACK
             </div>
 
@@ -76,7 +77,7 @@ const LoginPage = () => {
 
             <Link
               href="/auth/forgotPassword"
-              className="text-primary hover:text-chart-3 text-xs"
+              className="text-muted-foreground hover:text-primary text-xs transition-colors"
             >
               Forgot password?
             </Link>
@@ -85,21 +86,20 @@ const LoginPage = () => {
           {/* 3 */}
           <div className="flex w-full flex-col items-center justify-center gap-4">
             <Button
-              size={"none"}
               disabled={!dirty || isLogin}
               isPending={isLogin}
               pendingText="Wait . . ."
               type="submit"
-              className="h-13 w-full rounded-lg px-4 py-4 text-center hover:cursor-pointer md:h-15"
+              className="w-full"
             >
               LOG IN
             </Button>
 
-            <div className="text-sm md:text-base">
+            <div className="text-muted-foreground text-sm md:text-base">
               Don&apos;t have an account?{" "}
               <Link
                 href="/auth/signup"
-                className="text-primary hover:text-chart-3 transition-colors duration-300"
+                className="text-primary hover:text-primary/80 font-medium transition-colors duration-300"
               >
                 Sign Up
               </Link>

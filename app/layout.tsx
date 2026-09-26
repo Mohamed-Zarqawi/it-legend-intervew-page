@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Outfit } from "next/font/google";
@@ -36,17 +37,25 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         outfit.variable,
         "scroll-smooth",
       )}
+      suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">
-        <Providers>
-          <Header />
-          {children}
-          <Toaster
-            position="bottom-right"
-            richColors
-            className="hidden md:block"
-          />
-        </Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            <Header />
+            {children}
+            <Toaster
+              position="bottom-right"
+              richColors
+              className="hidden md:block"
+            />
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -61,11 +61,11 @@ const SignUpPage = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="border-primary md:bg-card flex h-fit w-135 flex-col items-center justify-center gap-8 rounded-3xl md:border md:p-12"
+          className="border-border bg-card text-card-foreground flex h-fit w-135 flex-col items-center justify-center gap-8 rounded-3xl md:border md:p-12 md:shadow-sm"
         >
           {/* 1 */}
           <div className="flex w-full flex-col items-center justify-center gap-3 md:gap-4">
-            <div className="text-primary text-center text-2xl md:text-4xl">
+            <div className="text-foreground text-center text-2xl font-bold md:text-4xl">
               JOIN THE ELITE
             </div>
             <div className="text-muted-foreground text-center text-sm md:text-base">
@@ -131,19 +131,18 @@ const SignUpPage = () => {
           <div className="flex w-full flex-col items-center justify-center gap-4">
             <Button
               type="submit"
-              size={"none"}
               isPending={isSignUp}
               pendingText="Registering"
               disabled={!dirty || isSignUp}
-              className="bg-primary h-13 w-full rounded-lg px-4 py-4 text-center hover:cursor-pointer md:h-15"
+              className="w-full"
             >
               CREATE ACCOUNT
             </Button>
-            <div className="text-sm md:text-base">
+            <div className="text-muted-foreground text-sm md:text-base">
               Already a member?{" "}
               <Link
                 href="/auth/login"
-                className="text-primary hover:text-chart-2 transition-colors duration-300"
+                className="text-primary hover:text-primary/80 font-medium transition-colors duration-300"
               >
                 Log In
               </Link>

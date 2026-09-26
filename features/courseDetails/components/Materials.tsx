@@ -32,11 +32,16 @@ const Materials = () => {
   ];
   return (
     <div className="mt-8 flex flex-col gap-2 px-4 md:mt-8 md:gap-5 md:px-0">
-      <div className="text-xl font-medium md:text-2xl">Course Materials</div>
-      <div className="bg-card border-chart-1 flex gap-3 rounded-4xl border px-4 py-3 md:px-7">
+      <div className="text-foreground text-xl font-medium md:text-2xl">
+        Course Materials
+      </div>
+      <div className="bg-card text-card-foreground border-border flex gap-3 rounded-4xl border px-4 py-3 md:px-7">
         {courseMaterialsMenu.map((sections, i) => {
           return (
-            <div key={i} className="flex w-full flex-col divide-y">
+            <div
+              key={i}
+              className="border-border divide-border flex w-full flex-col divide-y"
+            >
               {sections.section.map((section, j) => {
                 return (
                   <div
@@ -44,10 +49,14 @@ const Materials = () => {
                     className="flex items-center justify-between py-3"
                   >
                     <div className="flex items-center gap-2">
-                      <section.icon className="size-5" />
-                      <span className="text-chart-4">{section.title}:</span>
+                      <section.icon className="text-muted-foreground size-5" />
+                      <span className="text-muted-foreground font-medium">
+                        {section.title}:
+                      </span>
                     </div>
-                    <div className="text-end">{section.data}</div>
+                    <div className="text-foreground text-end font-medium">
+                      {section.data}
+                    </div>
                   </div>
                 );
               })}

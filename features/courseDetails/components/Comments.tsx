@@ -53,8 +53,10 @@ const Comments = () => {
     <div>
       {/* Comments */}
       <div className="mt-8 flex flex-col gap-2 px-4 md:mt-8 md:gap-5 md:px-0">
-        <div className="text-xl font-medium md:text-2xl">Comments</div>
-        <div className="bg-card border-chart-1 flex flex-col justify-between divide-y rounded-4xl border px-4 md:px-6">
+        <div className="text-foreground text-xl font-medium md:text-2xl">
+          Comments
+        </div>
+        <div className="bg-card text-card-foreground border-border divide-border flex flex-col justify-between divide-y rounded-4xl border px-4 md:px-6">
           {/* card */}
 
           {comments?.map((comment, i) => {
@@ -70,20 +72,22 @@ const Comments = () => {
                     alt="comment photo"
                     width={300}
                     height={300}
-                    className="h-12 min-h-12 w-12 min-w-12 rounded-full object-cover object-center md:h-15 md:min-h-15 md:w-15 md:min-w-15"
+                    className="border-border h-12 min-h-12 w-12 min-w-12 rounded-full border object-cover object-center md:h-15 md:min-h-15 md:w-15 md:min-w-15"
                   />
                 </div>
 
                 {/* right */}
                 <div>
-                  <div className="text-chart-3 text-base font-medium">
+                  <div className="text-foreground text-base font-semibold">
                     {comment.user_name}
                   </div>
-                  <div className="text-chart-2 mt-1 text-xs font-medium">
+                  <div className="text-muted-foreground mt-1 text-xs font-medium">
                     {GetValidDate(comment.created_at).formattedDate}
                   </div>
 
-                  <p className="text-chart-2 mt-3 text-sm">{comment.comment}</p>
+                  <p className="text-card-foreground mt-3 text-sm leading-relaxed">
+                    {comment.comment}
+                  </p>
                 </div>
               </div>
             );
@@ -100,9 +104,9 @@ const Comments = () => {
               value={values.comment}
               onChange={handleChange}
               name="comment"
-              placeholder="Write a comment"
+              placeholder="Write a comment..."
               rows={20}
-              className="bg-card border-chart-1! h-35 rounded-4xl border drop-shadow-lg"
+              className="bg-card text-card-foreground border-border! focus-visible:ring-ring placeholder:text-muted-foreground h-35 rounded-4xl border p-4 drop-shadow-sm"
             />
           </Field>
 
@@ -110,7 +114,7 @@ const Comments = () => {
             size={"lg"}
             type="submit"
             disabled={!dirty}
-            className="mt-6 bg-[#41B69D] px-10 py-5 hover:cursor-pointer hover:bg-[#41B67D]"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 px-10 py-5 transition-colors hover:cursor-pointer"
           >
             Submit Review <MoveRight className="size-4" />
           </Button>

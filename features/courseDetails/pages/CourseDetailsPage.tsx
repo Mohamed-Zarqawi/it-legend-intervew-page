@@ -37,19 +37,22 @@ const CourseDetailsPage = () => {
 
   console.log(fullScreen);
   return (
-    <div className="mt-4">
+    <div className="text-foreground mt-4">
       <div className="flex flex-col gap-6 px-2 md:mx-10 md:px-0">
-        <div className="text-chart-3 flex items-end">
-          Home <ChevronRight className="size-5" /> Courses{" "}
-          <ChevronRight className="size-5" /> Course Details
+        <div className="text-muted-foreground flex items-center gap-1 text-sm">
+          <span>Home</span>
+          <ChevronRight className="size-4" />
+          <span>Courses</span>
+          <ChevronRight className="size-4" />
+          <span className="text-foreground font-medium">Course Details</span>
         </div>
-        <div className="text-3xl font-medium md:text-4xl md:font-semibold">
+        <div className="text-foreground text-3xl font-medium md:text-4xl md:font-semibold">
           Starting SEO as your Home
         </div>
       </div>
 
       <div
-        className={`bg-secondary mt-3 flex flex-col justify-between rounded-3xl md:mx-10 md:mt-8 md:pb-4 ${fullScreen == true ? "md:flex-col" : "md:flex-row"}`}
+        className={`bg-background mt-3 flex flex-col justify-between rounded-3xl md:mx-10 md:mt-8 md:pb-4 ${fullScreen == true ? "md:flex-col" : "md:flex-row"}`}
       >
         {/* Left Side */}
         <div className="relative mb-25 w-full">
@@ -72,7 +75,7 @@ const CourseDetailsPage = () => {
 
               <Button
                 size={"icon-lg"}
-                className="bg-chart-4 absolute top-5 right-5 z-20 hidden cursor-pointer rounded-full! p-4.5! backdrop-blur-md md:flex"
+                className="bg-primary/80 text-primary-foreground hover:bg-primary absolute top-5 right-5 z-20 hidden cursor-pointer rounded-full! p-4.5! backdrop-blur-md transition-colors md:flex"
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -89,7 +92,7 @@ const CourseDetailsPage = () => {
             <Button
               variant={"ghost"}
               size={"icon-lg"}
-              className="bg-card border-border rounded-full! border"
+              className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
               onClick={() => scrollToSection(commentsRef)}
               aria-label="go to comments"
             >
@@ -99,11 +102,11 @@ const CourseDetailsPage = () => {
             <Button
               variant={"ghost"}
               size={"icon-lg"}
-              className="bg-card border-border rounded-full!"
+              className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
               onClick={() => {
                 scrollToSection(mobileTopicsRef);
               }}
-              aria-label="go to comments"
+              aria-label="go to info"
             >
               <Info />
             </Button>
@@ -111,7 +114,7 @@ const CourseDetailsPage = () => {
             <Button
               variant={"ghost"}
               size={"icon-lg"}
-              className="bg-card border-border rounded-full!"
+              className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
             >
               <MessageCircleQuestionMark strokeWidth={2} />
             </Button>

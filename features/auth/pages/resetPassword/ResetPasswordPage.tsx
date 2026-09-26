@@ -34,11 +34,11 @@ export default function ResetPasswordPage() {
       <form onSubmit={handleSubmit}>
         <div className="flex h-[calc(100dvh-155px)] items-center justify-center lg:h-[calc(100dvh-185px)]">
           {/* body */}
-          <div className="border-primary flex h-fit w-160 flex-col items-center justify-center gap-7 rounded-3xl md:border md:bg-[#1a1a1a]/20 md:p-12">
+          <div className="border-border bg-card/50 text-card-foreground flex h-fit w-160 flex-col items-center justify-center gap-7 rounded-3xl backdrop-blur-sm md:border md:p-12 md:shadow-lg">
             {/* 1 */}
 
             <div className="flex flex-col items-center justify-center gap-3 md:gap-4">
-              <div className="text-primary text-center text-2xl md:text-4xl">
+              <div className="text-foreground text-center text-2xl font-bold tracking-tight md:text-4xl">
                 RESET PASSWORD
               </div>
               <div className="text-muted-foreground text-center text-sm md:text-base">
@@ -69,13 +69,10 @@ export default function ResetPasswordPage() {
               <div className="flex w-full flex-col items-center justify-center gap-4">
                 <Button
                   type="submit"
-                  variant={"none"}
-                  size={"none"}
                   disabled={!dirty || isReseting}
                   isPending={isReseting}
                   pendingText="UPDATING"
-                  onClick={handleChange}
-                  className="bg-primary hover:bg-secondary h-13 w-full rounded-lg px-4 py-4 text-center hover:cursor-pointer md:h-15"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 h-13 w-full rounded-lg px-4 py-4 text-center font-medium transition-colors hover:cursor-pointer md:h-15"
                 >
                   UPDATE PASSWORD
                 </Button>

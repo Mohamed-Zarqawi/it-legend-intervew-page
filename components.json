@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "radix-mira",
+  "style": "radix-rhea",
   "rsc": true,
   "tsx": true,
   "tailwind": {
@@ -21,7 +21,5 @@
   },
   "menuColor": "default",
   "menuAccent": "subtle",
-  "registries": {
-    "@animate-ui": "https://animate-ui.com/r/{name}.json"
-  }
+  "registries": {}
 }

@@ -70,7 +70,7 @@ const MobileTopics = ({ fullScreen }: { fullScreen?: boolean }) => {
     >
       {/* header */}
       <div>
-        <div className="text-xl font-medium md:text-2xl">
+        <div className="text-foreground text-xl font-medium md:text-2xl">
           Topics for This Course
         </div>
 
@@ -87,11 +87,15 @@ const MobileTopics = ({ fullScreen }: { fullScreen?: boolean }) => {
         return (
           <div
             key={i}
-            className="bg-card border-chart-1 mt-9 rounded-4xl border px-4 py-6 md:mt-8 md:border-0"
+            className="bg-card text-card-foreground border-border mt-9 rounded-4xl border px-4 py-6 md:mt-8 md:border-0"
           >
             <div className="flex flex-col gap-2">
-              <div className="font-medium">Week {card.week}</div>
-              <div className="text-chart-2 text-sm">{card.description}</div>
+              <div className="text-foreground font-semibold">
+                Week {card.week}
+              </div>
+              <div className="text-muted-foreground text-sm">
+                {card.description}
+              </div>
             </div>
 
             <div className="mt-4 flex flex-col pb-2">
@@ -99,26 +103,31 @@ const MobileTopics = ({ fullScreen }: { fullScreen?: boolean }) => {
                 return (
                   <div
                     key={j}
-                    className={`border-chart-1 flex justify-between border-y py-4 ${item.exersise?.question ? "items-start" : "items-center"}`}
+                    className={`border-border flex justify-between border-y py-4 ${item.exersise?.question ? "items-start" : "items-center"}`}
                   >
                     <div className="flex items-center gap-2">
-                      <FileText className="size-4" />
-                      <div className="text-sm">{item.item}</div>
+                      <FileText className="text-muted-foreground size-4" />
+                      <div className="text-card-foreground text-sm">
+                        {item.item}
+                      </div>
                     </div>
                     {item.exersise?.question ? (
                       <div className="flex cursor-pointer flex-col gap-2">
                         <Badge
-                          variant={"default"}
-                          className="min-w-20 bg-emerald-500/10 text-emerald-500"
+                          variant={"outline"}
+                          className="min-w-20 border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                         >
                           {item.exersise.question} QUESTIONS
                         </Badge>
-                        <Badge variant={"destructive"} className="min-w-20">
+                        <Badge
+                          variant={"destructive"}
+                          className="min-w-20 justify-center"
+                        >
                           {item.exersise.time} MINUTES
                         </Badge>
                       </div>
                     ) : (
-                      <Lock className="size-4" />
+                      <Lock className="text-muted-foreground size-4" />
                     )}
                   </div>
                 );

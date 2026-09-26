@@ -76,10 +76,10 @@ const ForgotPasswordPage = () => {
       <form onSubmit={handleSubmit}>
         <div className="flex h-[calc(100dvh-155px)] items-center justify-center lg:h-[calc(100dvh-185px)]">
           {/* body */}
-          <div className="border-primary flex h-fit w-160 flex-col items-center justify-center gap-7 rounded-3xl md:border md:bg-[#1a1a1a]/20 md:p-12">
+          <div className="border-border bg-card/50 text-card-foreground flex h-fit w-160 flex-col items-center justify-center gap-7 rounded-3xl backdrop-blur-sm md:border md:p-12 md:shadow-lg">
             {/* 1 */}
             <div className="flex flex-col items-center justify-center gap-3 md:gap-4">
-              <div className="text-primary text-center text-2xl md:text-4xl">
+              <div className="text-foreground text-center text-2xl font-bold tracking-tight md:text-4xl">
                 FORGOT PASSWORD
               </div>
               <div className="text-muted-foreground text-center text-sm md:text-base">
@@ -88,7 +88,6 @@ const ForgotPasswordPage = () => {
             </div>
 
             {/* 2 */}
-
             <div className="group flex w-full flex-col items-end justify-center gap-4">
               <div className="flex w-full flex-col gap-2">
                 <Input
@@ -110,14 +109,11 @@ const ForgotPasswordPage = () => {
               <div className="flex w-full flex-col items-center justify-center gap-4">
                 <Button
                   type="submit"
-                  variant={"none"}
-                  size={"none"}
                   disabled={!dirty || isEmailSending || cooldown > 0}
-                  onClick={handleChange}
-                  className="bg-primary hover:bg-secondary h-13 w-full rounded-lg px-4 py-4 text-center hover:cursor-pointer md:h-15"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 h-13 w-full rounded-lg px-4 py-4 text-center font-medium transition-colors hover:cursor-pointer md:h-15"
                 >
                   {cooldown > 0
-                    ? `RESEND IN ${cooldown} Second`
+                    ? `RESEND IN ${cooldown} Seconds`
                     : "SEND RECOVERY EMAIL"}
                 </Button>
               </div>
@@ -125,7 +121,7 @@ const ForgotPasswordPage = () => {
 
             <Link
               href="/auth/login"
-              className="hover:text-chart-2 text-muted-foreground flex items-center justify-center gap-1.5 text-sm hover:cursor-pointer md:text-base md:transition-colors md:duration-300"
+              className="text-muted-foreground hover:text-foreground flex items-center justify-center gap-1.5 text-sm font-medium hover:cursor-pointer md:text-base md:transition-colors md:duration-200"
             >
               <ArrowLeft className="size-5" />
               Back to login

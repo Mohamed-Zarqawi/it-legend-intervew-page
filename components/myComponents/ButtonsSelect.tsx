@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 import { Field, FieldLabel } from "@/components/ui/field";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 export type SelectOption = {
   label: string;
