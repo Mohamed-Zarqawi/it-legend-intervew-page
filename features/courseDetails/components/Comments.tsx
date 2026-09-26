@@ -54,7 +54,7 @@ const Comments = () => {
       {/* Comments */}
       <div className="mt-8 flex flex-col gap-2 px-4 md:mt-8 md:gap-5 md:px-0">
         <div className="text-xl font-medium md:text-2xl">Comments</div>
-        <div className="bg-card border-chart-1 flex flex-col justify-between divide-y rounded-sm px-4 md:px-6">
+        <div className="bg-card border-chart-1 flex flex-col justify-between divide-y rounded-4xl border px-4 md:px-6">
           {/* card */}
 
           {comments?.map((comment, i) => {
@@ -102,7 +102,7 @@ const Comments = () => {
               name="comment"
               placeholder="Write a comment"
               rows={20}
-              className="bg-card h-35 rounded-sm border-0 drop-shadow-lg"
+              className="bg-card border-chart-1! h-35 rounded-4xl border drop-shadow-lg"
             />
           </Field>
 

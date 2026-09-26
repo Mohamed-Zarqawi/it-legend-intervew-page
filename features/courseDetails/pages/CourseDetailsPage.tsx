@@ -38,7 +38,7 @@ const CourseDetailsPage = () => {
   console.log(fullScreen);
   return (
     <div className="mt-4">
-      <div className="flex flex-col gap-6 px-2 md:mx-50 md:px-0">
+      <div className="flex flex-col gap-6 px-2 md:mx-10 md:px-0">
         <div className="text-chart-3 flex items-end">
           Home <ChevronRight className="size-5" /> Courses{" "}
           <ChevronRight className="size-5" /> Course Details
@@ -49,7 +49,7 @@ const CourseDetailsPage = () => {
       </div>
 
       <div
-        className={`bg-secondary mt-3 flex flex-col justify-between rounded-3xl md:mx-50 md:mt-8 md:pb-4 ${fullScreen == true ? "md:flex-col" : "md:flex-row"}`}
+        className={`bg-secondary mt-3 flex flex-col justify-between rounded-3xl md:mx-10 md:mt-8 md:pb-4 ${fullScreen == true ? "md:flex-col" : "md:flex-row"}`}
       >
         {/* Left Side */}
         <div className="relative mb-25 w-full">
@@ -61,13 +61,13 @@ const CourseDetailsPage = () => {
               load="visible"
               posterLoad="visible"
               playsInline
-              className="relative aspect-video! w-full overflow-hidden! rounded-none! border-0! md:rounded-sm!"
+              className="relative aspect-video! w-full overflow-hidden! rounded-none! border-0! md:rounded-4xl!"
             >
               <MediaProvider className="overflow-hidden! rounded-none! border-0! md:rounded-sm!" />
 
               <DefaultVideoLayout
                 icons={defaultLayoutIcons}
-                className="overflow-hidden! rounded-none! border-0! md:rounded-sm!"
+                className="overflow-hidden! rounded-4xl! border-0! md:rounded-4xl!"
               />
 
               <Button

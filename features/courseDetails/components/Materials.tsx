@@ -33,7 +33,7 @@ const Materials = () => {
   return (
     <div className="mt-8 flex flex-col gap-2 px-4 md:mt-8 md:gap-5 md:px-0">
       <div className="text-xl font-medium md:text-2xl">Course Materials</div>
-      <div className="bg-card flex gap-3 rounded-sm px-4 py-3 md:px-7">
+      <div className="bg-card border-chart-1 flex gap-3 rounded-4xl border px-4 py-3 md:px-7">
         {courseMaterialsMenu.map((sections, i) => {
           return (
             <div key={i} className="flex w-full flex-col divide-y">

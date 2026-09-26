@@ -87,7 +87,7 @@ const MobileTopics = ({ fullScreen }: { fullScreen?: boolean }) => {
         return (
           <div
             key={i}
-            className="bg-card mt-9 rounded-sm border px-4 py-6 md:mt-8 md:border-0"
+            className="bg-card border-chart-1 mt-9 rounded-4xl border px-4 py-6 md:mt-8 md:border-0"
           >
             <div className="flex flex-col gap-2">
               <div className="font-medium">Week {card.week}</div>

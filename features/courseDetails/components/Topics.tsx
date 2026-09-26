@@ -85,7 +85,10 @@ const Topics = ({ fullScreen }: { fullScreen?: boolean }) => {
         {/* Card */}
         {courseDetailsMenu.map((card, i) => {
           return (
-            <div key={i} className="bg-card mt-12 w-sm rounded-sm px-4 py-6">
+            <div
+              key={i}
+              className="bg-card border-chart-1 mt-12 w-sm rounded-4xl border px-4 py-6"
+            >
               <div className="flex flex-col gap-2">
                 <div className="font-medium">Week {card.week}</div>
                 <div className="text-chart-2 text-sm">{card.description}</div>
@@ -96,7 +99,7 @@ const Topics = ({ fullScreen }: { fullScreen?: boolean }) => {
                   return (
                     <div
                       key={j}
-                      className={`border-chart-1 flex justify-between border-y py-4 ${item.exersise?.question ? "items-start" : "items-center"}`}
+                      className={`border-chart-1 flex justify-between border-b py-4 ${item.exersise?.question ? "items-start" : "items-center"}`}
                     >
                       <div className="flex items-center gap-2">
                         <FileText className="size-4" />
