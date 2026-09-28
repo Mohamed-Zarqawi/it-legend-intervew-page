@@ -7,8 +7,8 @@ const CoursesPage = () => {
   const { data: courses } = useGetAllCourses();
 
   return (
-    <div className="mx-10 my-10">
-      <div className="flex gap-4">
+    <div className="my-10 md:mx-10">
+      <div className="grid grid-cols-1 gap-4">
         {courses?.map((course) => (
           <CourseCard key={course.id} course={course} />
         ))}

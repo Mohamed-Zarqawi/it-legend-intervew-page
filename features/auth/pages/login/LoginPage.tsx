@@ -32,7 +32,7 @@ const LoginPage = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="border-border bg-card text-card-foreground flex h-fit w-130 flex-col items-center justify-center gap-7 rounded-3xl md:border md:p-12 md:shadow-sm"
+          className="border-border md:bg-card text-card-foreground flex h-fit w-130 flex-col items-center justify-center gap-7 rounded-3xl md:border md:p-12 md:shadow-sm"
           noValidate
         >
           {/* 1 */}

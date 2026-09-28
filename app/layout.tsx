@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import MobileBottomNav from "@/components/MobileBottomNav";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -49,6 +50,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Providers>
             <Header />
             {children}
+            <MobileBottomNav />
+
             <Toaster
               position="bottom-right"
               richColors

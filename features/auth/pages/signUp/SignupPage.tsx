@@ -61,15 +61,15 @@ const SignUpPage = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="border-border bg-card text-card-foreground flex h-fit w-135 flex-col items-center justify-center gap-8 rounded-3xl md:border md:p-12 md:shadow-sm"
+          className="border-border md:bg-card text-card-foreground flex h-fit w-135 flex-col items-center justify-center gap-8 rounded-3xl md:border md:p-12 md:shadow-sm"
         >
           {/* 1 */}
           <div className="flex w-full flex-col items-center justify-center gap-3 md:gap-4">
             <div className="text-foreground text-center text-2xl font-bold md:text-4xl">
-              JOIN THE ELITE
+              JOIN TO US!
             </div>
             <div className="text-muted-foreground text-center text-sm md:text-base">
-              Create your account to start your journey !
+              Create your account to start your trip !
             </div>
           </div>
 

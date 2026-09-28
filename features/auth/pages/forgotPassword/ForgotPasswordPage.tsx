@@ -76,7 +76,7 @@ const ForgotPasswordPage = () => {
       <form onSubmit={handleSubmit}>
         <div className="flex h-[calc(100dvh-155px)] items-center justify-center lg:h-[calc(100dvh-185px)]">
           {/* body */}
-          <div className="border-border bg-card text-card-foreground flex h-fit w-130 flex-col items-center justify-center gap-7 rounded-3xl md:border md:p-12 md:shadow-lg">
+          <div className="border-border md:bg-card text-card-foreground flex h-fit w-130 flex-col items-center justify-center gap-7 rounded-3xl md:border md:p-12 md:shadow-lg">
             {/* 1 */}
             <div className="flex flex-col items-center justify-center gap-3 md:gap-4">
               <div className="text-foreground text-center text-2xl font-bold tracking-tight md:text-4xl">

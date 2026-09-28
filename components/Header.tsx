@@ -101,7 +101,7 @@ const Header = () => {
           {currentUser ? (
             <Link
               href={"/profile"}
-              className="text-muted-foreground hover:text-foreground hover:bg-accent flex items-center justify-center rounded-full p-1.5 transition-colors"
+              className="text-muted-foreground hover:text-foreground hover:bg-accent hidden items-center justify-center rounded-full p-1.5 transition-colors md:flex"
             >
               <User className="h-5 w-5" />
             </Link>
