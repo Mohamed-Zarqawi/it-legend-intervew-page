@@ -140,12 +140,11 @@ const SignUpPage = () => {
             </Button>
             <div className="text-muted-foreground text-sm md:text-base">
               Already a member?{" "}
-              <Link
-                href="/auth/login"
-                className="text-primary hover:text-primary/80 font-medium transition-colors duration-300"
-              >
-                Log In
-              </Link>
+              <Button asChild variant={"linkUnderline"}>
+                <Link href="/auth/login" className="-ml-3">
+                  Log In
+                </Link>
+              </Button>
             </div>
           </div>
         </form>

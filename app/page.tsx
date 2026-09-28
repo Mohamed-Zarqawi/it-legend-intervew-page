@@ -1,11 +1,12 @@
-import CourseDetailsPage from "@/features/courseDetails/pages/CourseDetailsPage";
+import HomePage from "@/features/home/pages/HomePage";
 
-const CourseDetails = () => {
+const Home = () => {
   return (
     <div>
-      <CourseDetailsPage />
+      {/* <CourseDetailsPage /> */}
+      <HomePage />
     </div>
   );
 };
 
-export default CourseDetails;
+export default Home;

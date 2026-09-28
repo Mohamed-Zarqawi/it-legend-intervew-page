@@ -1,13 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
-
-import { MediaPlayer, MediaProvider } from "@vidstack/react";
-import {
-  defaultLayoutIcons,
-  DefaultVideoLayout,
-} from "@vidstack/react/player/layouts/default";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
 import {
@@ -17,13 +10,15 @@ import {
   MessageCircleQuestionMark,
   MessageSquarePlus,
 } from "lucide-react";
+import { useRef, useState } from "react";
+import ReactPlayer from "react-player";
 import Comments from "../components/Comments";
 import LeaderBoard from "../components/LeaderBoard";
 import Materials from "../components/Materials";
 import MobileTopics from "../components/MobileTopics";
 import Topics from "../components/Topics";
 
-const CourseDetailsPage = () => {
+const LessonPage = () => {
   const [fullScreen, setFullScreen] = useState<boolean>(false);
   const mobileTopicsRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
@@ -46,9 +41,6 @@ const CourseDetailsPage = () => {
           <ChevronRight className="size-4" />
           <span className="text-foreground font-medium">Course Details</span>
         </div>
-        <div className="text-foreground text-3xl font-medium md:text-4xl md:font-semibold">
-          Starting SEO as your Home
-        </div>
       </div>
 
       <div
@@ -57,10 +49,10 @@ const CourseDetailsPage = () => {
         {/* Left Side */}
         <div className="relative mb-25 w-full">
           {/* Video */}
-          <div className="sticky top-0 z-10 overflow-hidden! rounded-none! border-0! md:static md:rounded-lg!">
-            <MediaPlayer
+          <div className="sticky top-18 z-10 overflow-hidden! rounded-none! border-0! md:static md:rounded-lg!">
+            {/* <MediaPlayer
               title="Course Video"
-              src="youtube/https://www.youtube.com/watch?v=BB49x_uMlGA"
+              src="/https://www.youtube.com/watch?v=BB49x_uMlGA"
               load="visible"
               posterLoad="visible"
               playsInline
@@ -84,42 +76,65 @@ const CourseDetailsPage = () => {
               >
                 <LaptopMinimal />
               </Button>
-            </MediaPlayer>
+            </MediaPlayer> */}
+
+            <ReactPlayer
+              src="https://www.youtube.com/watch?v=LXb3EKWsInQ"
+              className="relative aspect-video! h-full! w-full! overflow-hidden! rounded-none! border-0! md:rounded-4xl!"
+
+              controls
+            />
+            <Button
+              size={"icon-lg"}
+              className="bg-primary/80 text-primary-foreground hover:bg-primary absolute top-13 right-7 z-20 hidden cursor-pointer rounded-full! p-4.5! backdrop-blur-md transition-colors md:flex"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setFullScreen(!fullScreen);
+              }}
+            >
+              <LaptopMinimal />
+            </Button>
           </div>
 
           {/* Icons / Action Buttons */}
-          <div className="mt-3 flex gap-3 px-6 md:mt-6 md:px-0">
-            <Button
-              variant={"ghost"}
-              size={"icon-lg"}
-              className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
-              onClick={() => scrollToSection(commentsRef)}
-              aria-label="go to comments"
-            >
-              <MessageSquarePlus />
-            </Button>
+          <div className="mt-4 flex justify-between gap-3 px-6 md:mt-6 md:px-0">
+            <div className="text-foreground text-3xl font-medium md:text-4xl md:font-semibold">
+              Starting SEO as your Home
+            </div>
+            <div className="flex gap-3">
+              <Button
+                variant={"ghost"}
+                size={"icon-lg"}
+                className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
+                onClick={() => scrollToSection(commentsRef)}
+                aria-label="go to comments"
+              >
+                <MessageSquarePlus />
+              </Button>
 
-            <Button
-              variant={"ghost"}
-              size={"icon-lg"}
-              className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
-              onClick={() => {
-                scrollToSection(mobileTopicsRef);
-              }}
-              aria-label="go to info"
-            >
-              <Info />
-            </Button>
+              <Button
+                variant={"ghost"}
+                size={"icon-lg"}
+                className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
+                onClick={() => {
+                  scrollToSection(mobileTopicsRef);
+                }}
+                aria-label="go to info"
+              >
+                <Info />
+              </Button>
 
-            <Button
-              variant={"ghost"}
-              size={"icon-lg"}
-              className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
-            >
-              <MessageCircleQuestionMark strokeWidth={2} />
-            </Button>
+              <Button
+                variant={"ghost"}
+                size={"icon-lg"}
+                className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
+              >
+                <MessageCircleQuestionMark strokeWidth={2} />
+              </Button>
 
-            <LeaderBoard />
+              <LeaderBoard />
+            </div>
           </div>
 
           {/* Course Materials */}
@@ -144,4 +159,4 @@ const CourseDetailsPage = () => {
   );
 };
 
-export default CourseDetailsPage;
+export default LessonPage;

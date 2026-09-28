@@ -75,12 +75,9 @@ const LoginPage = () => {
               aria-invalid={!!errors.password && !!touched.password}
             />
 
-            <Link
-              href="/auth/forgotPassword"
-              className="text-muted-foreground hover:text-primary text-xs transition-colors"
-            >
-              Forgot password?
-            </Link>
+            <Button asChild variant={"link"} className="-mt-3">
+              <Link href="/auth/forgotPassword">Forgot password?</Link>
+            </Button>
           </div>
 
           {/* 3 */}
@@ -97,12 +94,11 @@ const LoginPage = () => {
 
             <div className="text-muted-foreground text-sm md:text-base">
               Don&apos;t have an account?{" "}
-              <Link
-                href="/auth/signup"
-                className="text-primary hover:text-primary/80 font-medium transition-colors duration-300"
-              >
-                Sign Up
-              </Link>
+              <Button asChild variant={"linkUnderline"}>
+                <Link href="/auth/signup" className="-ml-3">
+                  Sign Up
+                </Link>
+              </Button>
             </div>
           </div>
         </form>

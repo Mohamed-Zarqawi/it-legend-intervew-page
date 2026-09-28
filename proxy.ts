@@ -30,18 +30,21 @@ export async function proxy(request: NextRequest) {
       },
     },
   );
+  console.log(
+    "COOKIES:",
+    request.cookies.getAll().map((cookie) => cookie.name),
+  );
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+
   const protectedRoutes = ["/profile", "/cart"];
 
-  // قائمة مسارات المصادقة التي يجب منع المسجلين من دخولها
   const authRoutes = ["/auth/login", "/auth/signup", "/auth/forgotPassword"];
 
-  // 1️⃣ حماية مسار الـ Admin (يتطلب تسجيل دخول + صلاحية أدمن)
   if (pathname.startsWith("/dashboard")) {
     if (!user) {
       const loginUrl = new URL("/auth/login", request.url);
@@ -68,8 +71,11 @@ export async function proxy(request: NextRequest) {
 
   const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
+  console.log("PATH:", pathname);
+  console.log("USER:", user);
+  console.log("IS AUTH:", isAuthRoute);
   if (isAuthRoute && user) {
-    return NextResponse.redirect(new URL("/profile", request.url));
+    return NextResponse.redirect(new URL("/courses", request.url));
   }
 
   return response;

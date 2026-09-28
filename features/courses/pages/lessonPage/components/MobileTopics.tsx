@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Progress } from "@/components/ui/progress";
 
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
@@ -74,12 +75,13 @@ const MobileTopics = ({ fullScreen }: { fullScreen?: boolean }) => {
           Topics for This Course
         </div>
 
-        <Slider
-          defaultValue={[63]}
-          disabled
-          max={100}
-          className="mx-auto mt-12 w-full md:mt-10"
-        />
+        <Field className="mx-auto mt-12 w-full md:mt-10">
+          <FieldLabel htmlFor="progress-upload">
+            <span>Your progress</span>
+            <span className="ml-auto">66%</span>
+          </FieldLabel>
+          <Progress value={66} id="progress-upload" />
+        </Field>
       </div>
 
       {/* Card */}

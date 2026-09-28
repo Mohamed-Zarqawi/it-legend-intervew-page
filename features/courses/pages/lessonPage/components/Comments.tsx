@@ -2,7 +2,7 @@ import GetValidDate from "@/components/GetValidDate";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import { CreateCommentSchema } from "@/types/CommentType";
+import { CreateCommentSchema } from "@/types/courses/CommentType";
 import { fakerEN as faker } from "@faker-js/faker";
 import { useFormik } from "formik";
 import { MoveRight } from "lucide-react";
@@ -50,7 +50,7 @@ const Comments = () => {
   }, []);
 
   return (
-    <div>
+    <div className="flex w-full flex-col">
       {/* Comments */}
       <div className="mt-8 flex flex-col gap-2 px-4 md:mt-8 md:gap-5 md:px-0">
         <div className="text-foreground text-xl font-medium md:text-2xl">
@@ -97,27 +97,35 @@ const Comments = () => {
 
       {/*  Write a comment */}
 
-      <div className="mt-8 px-4 md:px-0">
+      <div className="mt-5 px-4 md:px-0">
         <form onSubmit={handleSubmit}>
-          <Field>
-            <Textarea
-              value={values.comment}
-              onChange={handleChange}
-              name="comment"
-              placeholder="Write a comment..."
-              rows={20}
-              className="bg-card text-card-foreground border-border! focus-visible:ring-ring placeholder:text-muted-foreground h-35 rounded-4xl border p-4 drop-shadow-sm"
-            />
-          </Field>
-
-          <Button
-            size={"lg"}
-            type="submit"
-            disabled={!dirty}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 mt-6 px-10 py-5 transition-colors hover:cursor-pointer"
-          >
-            Submit Review <MoveRight className="size-4" />
-          </Button>
+          <div className="flex flex-col items-end">
+            <Field>
+              <Textarea
+                value={values.comment}
+                onChange={handleChange}
+                name="comment"
+                placeholder="Write a comment..."
+                rows={20}
+                className="bg-card text-card-foreground border-border! focus-visible:ring-ring placeholder:text-muted-foreground h-35 rounded-4xl border p-4 drop-shadow-sm"
+              />
+            </Field>
+            <div className="mt-6 flex gap-2">
+              <Button
+                variant={"outline"}
+                type="button"
+                size={"lg"}
+                onClick={() => {
+                  setFieldValue("comment", "");
+                }}
+              >
+                Cancle
+              </Button>
+              <Button size={"lg"} type="submit" disabled={!dirty}>
+                Submit Review <MoveRight className="size-4" />
+              </Button>
+            </div>
+          </div>
         </form>
       </div>
     </div>

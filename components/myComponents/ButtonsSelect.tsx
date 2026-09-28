@@ -23,20 +23,7 @@ type ButtonSelectProps = {
   options: SelectOption[];
 
   size?:
-    | "default"
-    | "lg"
-    | "sm"
-    | "xs"
-    | "icon-lg"
-    | "icon-sm"
-    | "icon-xs"
-    | "none"
-    | "rounded-xs"
-    | "rounded-sm"
-    | "rounded-lg"
-    | "rounded-icon-xs"
-    | "rounded-icon-sm"
-    | "rounded-icon-lg";
+    "default" | "lg" | "sm" | "xs" | "icon-lg" | "icon-sm" | "icon-xs" | "none";
   value?: string;
   activeClassName?: string;
   isRequired?: boolean;

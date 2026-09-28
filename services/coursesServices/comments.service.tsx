@@ -1,14 +1,11 @@
 import { supabase } from "@/lib/supabase";
-import { ReqCreateCommentType } from "@/types/CommentType";
+import { ReqCreateCommentType } from "@/types/courses/CommentType";
 
 export const getComments = async () => {
-  const { data, error } = await supabase.from("comments").select("*");
+  const { data: comments, error } = await supabase.from("comments").select("*");
 
-  if (data) {
-    console.log(data);
-  }
   if (error) throw error;
-  return data;
+  return comments;
 };
 
 export const createComment = async (values: ReqCreateCommentType) => {

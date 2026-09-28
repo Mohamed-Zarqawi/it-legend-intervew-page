@@ -51,7 +51,7 @@ function Input({
   return (
     <Field>
       {label && (
-        <FieldLabel htmlFor="name" className="text-primary text-sm">
+        <FieldLabel htmlFor="name" className="text-card-foreground text-sm">
           {label}
           {isRequired ? <span className="text-destructive">*</span> : null}
         </FieldLabel>

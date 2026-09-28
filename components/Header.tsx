@@ -1,12 +1,14 @@
 "use client";
 import { useGetCurrentUser } from "@/features/auth/pages/hooks/useAuth";
 
+import { IconSearch } from "@tabler/icons-react";
 import { Moon, Sun, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 const Header = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
@@ -25,19 +27,20 @@ const Header = () => {
   //   currentUser?.id,
   // );
 
-  const menuItems = [
-    { name: "Home", href: "/" },
+  const leftMenuItems = [
     { name: "Courses", href: "/courses" },
-    { name: "My Learning", href: "/dashboard" },
+    { name: "My Learning", href: "/profile" },
+  ];
+  const rightMenuItems = [
     { name: "About", href: "/aboutUs" },
     { name: "Contact", href: "/contact" },
   ];
 
+  const router = useRouter();
   return (
-    <header className="border-border bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 left-0 z-50 w-full border-b backdrop-blur">
-      <div className="flex h-18 w-full items-center justify-between px-4 md:h-20 md:px-10">
+    <header className="border-border bg-card/70 sticky top-0 left-0 z-50 w-full border-b backdrop-blur-xl">
+      <div className="flex h-18 w-full items-center justify-between gap-3 px-4 md:h-20 md:px-10">
         <img
-          // استخدام صورة موحدة أو شفافة بسيطة قبل الـ Mounted لمنع خطأ الـ Hydration
           src={
             !mounted
               ? "/images/zekaLogoBlack2.png"
@@ -45,12 +48,40 @@ const Header = () => {
                 ? "/images/zekaLogo2.png"
                 : "/images/zekaLogoBlack2.png"
           }
-          className="absolute top-1/2 left-1/2 w-24 -translate-x-1/2 -translate-y-1/2 object-contain sm:w-28 md:static md:w-40 md:translate-x-0 md:translate-y-0"
+          className="mr-3 w-24 hover:cursor-pointer sm:w-28 md:w-40"
           alt="ZEKA Logo"
+          onClick={() => {
+            router.push("/");
+          }}
         />
 
-        <div className="mx-auto hidden items-center gap-5 md:flex">
-          {menuItems.map((item, i) => (
+        <div className="hidden items-center gap-2 md:flex">
+          {leftMenuItems.map((item, i) => (
+            <Link key={i} href={item.href}>
+              <Button
+                variant={"none"}
+                className={`menu-item rounded-full text-base transition-colors hover:cursor-pointer ${
+                  pathname === item.href
+                    ? "bg-accent text-accent-foreground rounded-full font-medium"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                }`}
+              >
+                {item.name}
+              </Button>
+            </Link>
+          ))}
+        </div>
+
+        <div className="relative flex w-full items-center">
+          <Input
+            className="hidden w-full pl-10 text-base md:flex"
+            placeholder={"Search for anything.."}
+          />
+          <IconSearch className="text-muted-foreground absolute left-3 size-4.5" />
+        </div>
+
+        <div className="hidden items-center gap-2 md:flex">
+          {rightMenuItems.map((item, i) => (
             <Link key={i} href={item.href}>
               <Button
                 variant={"none"}
@@ -66,21 +97,34 @@ const Header = () => {
           ))}
         </div>
 
-        <div className="hidden items-center gap-4 md:flex">
+        <div className="hidden items-center gap-3 md:flex">
           {currentUser ? (
             <Link
               href={"/profile"}
-              className="text-muted-foreground hover:text-foreground hover:bg-accent flex items-center justify-center rounded-full p-2 transition-colors"
+              className="text-muted-foreground hover:text-foreground hover:bg-accent flex items-center justify-center rounded-full p-1.5 transition-colors"
             >
               <User className="h-5 w-5" />
             </Link>
           ) : (
-            <Link
-              href={"/auth/login"}
-              className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
-            >
-              Login
-            </Link>
+            <div className="flex items-center gap-3">
+              <Button variant={"outline"} asChild>
+                <Link
+                  href={"/auth/login"}
+                  className="text-muted-foreground hover:text-foreground font-medium transition-colors"
+                >
+                  Log in
+                </Link>
+              </Button>
+
+              <Button variant={"default"} asChild>
+                <Link
+                  href={"/auth/signup"}
+                  className="text-muted-foreground hover:text-foreground font-medium transition-colors"
+                >
+                  Sign up
+                </Link>
+              </Button>
+            </div>
           )}
 
           <Button
