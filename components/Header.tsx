@@ -48,7 +48,7 @@ const Header = () => {
                 ? "/images/zekaLogo2.png"
                 : "/images/zekaLogoBlack2.png"
           }
-          className="mr-3 w-24 hover:cursor-pointer sm:w-28 md:w-40"
+          className="w-24 hover:cursor-pointer sm:w-28 md:mr-3 md:w-40"
           alt="ZEKA Logo"
           onClick={() => {
             router.push("/");
@@ -74,7 +74,7 @@ const Header = () => {
 
         <div className="relative flex w-full items-center">
           <Input
-            className="hidden w-full pl-10 text-base md:flex"
+            className="w-full pl-10 text-base md:flex"
             placeholder={"Search for anything.."}
           />
           <IconSearch className="text-muted-foreground absolute left-3 size-4.5" />
@@ -97,7 +97,7 @@ const Header = () => {
           ))}
         </div>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="items-center gap-3 md:flex">
           {currentUser ? (
             <Link
               href={"/profile"}
@@ -106,7 +106,7 @@ const Header = () => {
               <User className="h-5 w-5" />
             </Link>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-3 md:flex">
               <Button variant={"outline"} asChild>
                 <Link
                   href={"/auth/login"}
@@ -116,7 +116,7 @@ const Header = () => {
                 </Link>
               </Button>
 
-              <Button variant={"default"} asChild>
+              <Button variant={"default"} className="hidden md:flex" asChild>
                 <Link
                   href={"/auth/signup"}
                   className="text-muted-foreground hover:text-foreground font-medium transition-colors"

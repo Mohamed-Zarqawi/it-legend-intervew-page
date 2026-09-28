@@ -98,11 +98,11 @@ const LessonPage = () => {
           </div>
 
           {/* Icons / Action Buttons */}
-          <div className="mt-4 flex justify-between gap-3 px-6 md:mt-6 md:px-0">
-            <div className="text-foreground text-3xl font-medium md:text-4xl md:font-semibold">
+          <div className="mt-4 flex flex-col justify-between gap-3 px-6 md:mt-6 md:flex-row md:px-0">
+            <div className="text-foreground text-2xl font-medium md:text-4xl md:font-semibold">
               Starting SEO as your Home
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2 md:gap-3">
               <Button
                 variant={"ghost"}
                 size={"icon-lg"}
