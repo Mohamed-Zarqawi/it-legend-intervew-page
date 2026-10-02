@@ -41,9 +41,9 @@ const CourseInfo = ({ course }: CourseInfo) => {
   ];
 
   return (
-    <div className="mt-8 flex flex-col gap-2 px-4 md:mt-8 md:gap-5 md:px-0">
+    <div className="mt-8 flex flex-col gap-2 px-4 md:mt-10 md:gap-5 md:px-0">
       <div className="text-foreground text-xl font-medium md:text-2xl">
-        Course Materials
+        Course Information
       </div>
       <div className="bg-card text-card-foreground border-border flex gap-3 rounded-4xl border px-4 py-3 md:px-7">
         {courseMaterialsMenu.map((sections, i) => {
@@ -58,13 +58,13 @@ const CourseInfo = ({ course }: CourseInfo) => {
                     key={j}
                     className="flex items-center justify-between py-3"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                       <section.icon className="text-muted-foreground size-5" />
-                      <span className="text-muted-foreground font-medium">
+                      <span className="text-foreground font-medium">
                         {section.title}:
                       </span>
                     </div>
-                    <div className="text-foreground text-end font-medium">
+                    <div className="text-muted-foreground text-end">
                       {section.data}
                     </div>
                   </div>

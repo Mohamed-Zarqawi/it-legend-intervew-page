@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Database } from "@/types/database.types";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
-import { CheckCircle2, FileText, Lock, PlayCircle } from "lucide-react";
+import { CircleCheck, FileText, Lock, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { useGetAllCourseLessons } from "../pages/hooks/useLesson";
 
@@ -92,18 +92,16 @@ const MobileTopics = ({
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      {isCompleted ? (
-                        <CheckCircle2 className="size-4 text-emerald-500" />
-                      ) : isCurrent ? (
-                        <PlayCircle className="text-primary size-4" />
+                      {isCurrent ? (
+                        <PlayCircle className="text-foreground size-4" />
                       ) : (
                         <FileText className="text-muted-foreground size-4" />
                       )}
                       <div
                         className={`line-clamp-1 text-sm ${
                           isCurrent
-                            ? "text-primary font-semibold"
-                            : "text-card-foreground"
+                            ? "text-card-foreground"
+                            : "text-muted-foreground"
                         }`}
                       >
                         {lesson.title}
@@ -111,9 +109,7 @@ const MobileTopics = ({
                     </div>
 
                     {isCompleted ? (
-                      <span className="text-xs font-medium text-emerald-500">
-                        Completed
-                      </span>
+                      <CircleCheck className="size-4 text-emerald-500" />
                     ) : (
                       <Lock className="text-muted-foreground size-4" />
                     )}
