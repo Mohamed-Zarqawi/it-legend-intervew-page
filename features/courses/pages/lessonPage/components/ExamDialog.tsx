@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Award } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface ExamDialogProps {
   courseId: string;
@@ -28,6 +30,7 @@ interface ExamDialogProps {
 }
 
 export const ExamDialog = ({ courseId, week }: ExamDialogProps) => {
+  const router = useRouter();
   const { data: exam, isLoading: isExamLoading } = useExam(courseId, week);
   const { data: currentUser, isLoading: isCurrentUserLoading } =
     useGetCurrentUser();
@@ -189,7 +192,19 @@ export const ExamDialog = ({ courseId, week }: ExamDialogProps) => {
                   <Button variant="outline">Close</Button>
                 </DialogClose>
                 <Button
-                  onClick={handleSubmit}
+                  onClick={
+                    currentUser
+                      ? handleSubmit
+                      : () => {
+                          toast.warning("Login required to submit", {
+                            description: "Your selections have been saved.",
+                            action: {
+                              label: "Log in",
+                              onClick: () => router.push("/auth/login"),
+                            },
+                          });
+                        }
+                  }
                   disabled={isPending}
                   variant="default"
                   pendingText="Submitting"
