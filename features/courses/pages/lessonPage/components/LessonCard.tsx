@@ -25,21 +25,31 @@ const LessonCard = ({ lesson }: LessonCardProps) => {
     <div>
       <Link
         href={`/courses/${lesson.course_id}/${lesson.id}`}
-        className="group text-card-foreground hover:bg-muted/50 flex w-full rounded-2xl px-4 py-3.5 duration-300 md:h-fit"
+        className="group text-card-foreground hover:bg-muted/50 flex w-full rounded-2xl px-1 py-2 duration-300 md:h-fit md:px-4 md:py-3.5"
       >
-        <div className="flex w-full justify-between">
-          <div className="flex items-center gap-4">
+        <div className="flex w-full justify-between gap-2">
+          <div className="flex items-center gap-4 md:gap-4">
             {isCompleted ? (
-              <CircleCheck className="size-4 text-emerald-500" />
+              <div>
+                <CircleCheck className="size-4 text-emerald-500" />
+              </div>
             ) : (
-              <TvMinimalPlay className="text-muted-foreground size-4" />
+              <div>
+                <TvMinimalPlay className="text-muted-foreground size-4" />
+              </div>
             )}
-            <div className="text-card-foreground">{lesson.title}</div>
+            <div className="text-card-foreground line-clamp-1 text-sm md:line-clamp-none md:text-base">
+              {lesson.title}
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="text-card-foreground"> {lesson.duration}</div>
-            <ChevronRight className="text-muted-foreground size-5" />
+          <div className="flex items-center justify-between gap-2 md:gap-3">
+            <div className="text-card-foreground text-xs md:text-base">
+              {lesson.duration}
+            </div>
+            <div>
+              <ChevronRight className="text-muted-foreground size-4 md:size-5" />
+            </div>
           </div>
         </div>
       </Link>
