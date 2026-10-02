@@ -157,23 +157,11 @@ const ProfilePage = () => {
             disabled={!dirty || isProfileUpdating}
             isPending={isProfileUpdating}
             pendingText="Updating"
-            className="hidden md:flex"
+            className="flex"
           >
             Update Profile
           </Button>
         </div>
-        <Button
-          type="submit"
-          variant="default"
-
-          size={"none"}
-          disabled={!dirty || isProfileUpdating}
-          isPending={isProfileUpdating}
-          pendingText="Updating"
-          className="flex md:hidden"
-        >
-          Update Profile
-        </Button>
       </form>
     </div>
   );
