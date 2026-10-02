@@ -36,16 +36,15 @@ export function CoursePage({ courseId }: LessonListProps) {
   }
 
   return (
-    <div className="my-10 space-y-8 md:mx-10">
-      <div className="flex flex-col gap-6">
-        <div className="text-muted-foreground flex items-center gap-1 text-sm">
-          <Link href={`/courses`}>Courses</Link>
-          <ChevronRight className="size-4" />
-          <Link className="text-foreground" href={`/courses/${courseId}`}>
-            {course?.[0].title}
-          </Link>
-        </div>
+    <div className="my-6 space-y-8 md:mx-10 md:my-10">
+      <div className="text-muted-foreground flex items-center gap-1 text-sm">
+        <Link href={`/courses`}>Courses</Link>
+        <ChevronRight className="size-4" />
+        <Link className="text-foreground" href={`/courses/${courseId}`}>
+          {course?.[0].title}
+        </Link>
       </div>
+
       <div className="text-foreground text-2xl md:text-3xl">Course Content</div>
 
       {Object.entries(groupedLessons).map(([weekName, weekLessons]) => (

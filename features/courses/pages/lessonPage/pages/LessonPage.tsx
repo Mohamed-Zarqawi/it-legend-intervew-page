@@ -80,12 +80,16 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
   return (
     <div className="text-foreground mt-10">
       <div className="flex flex-col gap-6 px-2 md:mx-10 md:px-0">
-        <div className="text-muted-foreground flex items-center gap-1 text-sm">
-          <Link href={`/courses`}>Courses</Link>
+        <div className="text-muted-foreground line-clamp-1 flex items-center gap-1 text-sm">
+          <Link href={`/courses`} className="line-clamp-1">
+            Courses
+          </Link>
           <ChevronRight className="size-4" />
-          <Link href={`/courses/${lesson.course_id}`}>{course?.[0].title}</Link>
+          <Link href={`/courses/${lesson.course_id}`} className="line-clamp-1">
+            {course?.[0].title}
+          </Link>
           <ChevronRight className="size-4" />
-          <span className="text-foreground font-medium">
+          <span className="text-foreground line-clamp-1 font-medium">
             {lesson?.title || "Lesson Details"}
           </span>
         </div>
