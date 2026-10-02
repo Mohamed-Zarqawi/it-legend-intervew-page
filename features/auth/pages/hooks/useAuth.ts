@@ -109,7 +109,7 @@ export const useSignUp = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       toast.success("Account Created Successfully", {});
-      router.push("/course");
+      router.push("/courses");
     },
     onError: () => {
       toast.error("This account already exists, please login", {
