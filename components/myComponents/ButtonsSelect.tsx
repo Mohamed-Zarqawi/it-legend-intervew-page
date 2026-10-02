@@ -68,7 +68,7 @@ const ButtonsSelect = ({
                 size={size}
                 type="button"
                 onClick={() => onChange?.(option.value)}
-                // دمج كلاسات التحديد إذا كانت قيمة الزر تساوي القيمة المحددة حالياً
+
                 className={`${className} ${
                   value === option.value ? activeClassName : ""
                 }`}

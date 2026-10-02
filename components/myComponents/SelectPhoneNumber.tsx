@@ -33,7 +33,7 @@ type SelectPhoneNumberProps = {
   isLoading?: boolean;
   errors?: FormikErrors<any>;
   touched?: FormikTouched<any>;
-  // دوال Formik الضرورية
+
   onChange: (e: React.ChangeEvent<any>) => void;
   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void;
   setFieldTouched: (
@@ -60,7 +60,6 @@ const SelectPhoneNumber = ({
     <div className="w-full">
       <Dialog>
         <DialogTrigger asChild>
-          {/* نستخدم div أو أي غلاف هنا لأن DialogTrigger أحياناً يعترض على وجود Input كابن مباشر بدون asChild، تأكد منها حسب إعداداتك */}
           <div className="w-full md:w-100">
             <Input
               label="Phone Number"
@@ -101,7 +100,6 @@ const SelectPhoneNumber = ({
                   (c) => c.isoCode === selectedIso,
                 );
                 if (selectedCountry) {
-                  // استخدام الاسم الديناميكي
                   setFieldValue(
                     phoneCodeName,
                     selectedCountry.phonecode.replace("+", ""),
@@ -136,7 +134,6 @@ const SelectPhoneNumber = ({
               </SelectContent>
             </Select>
 
-            {/* حقل إدخال الرقم */}
             <div className="flex-1">
               <Input
                 id={phoneNumberName}

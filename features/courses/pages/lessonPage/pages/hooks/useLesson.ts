@@ -46,7 +46,6 @@ export const useToggleLessonProgress = () => {
   return useMutation({
     mutationFn: toggleLessonProgress,
     onSuccess: (_, variables) => {
-      // إعادة جلب بيانات تقدم الكورس لتحديث الـ UI فوراً
       queryClient.invalidateQueries({
         queryKey: ["course-progress", variables.courseId],
       });
