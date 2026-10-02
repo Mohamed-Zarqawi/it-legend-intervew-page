@@ -57,6 +57,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               richColors
               className="hidden md:block"
             />
+            <Toaster
+              position="top-right"
+              mobileOffset={{ top: "80px" }}
+              richColors
+              className="block md:hidden"
+            />
           </Providers>
         </ThemeProvider>
       </body>
