@@ -25,7 +25,7 @@ const LessonCard = ({ lesson }: LessonCardProps) => {
     <div>
       <Link
         href={`/courses/${lesson.course_id}/${lesson.id}`}
-        className="group text-card-foreground hover:bg-primary/80 flex w-full rounded-2xl px-4 py-3.5 duration-300 md:h-fit"
+        className="group text-card-foreground hover:bg-muted/50 flex w-full rounded-2xl px-4 py-3.5 duration-300 md:h-fit"
       >
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-4">

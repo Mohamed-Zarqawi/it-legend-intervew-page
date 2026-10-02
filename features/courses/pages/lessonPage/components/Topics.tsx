@@ -4,7 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { Database } from "@/types/database.types";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
-import { CheckCircle2, FileText, Lock, PlayCircle } from "lucide-react";
+import { CircleCheck, FileText, Lock, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { useGetAllCourseLessons } from "../pages/hooks/useLesson";
 
@@ -91,22 +91,20 @@ const Topics = ({
                       key={lesson.id}
                       href={`/courses/${courseId}/${lesson.id}`}
                       className={`border-border hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
-                        isCurrent ? "bg-accent/50 font-medium" : ""
+                        isCurrent ? "bg-accent/50" : ""
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        {isCompleted ? (
-                          <CheckCircle2 className="size-4 text-emerald-500" />
-                        ) : isCurrent ? (
-                          <PlayCircle className="text-primary size-4" />
+                        {isCurrent ? (
+                          <PlayCircle className="text-foreground size-4" />
                         ) : (
                           <FileText className="text-muted-foreground size-4" />
                         )}
                         <div
                           className={`line-clamp-1 text-sm ${
                             isCurrent
-                              ? "text-primary font-semibold"
-                              : "text-card-foreground"
+                              ? "text-card-foreground"
+                              : "text-muted-foreground"
                           }`}
                         >
                           {lesson.title}
@@ -114,9 +112,7 @@ const Topics = ({
                       </div>
 
                       {isCompleted ? (
-                        <span className="text-xs font-medium text-emerald-500">
-                          Completed
-                        </span>
+                        <CircleCheck className="size-4 text-emerald-500" />
                       ) : (
                         <Lock className="text-muted-foreground size-4" />
                       )}
