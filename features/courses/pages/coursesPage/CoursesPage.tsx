@@ -13,7 +13,7 @@ const CoursesPage = () => {
   return (
     <div className="mx-3 my-10 md:mx-10">
       <div className="text-foreground text-2xl md:text-3xl">Courses</div>
-      <div className="mt-6 grid w-full grid-cols-1 gap-3 md:grid-cols-[repeat(auto-fill,minmax(400px,1fr))] md:gap-6">
+      <div className="mt-6 grid w-full grid-cols-2 gap-3 md:grid-cols-[repeat(auto-fill,minmax(400px,1fr))] md:gap-6">
         {courses?.map((course) => (
           <CourseCard key={course.id} course={course} />
         ))}

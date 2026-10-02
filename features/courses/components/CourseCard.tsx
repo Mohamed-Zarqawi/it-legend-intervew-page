@@ -25,35 +25,35 @@ const CourseCard = ({ course }: CourseCardProps) => {
   const percentage = progressData?.progress_percentage || 0;
 
   return (
-    <div className="group bg-card border-border text-card-foreground md:h- flex w-full flex-col justify-between rounded-4xl border p-4">
+    <div className="group bg-card border-border text-card-foreground flex h-85 w-full flex-col justify-between rounded-4xl border md:p-4">
       <div>
-        <div className="group overflow-hidden rounded-2xl hover:cursor-pointer">
+        <div className="group overflow-hidden rounded-t-2xl hover:cursor-pointer md:rounded-2xl">
           <Image
             src={String(course?.thumbnail_url)}
             alt={course?.title}
             width={300}
             height={300}
-            className="inset-0 h-90 w-full rounded-2xl object-cover object-center transition-transform duration-500 group-hover:scale-103 md:min-w-100"
+            className="inset-0 h-46 w-full rounded-t-2xl object-cover object-center transition-transform duration-500 group-hover:scale-103 md:h-90 md:min-w-100 md:rounded-2xl"
           />
         </div>
 
-        <div className="mt-3 flex flex-col gap-0.5">
-          <div className="text-card-foreground text-lg font-medium">
+        <div className="mt-3 flex flex-col px-2 md:gap-0.5 md:px-0">
+          <div className="text-card-foreground text-xs font-medium md:text-lg">
             {course?.title}
           </div>
-          <div className="text-muted-foreground line-clamp-2 w-full text-sm">
+          <div className="text-muted-foreground line-clamp-2 hidden w-full text-sm md:block">
             {course?.description}
           </div>
         </div>
       </div>
-      <div className="mt-3 flex w-full flex-col justify-end gap-3">
+      <div className="mt-3 flex w-full flex-col justify-end gap-2 p-2 md:gap-3 md:p-0">
         <div className="flex w-full flex-col gap-2 px-1">
           <div className="text-foreground flex items-center gap-1.5">
             <IconCategoryFilled className="text-muted-foreground size-3.5" />
             <span className="text-xs">{course?.category}</span>
           </div>
           <div className="flex justify-between">
-            <div className="text-foreground flex items-center gap-1.5">
+            <div className="text-foreground hidden items-center gap-1.5 md:flex">
               <IconAwardFilled className="text-muted-foreground size-3.5" />
               <span className="text-xs">
                 1/{course?.certificate}

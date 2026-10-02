@@ -78,12 +78,10 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
   };
 
   return (
-    <div className="text-foreground mt-10">
+    <div className="text-foreground mt-5 md:mt-10">
       <div className="flex flex-col gap-6 px-2 md:mx-10 md:px-0">
         <div className="text-muted-foreground line-clamp-1 flex items-center gap-1 text-sm">
-          <Link href={`/courses`} className="line-clamp-1">
-            Courses
-          </Link>
+          <Link href={`/courses`}>Courses</Link>
           <ChevronRight className="size-4" />
           <Link href={`/courses/${lesson.course_id}`} className="line-clamp-1">
             {course?.[0].title}
@@ -125,7 +123,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
 
           {/* Icons / Action Buttons */}
           <div className="mt-4 flex flex-col justify-between gap-3 px-6 md:mt-6 md:flex-row md:px-0">
-            <div className="text-foreground text-2xl font-medium md:text-4xl md:font-semibold">
+            <div className="text-foreground text-xl font-medium md:text-4xl md:font-semibold">
               {lesson?.title}
             </div>
             <div className="flex gap-2 md:gap-3">
