@@ -57,7 +57,7 @@ function Input({
         </FieldLabel>
       )}
       {isLoading ? (
-        <Skeleton className={cn("h-12.5 rounded-lg md:h-13", className)} />
+        <Skeleton className={cn("h-8", className)} />
       ) : (
         <input
           type={type}

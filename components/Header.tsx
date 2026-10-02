@@ -9,6 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Skeleton } from "./ui/skeleton";
 
 const Header = () => {
   const { theme, setTheme, resolvedTheme } = useTheme();
@@ -18,22 +19,18 @@ const Header = () => {
     setMounted(true);
   }, []);
 
-  // تحديد اسم الثيم الحالي بشكل آمن
   const currentTheme = theme === "system" ? resolvedTheme : theme;
   const pathname = usePathname();
   const { data: currentUser, isLoading: isCurrentUserLoading } =
     useGetCurrentUser();
-  // const { data: cart = [], isLoading: isCartLoading } = useGetCart(
-  //   currentUser?.id,
-  // );
 
   const leftMenuItems = [
     { name: "Courses", href: "/courses" },
-    { name: "My Learning", href: "/profile" },
+    { name: "My Learning", href: "/courses" },
   ];
   const rightMenuItems = [
-    { name: "About", href: "/aboutUs" },
-    { name: "Contact", href: "/contact" },
+    { name: "About", href: "/courses" },
+    { name: "Contact", href: "/courses" },
   ];
 
   const router = useRouter();
@@ -96,47 +93,50 @@ const Header = () => {
             </Link>
           ))}
         </div>
+        {isCurrentUserLoading ? (
+          <Skeleton className="md:h-8 md:w-50" />
+        ) : (
+          <div className="items-center gap-3 md:flex">
+            {currentUser ? (
+              <Link
+                href={"/profile"}
+                className="text-muted-foreground hover:text-foreground hover:bg-accent hidden items-center justify-center rounded-full p-1.5 transition-colors md:flex"
+              >
+                <User className="h-5 w-5" />
+              </Link>
+            ) : (
+              <div className="hidden items-center gap-3 md:flex">
+                <Button variant={"outline"} asChild>
+                  <Link
+                    href={"/auth/login"}
+                    className="text-muted-foreground hover:text-foreground font-medium transition-colors"
+                  >
+                    Log in
+                  </Link>
+                </Button>
 
-        <div className="items-center gap-3 md:flex">
-          {currentUser ? (
-            <Link
-              href={"/profile"}
-              className="text-muted-foreground hover:text-foreground hover:bg-accent hidden items-center justify-center rounded-full p-1.5 transition-colors md:flex"
+                <Button variant={"default"} className="hidden md:flex" asChild>
+                  <Link
+                    href={"/auth/signup"}
+                    className="text-muted-foreground hover:text-foreground font-medium transition-colors"
+                  >
+                    Sign up
+                  </Link>
+                </Button>
+              </div>
+            )}
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground relative"
             >
-              <User className="h-5 w-5" />
-            </Link>
-          ) : (
-            <div className="hidden items-center gap-3 md:flex">
-              <Button variant={"outline"} asChild>
-                <Link
-                  href={"/auth/login"}
-                  className="text-muted-foreground hover:text-foreground font-medium transition-colors"
-                >
-                  Log in
-                </Link>
-              </Button>
-
-              <Button variant={"default"} className="hidden md:flex" asChild>
-                <Link
-                  href={"/auth/signup"}
-                  className="text-muted-foreground hover:text-foreground font-medium transition-colors"
-                >
-                  Sign up
-                </Link>
-              </Button>
-            </div>
-          )}
-
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground relative"
-          >
-            <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-          </Button>
-        </div>
+              <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            </Button>
+          </div>
+        )}
       </div>
     </header>
   );

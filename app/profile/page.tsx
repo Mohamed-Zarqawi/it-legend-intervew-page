@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { useLogout } from "@/features/auth/pages/hooks/useAuth";
+import ProfilePage from "@/features/profile/pages/ProfilePage";
 
 import { useRouter } from "next/navigation";
 
-const page = () => {
+const Profile = () => {
   const router = useRouter();
   const logout = useLogout();
   const handleLogout = () => {
@@ -15,16 +15,9 @@ const page = () => {
 
   return (
     <div>
-      Hi
-      <Button
-        onClick={() => {
-          handleLogout();
-        }}
-      >
-        Logout
-      </Button>
+      <ProfilePage />
     </div>
   );
 };
 
-export default page;
+export default Profile;

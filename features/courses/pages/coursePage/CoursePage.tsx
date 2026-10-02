@@ -26,6 +26,10 @@ export function CoursePage({ courseId }: LessonListProps) {
     {},
   );
 
+  if (isLoading) {
+    return <div className="p-10 text-center">Loading Course...</div>;
+  }
+
   return (
     <div className="my-10 space-y-8 md:mx-10">
       <div className="text-xl font-bold">Course Content</div>

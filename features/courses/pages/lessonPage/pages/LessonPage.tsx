@@ -99,7 +99,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
           {/* Video */}
           <div className="sticky top-18 z-10 overflow-hidden! rounded-none! border-0! md:static md:rounded-lg!">
             <ReactPlayer
-              src={lesson.video_url}
+              src={lesson.video_url || ""}
               className="relative aspect-video! h-full! w-full! overflow-hidden! rounded-none! border-0! md:rounded-4xl!"
               controls
               onPlay={() => {

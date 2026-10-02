@@ -11,7 +11,6 @@ import {
 
 import { reqForgotPassword } from "@/types/auth/forgotPassword";
 import { ReqLoginType } from "@/types/auth/login";
-import { User } from "@/types/auth/user";
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -62,13 +61,10 @@ const getErrorMessage = (
 };
 
 export const useGetCurrentUser = () => {
-  return useQuery<User>({
+  return useQuery({
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     retry: false,
-
-    staleTime: 1000 * 60 * 5, // 5 دقائق طالما هناك مستخدم
-    gcTime: 0, // حذف البيانات من الذاكرة فور إلغاء التثبيت
   });
 };
 
