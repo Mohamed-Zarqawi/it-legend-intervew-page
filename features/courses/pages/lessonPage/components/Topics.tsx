@@ -32,7 +32,7 @@ const Topics = ({
 
   const groupedLessons = (lessons ?? []).reduce<Record<string, Lesson[]>>(
     (acc, lesson) => {
-      const weekKey = lesson.week ? `${lesson.week}` : "Other Lessons";
+      const weekKey = lesson.week ? `Week ${lesson.week}` : "Other Lessons";
 
       if (!acc[weekKey]) {
         acc[weekKey] = [];
@@ -49,7 +49,7 @@ const Topics = ({
     <div>
       {/* Right Side */}
       <div
-        className={`hidden w-full max-w-fit min-w-fit md:pl-14 ${fullScreen == true ? "md:hidden" : "md:block"} `}
+        className={`hidden w-full max-w-fit min-w-fit md:pl-14 ${fullScreen == true ? "lg:hidden" : "lg:block"} `}
       >
         {/* header */}
         <div>
@@ -76,9 +76,6 @@ const Topics = ({
             >
               <div className="flex flex-col gap-2">
                 <div className="text-foreground font-semibold">{week}</div>
-                <div className="text-muted-foreground text-sm">
-                  Course lessons and materials for week {week}
-                </div>
               </div>
 
               <div className="mt-6 flex flex-col divide-y pb-2">

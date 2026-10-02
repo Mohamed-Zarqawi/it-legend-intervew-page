@@ -20,7 +20,7 @@ export function CoursePage({ courseId }: LessonListProps) {
 
   const groupedLessons = (lessons ?? []).reduce<Record<string, Lesson[]>>(
     (acc, lesson) => {
-      const weekKey = lesson.week ? `${lesson.week}` : "Other Lessons";
+      const weekKey = lesson.week ? `Week ${lesson.week}` : "Other Lessons";
 
       if (!acc[weekKey]) {
         acc[weekKey] = [];

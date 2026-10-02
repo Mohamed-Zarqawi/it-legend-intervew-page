@@ -25,7 +25,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
   const percentage = progressData?.progress_percentage || 0;
 
   return (
-    <div className="group bg-card border-border text-card-foreground flex w-full flex-col justify-between rounded-4xl border p-4 md:h-fit">
+    <div className="group bg-card border-border text-card-foreground md:h- flex w-full flex-col justify-between rounded-4xl border p-4">
       <div>
         <div className="group overflow-hidden rounded-2xl hover:cursor-pointer">
           <Image
@@ -33,7 +33,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
             alt={course?.title}
             width={300}
             height={300}
-            className="inset-0 h-fit w-full rounded-2xl object-cover object-center transition-transform duration-500 group-hover:scale-103 md:min-w-100"
+            className="inset-0 h-90 w-full rounded-2xl object-cover object-center transition-transform duration-500 group-hover:scale-103 md:min-w-100"
           />
         </div>
 

@@ -31,7 +31,7 @@ const MobileTopics = ({
 
   const groupedLessons = (lessons ?? []).reduce<Record<string, Lesson[]>>(
     (acc, lesson) => {
-      const weekKey = lesson.week ? `${lesson.week}` : "Other Lessons";
+      const weekKey = lesson.week ? `Week ${lesson.week}` : "Other Lessons";
 
       if (!acc[weekKey]) {
         acc[weekKey] = [];
@@ -72,10 +72,7 @@ const MobileTopics = ({
             className="bg-card text-card-foreground border-border mt-9 rounded-4xl border px-4 py-6 md:mt-8 md:border-0"
           >
             <div className="flex flex-col gap-2">
-              <div className="text-foreground font-semibold">Week {week}</div>
-              <div className="text-muted-foreground text-sm">
-                Course lessons and materials for week {week}
-              </div>
+              <div className="text-foreground font-semibold">{week}</div>
             </div>
 
             <div className="mt-4 flex flex-col divide-y pb-2">
