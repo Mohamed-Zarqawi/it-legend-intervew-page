@@ -2,6 +2,7 @@ import GetValidDate from "@/components/GetValidDate";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { useGetCurrentUser } from "@/features/auth/pages/hooks/useAuth";
 import { CreateCommentSchema } from "@/types/courses/CommentType";
 import { fakerEN as faker } from "@faker-js/faker";
 import { useFormik } from "formik";
@@ -11,6 +12,8 @@ import { useEffect } from "react";
 import { useAddComment, useGetComments } from "../pages/hooks/useComments";
 
 const Comments = () => {
+  const { data: currentUser, isLoading: isCurrentUserLoading } =
+    useGetCurrentUser();
   const { data: comments, refetch: refetchComments } = useGetComments();
   const { mutateAsync: handleCreateComment, isPending: isCategoryCreating } =
     useAddComment();
@@ -44,9 +47,16 @@ const Comments = () => {
     const lastName = faker.person.lastName();
     const fullName = `${firstName} ${lastName}`;
     const avatar = faker.image.avatar();
-    console.log(avatar);
-    setFieldValue("user_name", fullName);
-    setFieldValue("user_avatar", avatar);
+    if (!currentUser) {
+      setFieldValue("user_name", fullName);
+      setFieldValue("user_avatar", avatar);
+    } else {
+      setFieldValue(
+        "user_name",
+        currentUser.first_name + " " + currentUser.last_name,
+      );
+      setFieldValue("user_avatar", currentUser.avatar_url || "");
+    }
   }, []);
 
   return (
@@ -79,7 +89,8 @@ const Comments = () => {
                 {/* right */}
                 <div>
                   <div className="text-foreground text-base font-semibold">
-                    {comment.user_name}
+                    {comment.user_name ||
+                      currentUser?.first_name + " " + currentUser?.last_name}
                   </div>
                   <div className="text-muted-foreground mt-1 text-xs font-medium">
                     {GetValidDate(comment.created_at).formattedDate}
