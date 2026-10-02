@@ -45,9 +45,11 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          language: string | null
           teacher_name: string | null
           thumbnail_url: string | null
           title: string
+          weeks: number | null
         }
         Insert: {
           category?: string | null
@@ -55,9 +57,11 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          language?: string | null
           teacher_name?: string | null
           thumbnail_url?: string | null
           title: string
+          weeks?: number | null
         }
         Update: {
           category?: string | null
@@ -65,9 +69,11 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          language?: string | null
           teacher_name?: string | null
           thumbnail_url?: string | null
           title?: string
+          weeks?: number | null
         }
         Relationships: []
       }
@@ -188,7 +194,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_course_progress_details: {
+        Args: { p_course_id: string; p_user_id: string }
+        Returns: {
+          completed_count: number
+          completed_lesson_ids: string[]
+          progress_percentage: number
+          total_lessons: number
+        }[]
+      }
+      toggle_lesson_progress: {
+        Args: {
+          p_course_id: string
+          p_is_completed: boolean
+          p_lesson_id: string
+          p_user_id: string
+        }
+        Returns: {
+          completed_count: number
+          progress_percentage: number
+          total_lessons: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

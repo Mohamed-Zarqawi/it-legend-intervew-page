@@ -19,9 +19,10 @@ export const getAllCourses = async () => {
 export const getOneCourse = async (courseId: string) => {
   const { data: course, error } = await supabase
     .from("courses")
-    .select("*")
+    .select("*  , lessons:lessons(id)")
     .eq("id", courseId);
 
+  console.log(course);
   if (error) throw error;
 
   return course;

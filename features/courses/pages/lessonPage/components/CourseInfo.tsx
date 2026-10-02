@@ -1,20 +1,29 @@
+import { Database } from "@/types/database.types";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
 import { BookUser, Clock, Globe, LibraryBig } from "lucide-react";
 
-const Materials = () => {
+type Course = Database["public"]["Tables"]["courses"]["Row"] & {
+  lessons: Pick<Database["public"]["Tables"]["lessons"]["Row"], "id">[];
+};
+
+interface CourseInfo {
+  course?: Course;
+}
+
+const CourseInfo = ({ course }: CourseInfo) => {
   const courseMaterialsMenu = [
     {
       section: [
         {
           title: "Duration",
-          data: "3 weeks",
+          data: `${course?.weeks} Weeks`,
           icon: Clock,
         },
 
         {
           title: "Lessons",
-          data: "8",
+          data: `${course?.lessons.length} Lesson`,
           icon: LibraryBig,
         },
         {
@@ -24,12 +33,13 @@ const Materials = () => {
         },
         {
           title: "Language",
-          data: "English",
+          data: `${course?.language}`,
           icon: Globe,
         },
       ],
     },
   ];
+
   return (
     <div className="mt-8 flex flex-col gap-2 px-4 md:mt-8 md:gap-5 md:px-0">
       <div className="text-foreground text-xl font-medium md:text-2xl">
@@ -68,4 +78,4 @@ const Materials = () => {
   );
 };
 
-export default Materials;
+export default CourseInfo;

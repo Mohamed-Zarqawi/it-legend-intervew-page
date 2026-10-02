@@ -9,11 +9,7 @@ export const getCurrentUser = async () => {
     error: authError,
   } = await supabase.auth.getUser();
 
-  if (authError) {
-    throw authError;
-  }
-
-  if (!user) {
+  if (authError || !user) {
     return null;
   }
 
@@ -24,9 +20,9 @@ export const getCurrentUser = async () => {
     .single();
 
   if (profileError) {
-    throw profileError;
+    console.error("Error fetching user profile:", profileError);
+    return null;
   }
-
   return {
     ...user,
     ...profile,

@@ -8,7 +8,7 @@ import {
   resetPassword,
   signUp,
 } from "@/services/authServices/auth.service";
-// import { deleteAccount } from "@/services/authServices/deleteAccount.service";
+
 import { reqForgotPassword } from "@/types/auth/forgotPassword";
 import { ReqLoginType } from "@/types/auth/login";
 import { User } from "@/types/auth/user";
@@ -16,12 +16,6 @@ import { User } from "@/types/auth/user";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-// toast.error(`${getErrorMessage(error)}`, {
-//   action: {
-//     label: "Register",
-//     onClick: () => router.push("/auth/signup"),
-//   },
-// });
 const AUTH_TOKEN_CHANGED_EVENT = "auth-token-changed";
 
 const notifyAuthTokenChanged = () => {
@@ -63,7 +57,6 @@ const getErrorMessage = (
       return "Server Error: Something went wrong on our end. Please try again later.";
 
     default:
-      // في حال لم يتطابق الكود، نعرض الرسالة القادمة من الـ API إن وُجدت، أو رسالة عامة
       return error.message || "An unexpected error occurred. Please try again.";
   }
 };
@@ -73,6 +66,9 @@ export const useGetCurrentUser = () => {
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     retry: false,
+
+    staleTime: 1000 * 60 * 5, // 5 دقائق طالما هناك مستخدم
+    gcTime: 0, // حذف البيانات من الذاكرة فور إلغاء التثبيت
   });
 };
 
@@ -86,7 +82,7 @@ export const useLogin = () => {
       notifyAuthTokenChanged();
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       toast.success("Login Successfully", {});
-      // router.push("/shop");
+      router.push("/courses");
     },
     onError: (error: ApiError) => {
       getErrorMessage(error, router);
@@ -112,15 +108,12 @@ export const useSignUp = () => {
       email,
       password,
     }: SignUpParams) => {
-      // const username = kebabCase(
-      //   `${firstName} ${lastName} ${random(1000, 9000)}`,
-      // );
       return signUp({ firstName, lastName, email, password });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["currentUser"] });
       toast.success("Account Created Successfully", {});
-      // router.push("/shop");
+      router.push("/course");
     },
     onError: () => {
       toast.error("This account already exists, please login", {
@@ -132,15 +125,16 @@ export const useSignUp = () => {
     },
   });
 };
-
 export const useLogout = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   return async () => {
-    const { error } = await supabase.auth.signOut();
-    notifyAuthTokenChanged();
+    await supabase.auth.signOut();
+    await queryClient.cancelQueries();
+    queryClient.removeQueries({ queryKey: ["currentUser"] });
     queryClient.clear();
+
     router.push("/auth/login");
   };
 };

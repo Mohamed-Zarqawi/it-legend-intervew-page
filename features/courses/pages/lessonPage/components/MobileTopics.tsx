@@ -1,69 +1,49 @@
-import { Badge } from "@/components/ui/badge";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
-
+import { Database } from "@/types/database.types";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
-import { FileText, Lock } from "lucide-react";
+import { CheckCircle2, FileText, Lock, PlayCircle } from "lucide-react";
+import Link from "next/link";
+import { useGetAllCourseLessons } from "../pages/hooks/useLesson";
 
-const MobileTopics = ({ fullScreen }: { fullScreen?: boolean }) => {
-  const courseDetailsMenu = [
-    {
-      week: "1 - 4",
-      description:
-        "Advanced story telling techniques for writers: Persons, Charachters & Plots",
-      items: [
-        { item: "Introduction" },
-        { item: "Course Overview" },
-        {
-          item: "Course Exercise | Reference Files",
-          exersise: {
-            question: "1",
-            time: "10",
-          },
-        },
-        { item: "Code Editor Installation" },
-        { item: "Embedding PHP in HTML" },
-      ],
-    },
+interface MobileTopicsProps {
+  fullScreen?: boolean;
+  courseId: string;
+  currentLessonId: string;
+  progressData?: {
+    completed_lesson_ids?: string[];
+    completed_count?: number;
+    total_lessons?: number;
+    progress_percentage?: number;
+  };
+}
 
-    {
-      week: "5 - 8",
-      description:
-        "Advanced story telling techniques for writers: Persons, Charachters & Plots",
-      items: [
-        { item: "Defining Functions" },
-        { item: "Function Parameters" },
-        {
-          item: "Global variable and Scope",
-          exersise: {
-            question: "2",
-            time: "15",
-          },
-        },
-        { item: "Newer Way of creating a constant" },
-        { item: "Constants" },
-      ],
+type Lesson = Database["public"]["Tables"]["lessons"]["Row"];
+
+const MobileTopics = ({
+  fullScreen,
+  courseId,
+  currentLessonId,
+  progressData,
+}: MobileTopicsProps) => {
+  const { data: lessons } = useGetAllCourseLessons(courseId);
+
+  const groupedLessons = (lessons ?? []).reduce<Record<string, Lesson[]>>(
+    (acc, lesson) => {
+      const weekKey = lesson.week ? `${lesson.week}` : "Other Lessons";
+
+      if (!acc[weekKey]) {
+        acc[weekKey] = [];
+      }
+      acc[weekKey].push(lesson);
+      return acc;
     },
-    {
-      week: "9 - 12",
-      description:
-        "Advanced story telling techniques for writers: Persons, Charachters & Plots",
-      items: [
-        { item: "Defining Functions" },
-        { item: "Function Parameters" },
-        {
-          item: "Global variable and Scope",
-          exersise: {
-            question: "3",
-            time: "20",
-          },
-        },
-        { item: "Newer Way of creating a constant" },
-        { item: "Constants" },
-      ],
-    },
-  ];
+    {},
+  );
+
+  const percentage = progressData?.progress_percentage || 0;
+  const completedIds = progressData?.completed_lesson_ids || [];
 
   return (
     <div
@@ -78,60 +58,66 @@ const MobileTopics = ({ fullScreen }: { fullScreen?: boolean }) => {
         <Field className="mx-auto mt-12 w-full md:mt-10">
           <FieldLabel htmlFor="progress-upload">
             <span>Your progress</span>
-            <span className="ml-auto">66%</span>
+            <span className="ml-auto">{percentage}%</span>
           </FieldLabel>
-          <Progress value={66} id="progress-upload" />
+          <Progress value={percentage} id="progress-upload" />
         </Field>
       </div>
 
       {/* Card */}
-      {courseDetailsMenu.map((card, i) => {
+      {Object.entries(groupedLessons).map(([week, weekLessons], i) => {
         return (
           <div
             key={i}
             className="bg-card text-card-foreground border-border mt-9 rounded-4xl border px-4 py-6 md:mt-8 md:border-0"
           >
             <div className="flex flex-col gap-2">
-              <div className="text-foreground font-semibold">
-                Week {card.week}
-              </div>
+              <div className="text-foreground font-semibold">Week {week}</div>
               <div className="text-muted-foreground text-sm">
-                {card.description}
+                Course lessons and materials for week {week}
               </div>
             </div>
 
-            <div className="mt-4 flex flex-col pb-2">
-              {card.items.map((item, j) => {
+            <div className="mt-4 flex flex-col divide-y pb-2">
+              {weekLessons.map((lesson) => {
+                const isCurrent = lesson.id === currentLessonId;
+                const isCompleted = completedIds.includes(lesson.id);
+
                 return (
-                  <div
-                    key={j}
-                    className={`border-border flex justify-between border-y py-4 ${item.exersise?.question ? "items-start" : "items-center"}`}
+                  <Link
+                    key={lesson.id}
+                    href={`/courses/${courseId}/${lesson.id}`}
+                    className={`hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
+                      isCurrent ? "bg-accent/50 font-medium" : ""
+                    }`}
                   >
-                    <div className="flex items-center gap-2">
-                      <FileText className="text-muted-foreground size-4" />
-                      <div className="text-card-foreground text-sm">
-                        {item.item}
+                    <div className="flex items-center gap-3">
+                      {isCompleted ? (
+                        <CheckCircle2 className="size-4 text-emerald-500" />
+                      ) : isCurrent ? (
+                        <PlayCircle className="text-primary size-4" />
+                      ) : (
+                        <FileText className="text-muted-foreground size-4" />
+                      )}
+                      <div
+                        className={`line-clamp-1 text-sm ${
+                          isCurrent
+                            ? "text-primary font-semibold"
+                            : "text-card-foreground"
+                        }`}
+                      >
+                        {lesson.title}
                       </div>
                     </div>
-                    {item.exersise?.question ? (
-                      <div className="flex cursor-pointer flex-col gap-2">
-                        <Badge
-                          variant={"outline"}
-                          className="min-w-20 border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                        >
-                          {item.exersise.question} QUESTIONS
-                        </Badge>
-                        <Badge
-                          variant={"destructive"}
-                          className="min-w-20 justify-center"
-                        >
-                          {item.exersise.time} MINUTES
-                        </Badge>
-                      </div>
+
+                    {isCompleted ? (
+                      <span className="text-xs font-medium text-emerald-500">
+                        Completed
+                      </span>
                     ) : (
                       <Lock className="text-muted-foreground size-4" />
                     )}
-                  </div>
+                  </Link>
                 );
               })}
             </div>

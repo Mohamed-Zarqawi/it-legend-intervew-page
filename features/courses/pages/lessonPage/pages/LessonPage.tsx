@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Database } from "@/types/database.types";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
 import {
@@ -10,18 +11,64 @@ import {
   MessageCircleQuestionMark,
   MessageSquarePlus,
 } from "lucide-react";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import ReactPlayer from "react-player";
+import { useGetOneCourse } from "../../hooks/useCourse";
 import Comments from "../components/Comments";
+import CourseInfo from "../components/CourseInfo";
 import LeaderBoard from "../components/LeaderBoard";
-import Materials from "../components/Materials";
 import MobileTopics from "../components/MobileTopics";
 import Topics from "../components/Topics";
+import {
+  useGetCourseLesson,
+  useGetCourseProgress,
+  useToggleLessonProgress,
+} from "./hooks/useLesson";
 
-const LessonPage = () => {
+interface LessonPageProps {
+  courseId: string;
+  lessonId: string;
+  userId: string;
+}
+type Lesson = Database["public"]["Tables"]["lessons"]["Row"]["video_url"];
+type Course = Database["public"]["Tables"]["courses"]["Row"];
+
+const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
   const [fullScreen, setFullScreen] = useState<boolean>(false);
   const mobileTopicsRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
+
+  const { data: lesson, isLoading: isLessonLoading } =
+    useGetCourseLesson(lessonId);
+  const { data: course, isLoading: isCourseLoading } =
+    useGetOneCourse(courseId);
+
+  const { data: progressData } = useGetCourseProgress(courseId, userId);
+
+  const { mutate: toggleProgress, isPending: isToggling } =
+    useToggleLessonProgress();
+
+  if (isLessonLoading) {
+    return <div className="p-10 text-center">Loading lesson...</div>;
+  }
+
+  if (!lesson) {
+    return <div className="p-10 text-center">Lesson not found.</div>;
+  }
+
+  const isCompleted =
+    progressData?.completed_lesson_ids?.includes(lessonId) ?? false;
+
+  const handleToggleComplete = () => {
+    if (!userId) return;
+    toggleProgress({
+      userId,
+      lessonId,
+      courseId,
+      isCompleted: !isCompleted,
+    });
+  };
 
   const scrollToSection = (ref: React.RefObject<HTMLDivElement | null>) => {
     ref.current?.scrollIntoView({
@@ -30,16 +77,17 @@ const LessonPage = () => {
     });
   };
 
-  console.log(fullScreen);
   return (
     <div className="text-foreground mt-4">
       <div className="flex flex-col gap-6 px-2 md:mx-10 md:px-0">
         <div className="text-muted-foreground flex items-center gap-1 text-sm">
-          <span>Home</span>
+          <Link href={`/courses`}>Courses</Link>
           <ChevronRight className="size-4" />
-          <span>Courses</span>
+          <Link href={`/courses/${lesson.course_id}`}>{course?.[0].title}</Link>
           <ChevronRight className="size-4" />
-          <span className="text-foreground font-medium">Course Details</span>
+          <span className="text-foreground font-medium">
+            {lesson?.title || "Lesson Details"}
+          </span>
         </div>
       </div>
 
@@ -50,39 +98,13 @@ const LessonPage = () => {
         <div className="relative mb-25 w-full">
           {/* Video */}
           <div className="sticky top-18 z-10 overflow-hidden! rounded-none! border-0! md:static md:rounded-lg!">
-            {/* <MediaPlayer
-              title="Course Video"
-              src="/https://www.youtube.com/watch?v=BB49x_uMlGA"
-              load="visible"
-              posterLoad="visible"
-              playsInline
-              className="relative aspect-video! w-full overflow-hidden! rounded-none! border-0! md:rounded-4xl!"
-            >
-              <MediaProvider className="overflow-hidden! rounded-none! border-0! md:rounded-sm!" />
-
-              <DefaultVideoLayout
-                icons={defaultLayoutIcons}
-                className="overflow-hidden! rounded-4xl! border-0! md:rounded-4xl!"
-              />
-
-              <Button
-                size={"icon-lg"}
-                className="bg-primary/80 text-primary-foreground hover:bg-primary absolute top-5 right-5 z-20 hidden cursor-pointer rounded-full! p-4.5! backdrop-blur-md transition-colors md:flex"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setFullScreen(!fullScreen);
-                }}
-              >
-                <LaptopMinimal />
-              </Button>
-            </MediaPlayer> */}
-
             <ReactPlayer
-              src="https://www.youtube.com/watch?v=LXb3EKWsInQ"
+              src={lesson.video_url}
               className="relative aspect-video! h-full! w-full! overflow-hidden! rounded-none! border-0! md:rounded-4xl!"
-
               controls
+              onPlay={() => {
+                if (!isCompleted) handleToggleComplete();
+              }}
             />
             <Button
               size={"icon-lg"}
@@ -100,7 +122,7 @@ const LessonPage = () => {
           {/* Icons / Action Buttons */}
           <div className="mt-4 flex flex-col justify-between gap-3 px-6 md:mt-6 md:flex-row md:px-0">
             <div className="text-foreground text-2xl font-medium md:text-4xl md:font-semibold">
-              Starting SEO as your Home
+              {lesson?.title}
             </div>
             <div className="flex gap-2 md:gap-3">
               <Button
@@ -138,10 +160,15 @@ const LessonPage = () => {
           </div>
 
           {/* Course Materials */}
-          <Materials />
+          <CourseInfo course={course?.[0]} />
 
           <div ref={mobileTopicsRef} className="scroll-mt-60 md:scroll-mt-6">
-            <MobileTopics fullScreen={fullScreen} />
+            <MobileTopics
+              fullScreen={fullScreen}
+              courseId={courseId}
+              currentLessonId={lessonId}
+              progressData={progressData}
+            />
           </div>
 
           {/* Comments Section */}
@@ -153,7 +180,13 @@ const LessonPage = () => {
 
         {/* Right Side */}
 
-        <Topics fullScreen={fullScreen} />
+        {/* <Topics fullScreen={fullScreen} /> */}
+        <Topics
+          fullScreen={fullScreen}
+          courseId={courseId}
+          currentLessonId={lessonId}
+          progressData={progressData}
+        />
       </div>
     </div>
   );
