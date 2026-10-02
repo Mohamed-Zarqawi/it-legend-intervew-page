@@ -26,7 +26,7 @@ export default function MobileBottomNav() {
 
     {
       title: "3",
-      href: "/courses/1/1",
+      href: "courses/22222222-2222-4222-8222-222222222222/a2020202-0002-4000-8000-000000000001",
       icon: Book,
     },
 
