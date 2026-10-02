@@ -1,56 +1,48 @@
-# Project Title: IT Legend Course Page
+# 🚀 IT Legend - Interactive Learning Platform
 
-## Features
-- Responsive design for optimal viewing on various devices.
-- Dynamic routing with Next.js for seamless navigation.
-- Reusable components for consistent UI.
-- Static asset management for images and other media.
+> A modern, full-stack interactive learning management platform built to deliver structured courses, video lessons, and real-time weekly quizzes with automated grading, state persistence, and secure user authentication.
 
-## Tech Stack
-- **Framework**: Next.js
-- **Language**: TypeScript
-- **Styling**: CSS Modules or styled-components (if applicable)
-- **Package Manager**: npm or yarn
+---
 
-## Installation Steps
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   ```
-2. Navigate to the project directory:
-   ```
-   cd it-legend-course-page
-   ```
-3. Install dependencies:
-   ```
-   npm install
-   ```
-   or
-   ```
-   yarn install
-   ```
-4. Start the development server:
-   ```
-   npm run dev
-   ```
-   or
-   ```
-   yarn dev
-   ```
+## 🛠️ Tech Stack
 
-## Project Structure
-```
-it-legend-course-page
-├── src
-│   ├── app
-│   │   ├── layout.tsx
-│   │   └── page.tsx
-│   └── components
-├── public
-├── package.json
-├── tsconfig.json
-├── next.config.ts
-└── README.md
-``` 
+This project leverages a high-performance modern web development stack:
 
-This README provides a comprehensive overview of the project, its features, tech stack, installation steps, and structure.
+* **Framework:** [Next.js](https://nextjs.org/) (App Router & React Server Components)
+* **Library:** [React](https://react.dev/)
+* **Type Safety:** [TypeScript](https://www.typescriptlang.org/)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **UI Components:** [shadcn/ui](https://ui.shadcn.com/) (Radix UI primitives)
+* **Backend & Database:** [Supabase](https://supabase.com/) (PostgreSQL, Row Level Security, and Real-time)
+* **Authentication:** Supabase Auth (Secure JWT-based session management)
+* **State Management & Data Fetching:** [TanStack Query](https://tanstack.com/query) (React Query)
+* **Form Management:** Formik & Yup (Validation schemas)
+
+---
+
+## ✨ Key Features
+
+* **🔐 Full Authentication System:** Secure user registration, login, and session persistence powered by Supabase Auth, featuring protected routes and automatic user redirection.
+* **📚 Dynamic Course & Lesson Management:** Interactive course outlines, multi-week structures, and structured video lesson delivery.
+* **⏱️ Interactive Weekly Exams & Timers:**
+  * Dedicated quiz interface for each week featuring multiple-choice questions fetched dynamically from the database.
+  * Custom countdown timer hook (`useLessonTimer`) with live minute/second formatting and visual warning indicators.
+  * **Auto-Submission:** Automatically submits the exam when the time expires.
+* **💾 Local Storage Draft Persistence:** Quiz answers are saved locally in real-time (`localStorage`), preventing data loss if the page reloads or the browser crashes.
+* **📊 Automated Grading & Result Tracking:** Instant calculation of exam scores upon submission, storing passing/failing states, and fetching previous user scores (`useUserExamResult`) to prevent redundant attempts or display historical grades.
+* **🎨 Responsive & Accessible UI:** Fully responsive layouts optimized for mobile and desktop screens, built with Tailwind CSS and custom shadcn-styled components.
+
+---
+
+## 📁 Project Structure
+
+```text
+it-legend/
+├── app/                  # Next.js App Router pages and layouts
+├── components/           # Reusable UI components (shadcn/ui primitives)
+├── features/             # Feature-based modules (Auth, Exams, Courses)
+│   ├── auth/             # Authentication hooks and components
+│   └── exams/            # Exam logic, components, and hooks (ExamDialog, Timer)
+├── public/               # Static assets (images, icons)
+├── styles/               # Global CSS styles
+└── types/                # TypeScript interface definitions
