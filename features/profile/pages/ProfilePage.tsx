@@ -4,10 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFormik } from "formik";
 
-import { useGetCurrentUser } from "@/features/auth/pages/hooks/useAuth";
+import {
+  useGetCurrentUser,
+  useLogout,
+} from "@/features/auth/pages/hooks/useAuth";
 import { updateProfileSchema } from "@/types/auth/profile";
 import { getChangedValues } from "@/utils/getChangedValues";
 import { Country } from "country-state-city";
+import { useRouter } from "next/navigation";
 import { useUpdateProfile } from "../hooks/useProfile";
 
 const ALL_COUNTRIES = Country.getAllCountries();
@@ -17,6 +21,13 @@ const ProfilePage = () => {
     useGetCurrentUser();
   const { mutateAsync: handleUpdateProfile, isPending: isProfileUpdating } =
     useUpdateProfile();
+
+  const router = useRouter();
+  const logout = useLogout();
+  const handleLogout = () => {
+    logout();
+    router.push("/auth/login");
+  };
 
   type ProfileFormValues = {
     first_name: string;
@@ -130,6 +141,16 @@ const ProfilePage = () => {
 
         {/* Buttons */}
         <div className="mt-6 flex justify-end gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              handleLogout();
+            }}
+          >
+            Log out
+          </Button>
+
           <Button
             type="submit"
             variant="default"

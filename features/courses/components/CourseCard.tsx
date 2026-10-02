@@ -7,7 +7,6 @@ import {
   IconClockFilled,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useGetCourseProgress } from "../pages/lessonPage/pages/hooks/useLesson";
 
 type Course = Database["public"]["Tables"]["courses"]["Row"] & {
@@ -73,13 +72,11 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
         <Progress
           value={percentage}
-          href={`/courses/${course?.id}`}
+          href={!currentUser ? "/auth/login" : `courses/${course?.id}`}
           id="progress-upload"
           label={`${percentage == 0 ? "Start Learning" : "Continue Learning"}`}
           className="bg-card w-full"
-        >
-          <Link href={!currentUser ? "/auth/login" : `/${course?.id}`}></Link>
-        </Progress>
+        />
       </div>
     </div>
   );

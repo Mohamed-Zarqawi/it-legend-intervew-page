@@ -78,7 +78,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
   };
 
   return (
-    <div className="text-foreground mt-4">
+    <div className="text-foreground mt-10">
       <div className="flex flex-col gap-6 px-2 md:mx-10 md:px-0">
         <div className="text-muted-foreground flex items-center gap-1 text-sm">
           <Link href={`/courses`}>Courses</Link>

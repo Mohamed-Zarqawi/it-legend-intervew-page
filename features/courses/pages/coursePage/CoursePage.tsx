@@ -1,6 +1,9 @@
 "use client";
 
 import { Database } from "@/types/database.types";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { useGetOneCourse } from "../hooks/useCourse";
 import LessonCard from "../lessonPage/components/LessonCard";
 import { useGetAllCourseLessons } from "../lessonPage/pages/hooks/useLesson";
 
@@ -12,6 +15,8 @@ type Lesson = Database["public"]["Tables"]["lessons"]["Row"];
 
 export function CoursePage({ courseId }: LessonListProps) {
   const { data: lessons, isLoading, error } = useGetAllCourseLessons(courseId);
+  const { data: course, isLoading: isCourseLoading } =
+    useGetOneCourse(courseId);
 
   const groupedLessons = (lessons ?? []).reduce<Record<string, Lesson[]>>(
     (acc, lesson) => {
@@ -32,7 +37,16 @@ export function CoursePage({ courseId }: LessonListProps) {
 
   return (
     <div className="my-10 space-y-8 md:mx-10">
-      <div className="text-xl font-bold">Course Content</div>
+      <div className="flex flex-col gap-6">
+        <div className="text-muted-foreground flex items-center gap-1 text-sm">
+          <Link href={`/courses`}>Courses</Link>
+          <ChevronRight className="size-4" />
+          <Link className="text-foreground" href={`/courses/${courseId}`}>
+            {course?.[0].title}
+          </Link>
+        </div>
+      </div>
+      <div className="text-foreground text-2xl md:text-3xl">Course Content</div>
 
       {Object.entries(groupedLessons).map(([weekName, weekLessons]) => (
         <div key={weekName} className="space-y-3">
