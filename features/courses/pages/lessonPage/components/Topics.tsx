@@ -7,6 +7,7 @@ import "@vidstack/react/player/styles/default/theme.css";
 import { CircleCheck, FileText, Lock, PlayCircle } from "lucide-react";
 import Link from "next/link";
 import { useGetAllCourseLessons } from "../pages/hooks/useLesson";
+import { ExamDialog } from "./ExamDialog";
 
 interface TopicsProps {
   fullScreen?: boolean;
@@ -32,7 +33,7 @@ const Topics = ({
 
   const groupedLessons = (lessons ?? []).reduce<Record<string, Lesson[]>>(
     (acc, lesson) => {
-      const weekKey = lesson.week ? `Week ${lesson.week}` : "Other Lessons";
+      const weekKey = lesson.week ? `${lesson.week}` : "Other Lessons";
 
       if (!acc[weekKey]) {
         acc[weekKey] = [];
@@ -75,7 +76,7 @@ const Topics = ({
               className="bg-card text-card-foreground border-border mt-12 w-sm rounded-4xl border px-4 py-6"
             >
               <div className="flex flex-col gap-2">
-                <div className="text-foreground font-semibold">{week}</div>
+                <div className="text-foreground font-semibold">Week {week}</div>
               </div>
 
               <div className="mt-6 flex flex-col divide-y pb-2">
@@ -116,6 +117,8 @@ const Topics = ({
                     </Link>
                   );
                 })}
+
+                <ExamDialog week={week} courseId={courseId} />
               </div>
             </div>
           );

@@ -77,12 +77,83 @@ export type Database = {
         }
         Relationships: []
       }
+      exam_questions: {
+        Row: {
+          correct_answer: number
+          created_at: string
+          exam_id: string
+          id: string
+          options: Json
+          question: string
+        }
+        Insert: {
+          correct_answer: number
+          created_at?: string
+          exam_id: string
+          id?: string
+          options: Json
+          question: string
+        }
+        Update: {
+          correct_answer?: number
+          created_at?: string
+          exam_id?: string
+          id?: string
+          options?: Json
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_questions_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exams: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          passing_score: number | null
+          title: string
+          week: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          passing_score?: number | null
+          title: string
+          week: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          passing_score?: number | null
+          title?: string
+          week?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exams_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lessons: {
         Row: {
           course_id: string | null
           created_at: string
           duration: string
           id: string
+          isExam: boolean | null
           position_order: number
           progress_percentage: number
           title: string
@@ -94,6 +165,7 @@ export type Database = {
           created_at?: string
           duration: string
           id?: string
+          isExam?: boolean | null
           position_order: number
           progress_percentage: number
           title: string
@@ -105,6 +177,7 @@ export type Database = {
           created_at?: string
           duration?: string
           id?: string
+          isExam?: boolean | null
           position_order?: number
           progress_percentage?: number
           title?: string
@@ -117,6 +190,51 @@ export type Database = {
             columns: ["course_id"]
             isOneToOne: false
             referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_exam_results: {
+        Row: {
+          created_at: string
+          exam_id: string
+          id: string
+          is_passed: boolean
+          is_taked: boolean | null
+          score: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          exam_id: string
+          id?: string
+          is_passed: boolean
+          is_taked?: boolean | null
+          score: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          exam_id?: string
+          id?: string
+          is_passed?: boolean
+          is_taked?: boolean | null
+          score?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_exam_results_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_exam_results_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
