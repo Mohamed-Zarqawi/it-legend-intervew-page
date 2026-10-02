@@ -71,7 +71,7 @@ const ProfilePage = () => {
   const isLoading = isCurrentUserLoading || !currentUser;
 
   return (
-    <div className="mx-10 my-10">
+    <div className="mx-3 mt-6 md:mx-10 md:my-10">
       <div className="text-foreground text-2xl md:text-3xl">PROFILE</div>
 
       {/* contact information */}
