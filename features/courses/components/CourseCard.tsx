@@ -25,7 +25,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
   const percentage = progressData?.progress_percentage || 0;
 
   return (
-    <div className="group bg-card border-border text-card-foreground flex h-85 w-full flex-col justify-between rounded-4xl border md:p-4">
+    <div className="group bg-card border-border text-card-foreground flex h-80 w-full flex-col justify-between rounded-4xl border md:h-auto md:p-4">
       <div>
         <div className="group overflow-hidden rounded-t-2xl hover:cursor-pointer md:rounded-2xl">
           <Image
@@ -38,7 +38,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
         </div>
 
         <div className="mt-3 flex flex-col px-2 md:gap-0.5 md:px-0">
-          <div className="text-card-foreground text-xs font-medium md:text-lg">
+          <div className="text-card-foreground line-clamp-1 text-xs font-medium md:line-clamp-none md:text-lg">
             {course?.title}
           </div>
           <div className="text-muted-foreground line-clamp-2 hidden w-full text-sm md:block">
@@ -72,7 +72,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
 
         <Progress
           value={percentage}
-          href={!currentUser ? "/auth/login" : `courses/${course?.id}`}
+          href={`courses/${course?.id}`}
           id="progress-upload"
           label={`${percentage == 0 ? "Start Learning" : "Continue Learning"}`}
           className="bg-card w-full"
