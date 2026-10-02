@@ -33,7 +33,7 @@ export default function MobileBottomNav() {
     {
       title: "4",
       name: currentUser ? null : "LOGIN",
-      href: currentUser ? "/accountMoblie" : "/auth/login",
+      href: currentUser ? "/profile" : "/auth/login",
       icon: currentUser ? UserIcon : LogIn,
     },
   ];
