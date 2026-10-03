@@ -30,7 +30,7 @@ const Header = () => {
   ];
   const rightMenuItems = [
     { name: "About", href: "/about" },
-    { name: "Contact", href: "/courses" },
+    { name: "Contact", href: "/contact" },
   ];
 
   const router = useRouter();

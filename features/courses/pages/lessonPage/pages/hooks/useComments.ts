@@ -6,7 +6,6 @@ import { Comments, ReqCreateCommentType } from "@/types/courses/CommentType";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 export const useGetComments = () => {
   return useQuery<Comments[]>({
@@ -22,8 +21,7 @@ export const useAddComment = () => {
   return useMutation({
     mutationFn: (values: ReqCreateCommentType) => createComment(values),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["addresses"] });
-      toast.success("Address Added Successfully!");
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
     },
   });
 };
