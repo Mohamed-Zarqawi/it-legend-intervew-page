@@ -27,3 +27,28 @@ export const getOneCourse = async (courseId: string) => {
 
   return course;
 };
+
+// ------------------- get enrolled courses by userId -------------------
+
+export const getEnrolledCourses = async (userId: string) => {
+  const { data: enrolledCourses, error } = await supabase
+    .from("enrolled_courses")
+    .select("*  , course:courses(*,lessons(id))")
+    .eq("userId", userId);
+
+  if (error) throw error;
+
+  return enrolledCourses;
+};
+
+// ------------------- enroll course by userId -------------------
+
+export const enrollCourse = async (courseId: string, userId: string) => {
+  const { data: enrolledCourse, error } = await supabase
+    .from("enrolled_courses")
+    .insert({ courseId: courseId, userId: userId });
+
+  if (error) throw error;
+
+  return enrolledCourse;
+};

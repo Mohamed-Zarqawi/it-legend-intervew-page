@@ -5,7 +5,6 @@ import {
 import { Comments, ReqCreateCommentType } from "@/types/courses/CommentType";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 export const useGetComments = () => {
   return useQuery<Comments[]>({
@@ -15,7 +14,6 @@ export const useGetComments = () => {
 };
 
 export const useAddComment = () => {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   return useMutation({

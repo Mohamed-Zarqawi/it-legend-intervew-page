@@ -15,7 +15,7 @@ const Comments = () => {
   const { data: currentUser, isLoading: isCurrentUserLoading } =
     useGetCurrentUser();
   const { data: comments, refetch: refetchComments } = useGetComments();
-  const { mutateAsync: handleCreateComment, isPending: isCategoryCreating } =
+  const { mutateAsync: handleCreateComment, isPending: isCommentCreating } =
     useAddComment();
 
   const {

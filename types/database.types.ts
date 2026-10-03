@@ -77,6 +77,42 @@ export type Database = {
         }
         Relationships: []
       }
+      enrolled_courses: {
+        Row: {
+          courseId: string | null
+          created_at: string
+          id: number
+          userId: string | null
+        }
+        Insert: {
+          courseId?: string | null
+          created_at?: string
+          id?: number
+          userId?: string | null
+        }
+        Update: {
+          courseId?: string | null
+          created_at?: string
+          id?: number
+          userId?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "enrolled_courses_courseId_fkey"
+            columns: ["courseId"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "enrolled_courses_userId_fkey"
+            columns: ["userId"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exam_questions: {
         Row: {
           correct_answer: number

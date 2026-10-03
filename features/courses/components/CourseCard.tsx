@@ -1,4 +1,5 @@
 import { Progress } from "@/components/myComponents/progress";
+import { Button } from "@/components/ui/button";
 import { useGetCurrentUser } from "@/features/auth/pages/hooks/useAuth";
 import { Database } from "@/types/database.types";
 import {
@@ -7,6 +8,10 @@ import {
   IconClockFilled,
 } from "@tabler/icons-react";
 import Image from "next/image";
+import {
+  useEnrollCourse,
+  useGetEnrolledCourses,
+} from "../pages/hooks/useCourse";
 import { useGetCourseProgress } from "../pages/lessonPage/pages/hooks/useLesson";
 
 type Course = Database["public"]["Tables"]["courses"]["Row"] & {
@@ -22,6 +27,13 @@ const CourseCard = ({ course }: CourseCardProps) => {
     course.id,
     currentUser?.id,
   );
+
+  const { data: enrolledCourses, isLoading } = useGetEnrolledCourses(
+    currentUser?.id,
+  );
+
+  const { mutateAsync: handleEnroll, isPending: isEnrolling } =
+    useEnrollCourse();
   const percentage = progressData?.progress_percentage || 0;
 
   return (
@@ -70,13 +82,25 @@ const CourseCard = ({ course }: CourseCardProps) => {
           </div>
         </div>
 
-        <Progress
-          value={percentage}
-          href={`courses/${course?.id}`}
-          id="progress-upload"
-          label={`${percentage == 0 ? "Start Learning" : "Continue Learning"}`}
-          className="bg-card w-full"
-        />
+        {enrolledCourses?.some(
+          (enrolledCourse) => enrolledCourse.courseId === course.id,
+        ) ? (
+          <Progress
+            value={percentage}
+            href={`courses/${course?.id}`}
+            id="progress-upload"
+            label={`${percentage == 0 ? "Start Learning" : percentage == 100 ? "Completed" : `${percentage}% Completed`}`}
+            className="bg-card w-full"
+          />
+        ) : (
+          <Button
+            onClick={() => {
+              handleEnroll({ courseId: course?.id, userId: currentUser?.id });
+            }}
+          >
+            Enroll to your courses
+          </Button>
+        )}
       </div>
     </div>
   );
