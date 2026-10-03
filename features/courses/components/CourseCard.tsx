@@ -14,6 +14,7 @@ import {
   useGetEnrolledCourses,
 } from "../pages/hooks/useCourse";
 import { useGetCourseProgress } from "../pages/lessonPage/pages/hooks/useLesson";
+import { CourseCardSkeleton } from "./CourseCardSkeleton";
 
 type Course = Database["public"]["Tables"]["courses"]["Row"] & {
   lessons: Pick<Database["public"]["Tables"]["lessons"]["Row"], "id">[];
@@ -23,21 +24,24 @@ type CourseCardProps = {
 };
 
 const CourseCard = ({ course }: CourseCardProps) => {
-  const { data: currentUser } = useGetCurrentUser();
-  const { data: progressData } = useGetCourseProgress(
-    course.id,
-    currentUser?.id,
-  );
-
   const router = useRouter();
+  const { data: currentUser, isLoading: isCurrentUserLoading } =
+    useGetCurrentUser();
+  const { data: progressData, isLoading: isProgressLoading } =
+    useGetCourseProgress(course.id, currentUser?.id);
 
-  const { data: enrolledCourses, isLoading } = useGetEnrolledCourses(
-    currentUser?.id,
-  );
+  const { data: enrolledCourses, isLoading: isEnrolledLoading } =
+    useGetEnrolledCourses(currentUser?.id);
 
   const { mutateAsync: handleEnroll, isPending: isEnrolling } =
     useEnrollCourse();
   const percentage = progressData?.progress_percentage || 0;
+
+  const isLoading =
+    isEnrolledLoading || isCurrentUserLoading || isProgressLoading;
+  if (isLoading) {
+    return <CourseCardSkeleton />;
+  }
 
   return (
     <div className="group bg-card border-border text-card-foreground flex h-80 w-full flex-col justify-between rounded-4xl border md:h-auto md:p-4">
