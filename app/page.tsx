@@ -1,10 +1,9 @@
-import CoursesPage from "@/features/courses/pages/coursesPage/CoursesPage";
+import HomePage from "@/features/home/pages/HomePage";
 
 const Home = () => {
   return (
     <div>
-      {/* <CourseDetailsPage /> */}
-      <CoursesPage />
+      <HomePage />
     </div>
   );
 };
