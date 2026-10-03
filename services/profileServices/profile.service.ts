@@ -21,7 +21,7 @@ export const updateProfile = async (userId: string, body: reqUpdateProfile) => {
 export const getProfile = async (userId: string) => {
   const { data, error } = await supabase
     .from("users")
-    .select("* , addresses(*)")
+    .select("*")
     .eq("id", userId)
     .single();
 
