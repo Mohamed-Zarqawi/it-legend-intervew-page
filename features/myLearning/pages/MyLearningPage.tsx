@@ -9,13 +9,20 @@ const MyLearningPage = () => {
     currentUser?.id,
   );
 
-  console.log("enrolledCourses", enrolledCourses);
   if (isLoading) {
     return <div className="p-10 text-center">Loading...</div>;
   }
 
   if (enrolledCourses?.length === 0) {
     return <div className="p-10 text-center">No enrolled courses found.</div>;
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="p-10 text-center">
+        Please log in to view your courses.
+      </div>
+    );
   }
 
   return (
