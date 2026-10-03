@@ -8,6 +8,7 @@ import {
   IconClockFilled,
 } from "@tabler/icons-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   useEnrollCourse,
   useGetEnrolledCourses,
@@ -27,6 +28,8 @@ const CourseCard = ({ course }: CourseCardProps) => {
     course.id,
     currentUser?.id,
   );
+
+  const router = useRouter();
 
   const { data: enrolledCourses, isLoading } = useGetEnrolledCourses(
     currentUser?.id,
@@ -95,10 +98,13 @@ const CourseCard = ({ course }: CourseCardProps) => {
         ) : (
           <Button
             onClick={() => {
+              if (!currentUser) {
+                router.push(`courses/${course?.id}`);
+              }
               handleEnroll({ courseId: course?.id, userId: currentUser?.id });
             }}
           >
-            Enroll to your courses
+            {currentUser ? "Enroll to your courses" : "View Course"}
           </Button>
         )}
       </div>
