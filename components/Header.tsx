@@ -29,7 +29,7 @@ const Header = () => {
     { name: "My Learning", href: "/courses" },
   ];
   const rightMenuItems = [
-    { name: "About", href: "/courses" },
+    { name: "About", href: "/about" },
     { name: "Contact", href: "/courses" },
   ];
 
