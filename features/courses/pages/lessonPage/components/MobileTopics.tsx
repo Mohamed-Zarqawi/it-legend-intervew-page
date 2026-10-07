@@ -1,9 +1,21 @@
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { Database } from "@/types/database.types";
 import "@vidstack/react/player/styles/default/layouts/video.css";
 import "@vidstack/react/player/styles/default/theme.css";
-import { CircleCheck, FileText, Lock, PlayCircle } from "lucide-react";
+import {
+  ChevronDownIcon,
+  CircleCheck,
+  FileText,
+  Lock,
+  PlayCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { useGetAllCourseLessons } from "../pages/hooks/useLesson";
 import { ExamDialog } from "./ExamDialog";
@@ -51,76 +63,135 @@ const MobileTopics = ({
   return (
     <div className={`mt-8 block w-full px-4 md:hidden md:px-0`}>
       {/* header */}
-      <div>
+
+      {/* Card */}
+      <div className="bg-card text-card-foreground border-border mt-3 flex flex-col gap-5 rounded-4xl border px-4 py-6">
         <div className="text-foreground text-xl font-medium md:text-2xl">
           Topics for this course
         </div>
 
-        <Field className="mx-auto mt-12 w-full">
+        <Field className="mx-auto mb-4 w-full">
           <FieldLabel htmlFor="progress-upload">
             <span>Your progress</span>
             <span className="ml-auto">{percentage || 68}%</span>
           </FieldLabel>
           <Progress value={percentage || 68} id="progress-upload" />
         </Field>
-      </div>
 
-      {/* Card */}
-      {Object.entries(groupedLessons).map(([week, weekLessons], i) => {
-        return (
-          <div
-            key={i}
-            className="bg-card text-card-foreground border-border mt-9 rounded-4xl border px-4 py-6 md:mt-8 md:border-0"
-          >
-            <div className="flex flex-col gap-2">
-              <div className="text-foreground font-semibold">Week {week}</div>
-            </div>
+        {Object.entries(groupedLessons).map(([week, weekLessons], i) => {
+          return (
+            <Collapsible
+              className="data-[state=open]:bg-muted bg-muted rounded-2xl"
+              key={i}
+              defaultOpen={lessonWeek === week}
+            >
+              <CollapsibleTrigger asChild>
+                <Button
+                  variant={"none"}
+                  className="group bg-muted w-full px-4 py-6"
+                >
+                  <div className="text-foreground font-semibold">
+                    Week {week}
+                  </div>
+                  <ChevronDownIcon className="ml-auto duration-300 group-data-[state=open]:rotate-180" />
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down flex flex-col divide-y overflow-hidden px-4 pb-4">
+                {weekLessons.map((lesson) => {
+                  const isCurrent = lesson.id === currentLessonId;
+                  const isCompleted = completedIds.includes(lesson.id);
 
-            <div className="mt-4 flex flex-col divide-y pb-2">
-              {weekLessons.map((lesson) => {
-                const isCurrent = lesson.id === currentLessonId;
-                const isCompleted = completedIds.includes(lesson.id);
-
-                return (
-                  <Link
-                    key={lesson.id}
-                    href={`/courses/${courseId}/${lesson.id}`}
-                    className={`hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
-                      isCurrent ? "bg-accent/50 font-medium" : ""
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      {isCurrent ? (
-                        <PlayCircle className="text-foreground size-4" />
-                      ) : (
-                        <FileText className="text-muted-foreground size-4" />
-                      )}
-                      <div
-                        className={`line-clamp-1 text-sm ${
-                          isCurrent
-                            ? "text-card-foreground"
-                            : "text-muted-foreground"
-                        }`}
-                      >
-                        {lesson.title}
+                  return (
+                    <Link
+                      key={lesson.id}
+                      href={`/courses/${courseId}/${lesson.id}`}
+                      className={`hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
+                        isCurrent ? "bg-accent/50 font-medium" : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        {isCurrent ? (
+                          <PlayCircle className="text-foreground size-4" />
+                        ) : (
+                          <FileText className="text-muted-foreground size-4" />
+                        )}
+                        <div
+                          className={`line-clamp-1 text-sm ${
+                            isCurrent
+                              ? "text-card-foreground"
+                              : "text-muted-foreground"
+                          }`}
+                        >
+                          {lesson.title}
+                        </div>
                       </div>
-                    </div>
 
-                    {isCompleted ? (
-                      <CircleCheck className="size-4 text-emerald-500" />
-                    ) : (
-                      <Lock className="text-muted-foreground size-4" />
-                    )}
-                  </Link>
-                );
-              })}
-              <ExamDialog week={week} courseId={courseId} />
-            </div>
-          </div>
-        );
-      })}
+                      {isCompleted ? (
+                        <CircleCheck className="size-4 text-emerald-500" />
+                      ) : (
+                        <Lock className="text-muted-foreground size-4" />
+                      )}
+                    </Link>
+                  );
+                })}
+                <ExamDialog week={week} courseId={courseId} />
+              </CollapsibleContent>
+            </Collapsible>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 export default MobileTopics;
+
+// <div
+//   key={i}
+//   className="bg-card text-card-foreground border-border mt-9 rounded-4xl border px-4 py-6 md:mt-8 md:border-0"
+// >
+//   <div className="flex flex-col gap-2">
+// <div className="text-foreground font-semibold">Week {week}</div>
+//   </div>
+
+//   <div className="mt-4 flex flex-col divide-y pb-2">
+// {weekLessons.map((lesson) => {
+//   const isCurrent = lesson.id === currentLessonId;
+//   const isCompleted = completedIds.includes(lesson.id);
+
+//   return (
+//     <Link
+//       key={lesson.id}
+//       href={`/courses/${courseId}/${lesson.id}`}
+//       className={`hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
+//         isCurrent ? "bg-accent/50 font-medium" : ""
+//       }`}
+//     >
+//       <div className="flex items-center gap-3">
+//         {isCurrent ? (
+//           <PlayCircle className="text-foreground size-4" />
+//         ) : (
+//           <FileText className="text-muted-foreground size-4" />
+//         )}
+//         <div
+//           className={`line-clamp-1 text-sm ${
+//             isCurrent
+//               ? "text-card-foreground"
+//               : "text-muted-foreground"
+//           }`}
+//         >
+//           {lesson.title}
+//         </div>
+//       </div>
+
+//       {isCompleted ? (
+//         <CircleCheck className="size-4 text-emerald-500" />
+//       ) : (
+//         <Lock className="text-muted-foreground size-4" />
+//       )}
+//     </Link>
+//   );
+// })}
+// <ExamDialog week={week} courseId={courseId} />
+//   </div>
+// </div>

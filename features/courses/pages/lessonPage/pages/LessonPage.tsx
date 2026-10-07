@@ -36,7 +36,7 @@ type Course = Database["public"]["Tables"]["courses"]["Row"];
 
 const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
   const [fullScreen, setFullScreen] = useState<boolean>(false);
-  const mobileTopicsRef = useRef<HTMLDivElement>(null);
+  const courseInfoRef = useRef<HTMLDivElement>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
 
   const { data: lesson, isLoading: isLessonLoading } =
@@ -127,8 +127,8 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
           </div>
 
           {/* Icons / Action Buttons */}
-          <div className="mt-4 flex flex-col justify-between gap-3 px-6 md:mt-6 md:flex-row md:px-0">
-            <div className="text-foreground text-xl font-medium md:text-4xl md:font-semibold">
+          <div className="mt-4 flex flex-col justify-between gap-4 px-4 md:mt-6 md:flex-row md:px-0">
+            <div className="text-foreground text-2xl font-medium md:text-4xl md:font-semibold">
               {lesson?.title}
             </div>
             <div className="flex gap-2 md:gap-3">
@@ -147,7 +147,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
                 size={"icon-lg"}
                 className="bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground rounded-full! border transition-colors"
                 onClick={() => {
-                  scrollToSection(mobileTopicsRef);
+                  scrollToSection(courseInfoRef);
                 }}
                 aria-label="go to info"
               >
@@ -168,17 +168,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
 
           <div className="flex">
             <div>
-              {/* Course Materials */}
-              <div
-                ref={mobileTopicsRef}
-                // className="scroll-mt-60 md:scroll-mt-6"
-              >
-                <CourseInfo course={course?.[0]} />
-              </div>
-              <div
-                ref={mobileTopicsRef}
-                className="scroll-mt-60 md:hidden md:scroll-mt-6"
-              >
+              <div className="md:hidden">
                 <MobileTopics
                   fullScreen={fullScreen}
                   courseId={courseId}
@@ -188,9 +178,14 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
                 />
               </div>
 
+              {/* Course Materials */}
+              <div ref={courseInfoRef} className="scroll-mt-78 md:scroll-mt-25">
+                <CourseInfo course={course?.[0]} />
+              </div>
+
               {/* Comments Section */}
 
-              <div ref={commentsRef} className="scroll-mt-59 md:scroll-mt-0">
+              <div ref={commentsRef} className="scroll-mt-70 md:scroll-mt-0">
                 <Comments />
               </div>
             </div>

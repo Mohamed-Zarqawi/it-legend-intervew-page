@@ -85,57 +85,6 @@ const Topics = ({
         <div className="bg-card text-card-foreground border-border mt-10 flex w-sm flex-col gap-5 rounded-4xl border px-4 py-6">
           {Object.entries(groupedLessons).map(([week, weekLessons], i) => {
             return (
-              // <div
-              // key={i}
-              // className="bg-card text-card-foreground border-border mt-12 w-sm rounded-4xl border px-4 py-6"
-              // >
-              //   <div className="flex flex-col gap-2">
-              //     <div className="text-foreground font-semibold">Week {week}</div>
-              //   </div>
-
-              // <div className="mt-6 flex flex-col divide-y pb-2">
-              //   {weekLessons.map((lesson) => {
-              //     const isCurrent = lesson.id === currentLessonId;
-              //     const isCompleted = completedIds.includes(lesson.id);
-
-              //     return (
-              //       <Link
-              //         key={lesson.id}
-              //         href={`/courses/${courseId}/${lesson.id}`}
-              //         className={`border-border hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
-              //           isCurrent ? "bg-accent/50" : ""
-              //         }`}
-              //       >
-              //         <div className="flex items-center gap-3">
-              //           {isCurrent ? (
-              //             <PlayCircle className="text-foreground size-4" />
-              //           ) : (
-              //             <FileText className="text-muted-foreground size-4" />
-              //           )}
-              //           <div
-              //             className={`line-clamp-1 text-sm ${
-              //               isCurrent
-              //                 ? "text-card-foreground"
-              //                 : "text-muted-foreground"
-              //             }`}
-              //           >
-              //             {lesson.title}
-              //           </div>
-              //         </div>
-
-              //         {isCompleted ? (
-              //           <CircleCheck className="size-4 text-emerald-500" />
-              //         ) : (
-              //           <Lock className="text-muted-foreground size-4" />
-              //         )}
-              //       </Link>
-              //     );
-              //   })}
-
-              //   <ExamDialog week={week} courseId={courseId} />
-              // </div>
-              // </div>
-
               <Collapsible
                 className="data-[state=open]:bg-muted bg-muted rounded-2xl"
                 key={i}
@@ -207,3 +156,54 @@ const Topics = ({
 };
 
 export default Topics;
+
+// <div
+// key={i}
+// className="bg-card text-card-foreground border-border mt-12 w-sm rounded-4xl border px-4 py-6"
+// >
+//   <div className="flex flex-col gap-2">
+//     <div className="text-foreground font-semibold">Week {week}</div>
+//   </div>
+
+// <div className="mt-6 flex flex-col divide-y pb-2">
+//   {weekLessons.map((lesson) => {
+//     const isCurrent = lesson.id === currentLessonId;
+//     const isCompleted = completedIds.includes(lesson.id);
+
+//     return (
+//       <Link
+//         key={lesson.id}
+//         href={`/courses/${courseId}/${lesson.id}`}
+//         className={`border-border hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
+//           isCurrent ? "bg-accent/50" : ""
+//         }`}
+//       >
+//         <div className="flex items-center gap-3">
+//           {isCurrent ? (
+//             <PlayCircle className="text-foreground size-4" />
+//           ) : (
+//             <FileText className="text-muted-foreground size-4" />
+//           )}
+//           <div
+//             className={`line-clamp-1 text-sm ${
+//               isCurrent
+//                 ? "text-card-foreground"
+//                 : "text-muted-foreground"
+//             }`}
+//           >
+//             {lesson.title}
+//           </div>
+//         </div>
+
+//         {isCompleted ? (
+//           <CircleCheck className="size-4 text-emerald-500" />
+//         ) : (
+//           <Lock className="text-muted-foreground size-4" />
+//         )}
+//       </Link>
+//     );
+//   })}
+
+//   <ExamDialog week={week} courseId={courseId} />
+// </div>
+// </div>
