@@ -20,7 +20,6 @@ export const getCurrentUser = async () => {
     .single();
 
   if (profileError) {
-    console.error("Error fetching user profile:", profileError);
     return null;
   }
   return {

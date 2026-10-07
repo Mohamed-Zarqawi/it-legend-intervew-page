@@ -187,6 +187,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
           fullScreen={fullScreen}
           courseId={courseId}
           currentLessonId={lessonId}
+          lessonWeek={lesson.week}
           progressData={progressData}
         />
       </div>
