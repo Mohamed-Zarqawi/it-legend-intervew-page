@@ -101,12 +101,17 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
           {/* Video */}
           <div className="sticky top-18 z-10 overflow-hidden! rounded-none! border-0! md:static md:rounded-lg!">
             <ReactPlayer
-              src={lesson.video_url || ""}
+              src={
+                lesson.video_url ||
+                "https://www.youtube.com/watch?v=wm5gMKuwSYk"
+              }
+
               className="relative aspect-video! h-full! w-full! overflow-hidden! rounded-none! border-0! md:rounded-4xl!"
               controls
               onPlay={() => {
                 if (!isCompleted) handleToggleComplete();
               }}
+              // onEnded={() => {}}
             />
             <Button
               size={"icon-lg"}
@@ -161,35 +166,57 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
             </div>
           </div>
 
-          {/* Course Materials */}
-          <CourseInfo course={course?.[0]} />
+          <div className="flex">
+            <div>
+              {/* Course Materials */}
+              <div
+                ref={mobileTopicsRef}
+                // className="scroll-mt-60 md:scroll-mt-6"
+              >
+                <CourseInfo course={course?.[0]} />
+              </div>
+              <div
+                ref={mobileTopicsRef}
+                className="scroll-mt-60 md:hidden md:scroll-mt-6"
+              >
+                <MobileTopics
+                  fullScreen={fullScreen}
+                  courseId={courseId}
+                  currentLessonId={lessonId}
+                  lessonWeek={lesson.week}
+                  progressData={progressData}
+                />
+              </div>
 
-          <div ref={mobileTopicsRef} className="scroll-mt-60 md:scroll-mt-6">
-            <MobileTopics
-              fullScreen={fullScreen}
-              courseId={courseId}
-              currentLessonId={lessonId}
-              progressData={progressData}
-            />
-          </div>
+              {/* Comments Section */}
 
-          {/* Comments Section */}
+              <div ref={commentsRef} className="scroll-mt-59 md:scroll-mt-0">
+                <Comments />
+              </div>
+            </div>
 
-          <div ref={commentsRef} className="scroll-mt-59 md:scroll-mt-0">
-            <Comments />
+            <div className={`mt-10 ${fullScreen ? "block" : "hidden"}`}>
+              <Topics
+                fullScreen={fullScreen}
+                courseId={courseId}
+                currentLessonId={lessonId}
+                lessonWeek={lesson.week}
+                progressData={progressData}
+              />
+            </div>
           </div>
         </div>
 
         {/* Right Side */}
-
-        {/* <Topics fullScreen={fullScreen} /> */}
-        <Topics
-          fullScreen={fullScreen}
-          courseId={courseId}
-          currentLessonId={lessonId}
-          lessonWeek={lesson.week}
-          progressData={progressData}
-        />
+        <div className={` ${fullScreen ? "hidden" : "block"}`}>
+          <Topics
+            fullScreen={fullScreen}
+            courseId={courseId}
+            currentLessonId={lessonId}
+            lessonWeek={lesson.week}
+            progressData={progressData}
+          />
+        </div>
       </div>
     </div>
   );

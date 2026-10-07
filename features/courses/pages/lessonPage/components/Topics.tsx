@@ -63,26 +63,26 @@ const Topics = ({
     <div>
       {/* Right Side */}
       <div
-        className={`hidden w-full max-w-fit min-w-fit md:pl-14 ${fullScreen == true ? "lg:hidden" : "lg:block"} `}
+        className={`hidden w-full max-w-fit min-w-fit md:block ${fullScreen ? "md:pl-10" : "md:pl-14"} `}
       >
         {/* header */}
         <div>
-          <div className="text-foreground text-xl font-medium">
-            Topics for This Course
+          <div className="text-foreground text-xl font-medium md:text-2xl">
+            Topics for this course
           </div>
 
-          <Field className="mx-auto mt-10 w-full">
+          <Field className="mx-auto mt-6 w-full">
             <FieldLabel htmlFor="progress-upload">
               <span>Your progress</span>
-              <span className="ml-auto">{percentage}%</span>
+              <span className="ml-auto">{percentage || 68}%</span>
             </FieldLabel>
-            <Progress value={percentage} id="lesson-progress" />
+            <Progress value={percentage || 68} id="lesson-progress" />
           </Field>
         </div>
 
         {/* Card */}
 
-        <div className="bg-card text-card-foreground border-border mt-12 flex w-sm flex-col gap-5 rounded-4xl border px-4 py-6">
+        <div className="bg-card text-card-foreground border-border mt-10 flex w-sm flex-col gap-5 rounded-4xl border px-4 py-6">
           {Object.entries(groupedLessons).map(([week, weekLessons], i) => {
             return (
               // <div

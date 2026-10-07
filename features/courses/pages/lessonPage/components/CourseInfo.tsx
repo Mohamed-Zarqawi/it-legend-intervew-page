@@ -43,7 +43,7 @@ const CourseInfo = ({ course }: CourseInfo) => {
   return (
     <div className="mt-8 flex flex-col gap-2 px-4 md:mt-10 md:gap-5 md:px-0">
       <div className="text-foreground text-xl font-medium md:text-2xl">
-        Course Information
+        Course information
       </div>
       <div className="bg-card text-card-foreground border-border flex gap-3 rounded-4xl border px-4 py-3 md:px-7">
         {courseMaterialsMenu.map((sections, i) => {

@@ -11,6 +11,7 @@ import { ExamDialog } from "./ExamDialog";
 interface MobileTopicsProps {
   fullScreen?: boolean;
   courseId: string;
+  lessonWeek?: string;
   currentLessonId: string;
   progressData?: {
     completed_lesson_ids?: string[];
@@ -26,6 +27,7 @@ const MobileTopics = ({
   fullScreen,
   courseId,
   currentLessonId,
+  lessonWeek,
   progressData,
 }: MobileTopicsProps) => {
   const { data: lessons } = useGetAllCourseLessons(courseId);
@@ -47,21 +49,19 @@ const MobileTopics = ({
   const completedIds = progressData?.completed_lesson_ids || [];
 
   return (
-    <div
-      className={`mt-8 block w-full px-4 md:px-0 ${fullScreen == true ? "md:block" : "md:hidden"}`}
-    >
+    <div className={`mt-8 block w-full px-4 md:hidden md:px-0`}>
       {/* header */}
       <div>
         <div className="text-foreground text-xl font-medium md:text-2xl">
-          Topics for This Course
+          Topics for this course
         </div>
 
-        <Field className="mx-auto mt-12 w-full md:mt-10">
+        <Field className="mx-auto mt-12 w-full">
           <FieldLabel htmlFor="progress-upload">
             <span>Your progress</span>
-            <span className="ml-auto">{percentage}%</span>
+            <span className="ml-auto">{percentage || 68}%</span>
           </FieldLabel>
-          <Progress value={percentage} id="progress-upload" />
+          <Progress value={percentage || 68} id="progress-upload" />
         </Field>
       </div>
 
