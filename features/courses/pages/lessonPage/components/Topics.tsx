@@ -104,18 +104,14 @@ const Topics = ({
                 <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down flex flex-col divide-y overflow-hidden px-4 pb-4">
                   {weekLessons.map((lesson) => {
                     const isCurrent = lesson.id === currentLessonId;
-
-                    // if (isCurrent) {
-                    //   setCurrentWeekLesson(lesson.week);
-                    // }
                     const isCompleted = completedIds.includes(lesson.id);
 
                     return (
                       <Link
                         key={lesson.id}
                         href={`/courses/${courseId}/${lesson.id}`}
-                        className={`border-border hover:bg-muted/50 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
-                          isCurrent ? "bg-accent/50" : ""
+                        className={`border-border hover:bg-primary/10 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
+                          isCurrent ? "bg-primary/10" : ""
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -138,7 +134,9 @@ const Topics = ({
                         {isCompleted ? (
                           <CircleCheck className="size-4 text-emerald-500" />
                         ) : (
-                          <Lock className="text-muted-foreground size-4" />
+                          <Lock
+                            className={`size-4 ${isCurrent ? "text-foreground" : "text-muted-foreground"}`}
+                          />
                         )}
                       </Link>
                     );
