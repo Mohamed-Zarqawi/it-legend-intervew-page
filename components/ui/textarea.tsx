@@ -1,17 +1,61 @@
-import * as React from "react"
-import { cn } from "cn"
+import * as React from "react";
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
-  return (
-    <textarea
-      data-slot="textarea"
-      className={cn(
-        "flex field-sizing-content min-h-16 w-full resize-none rounded-2xl border border-transparent bg-input/50 px-2.5 py-2 text-base transition-[color,box-shadow] duration-200 outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-        className
-      )}
-      {...props}
-    />
-  )
+import { cn } from "@/lib/utils";
+import { FormikErrors, FormikTouched, getIn } from "formik";
+import { Field, FieldError, FieldLabel } from "./field";
+import { Skeleton } from "./skeleton";
+
+type TextareaProps = {
+  label?: string;
+  errors?: FormikErrors<any>;
+  touched?: FormikTouched<any>;
+  isLoading?: boolean;
+  isRequired?: boolean;
+};
+
+function capitalizeFirstLetter(val: string | undefined) {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
 
-export { Textarea }
+function handleErrors(error: string) {
+  return capitalizeFirstLetter(error);
+}
+function Textarea({
+  className,
+  errors,
+  touched,
+  isLoading,
+  isRequired,
+  label,
+  ...props
+}: React.ComponentProps<"textarea"> & TextareaProps) {
+  return (
+    <Field>
+      {label && (
+        <FieldLabel htmlFor="name" className="text-primary text-sm">
+          {label}
+          {isRequired ? <span className="text-destructive">*</span> : null}
+        </FieldLabel>
+      )}
+      {isLoading ? (
+        <Skeleton className={cn("h-13 rounded-lg", className)} />
+      ) : (
+        <textarea
+          data-slot="textarea"
+          className={cn(
+            "bg-input/20 dark:bg-input border-primary aria-invalid:border-destructive focus-visible:border-ring dark:aria-invalid:border-destructive/50 aria-invalid:ring-destructive/20 focus-visible:ring-ring/30 dark:aria-invalid:ring-destructive/40 placeholder:text-muted-foreground file:text-foreground w-full min-w-0 rounded-lg border px-4 py-3 text-base transition-colors outline-none file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-xs/relaxed file:font-medium focus-visible:ring-3 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:ring-2 md:text-base/relaxed",
+            className,
+          )}
+          {...props}
+        />
+      )}
+      {props.name &&
+        getIn(errors, props.name) &&
+        getIn(touched, props.name) && (
+          <FieldError>{handleErrors(getIn(errors, props.name))}</FieldError>
+        )}
+    </Field>
+  );
+}
+
+export { Textarea };

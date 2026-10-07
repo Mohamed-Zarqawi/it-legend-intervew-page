@@ -1,6 +1,8 @@
 import {
   createComment,
+  deleteComment,
   getComments,
+  updateComment,
 } from "@/services/lessonServices/comments.service";
 import { Comments, ReqCreateCommentType } from "@/types/courses/CommentType";
 
@@ -18,6 +20,34 @@ export const useAddComment = () => {
 
   return useMutation({
     mutationFn: (values: ReqCreateCommentType) => createComment(values),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
+    },
+  });
+};
+
+export const useDeleteComment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (commentId: number) => deleteComment(commentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
+    },
+  });
+};
+
+export const useUpdateComment = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      commentId,
+      values,
+    }: {
+      commentId: number;
+      values: ReqCreateCommentType;
+    }) => updateComment(commentId, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments"] });
     },
