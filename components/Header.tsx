@@ -111,7 +111,7 @@ const Header = () => {
                     href={"/auth/login"}
                     className="text-muted-foreground hover:text-foreground font-medium transition-colors"
                   >
-                    Log in
+                    Log in for best exprience
                   </Link>
                 </Button>
 
