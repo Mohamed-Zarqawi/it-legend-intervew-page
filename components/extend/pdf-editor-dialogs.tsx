@@ -1,12 +1,12 @@
-"use client"
+// @ts-nocheck
+"use client";
 
-import * as React from "react"
-import type { DocumentState } from "@embedpdf/core"
+import type { DocumentState } from "@embedpdf/core";
 import {
   useDocumentPermissions,
   useDocumentState,
   useRegistry,
-} from "@embedpdf/core/react"
+} from "@embedpdf/core/react";
 import {
   ignore,
   PdfActionType,
@@ -22,13 +22,13 @@ import {
   type PdfLinkTarget,
   type PdfMetadataObject,
   type PdfPrintOptions,
-} from "@embedpdf/models"
-import { useAnnotationCapability } from "@embedpdf/plugin-annotation/react"
-import { useCapture } from "@embedpdf/plugin-capture/react"
-import { useDocumentManagerCapability } from "@embedpdf/plugin-document-manager/react"
-import { usePrint } from "@embedpdf/plugin-print/react"
-import { useScroll } from "@embedpdf/plugin-scroll/react"
-import { useSelectionCapability } from "@embedpdf/plugin-selection/react"
+} from "@embedpdf/models";
+import { useAnnotationCapability } from "@embedpdf/plugin-annotation/react";
+import { useCapture } from "@embedpdf/plugin-capture/react";
+import { useDocumentManagerCapability } from "@embedpdf/plugin-document-manager/react";
+import { usePrint } from "@embedpdf/plugin-print/react";
+import { useScroll } from "@embedpdf/plugin-scroll/react";
+import { useSelectionCapability } from "@embedpdf/plugin-selection/react";
 import {
   SignatureDrawPad,
   SignatureMode,
@@ -38,30 +38,10 @@ import {
   type SignatureDrawPadHandle,
   type SignatureFieldDefinition,
   type SignatureTypePadHandle,
-} from "@embedpdf/plugin-signature/react"
+} from "@embedpdf/plugin-signature/react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Kbd } from "@/components/ui/kbd"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { ColorPicker } from "@/components/extend/document-color-picker"
+import { ColorPicker } from "@/components/extend/document-color-picker";
 import {
   CopyGlyph,
   downloadBlob,
@@ -79,8 +59,29 @@ import {
   ShieldGlyph,
   UnlockGlyph,
   usePdfEditor,
-} from "@/components/extend/pdf-editor-shared"
-import { LoaderCircle } from "lucide-react"
+} from "@/components/extend/pdf-editor-shared";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Kbd } from "@/components/ui/kbd";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { LoaderCircle } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
 /* Confirm                                                                    */
@@ -94,13 +95,13 @@ export function PdfEditorConfirmDialog({
   destructive = false,
   onConfirm,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  title: string
-  description?: string
-  confirmLabel?: string
-  destructive?: boolean
-  onConfirm: () => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description?: string;
+  confirmLabel?: string;
+  destructive?: boolean;
+  onConfirm: () => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -123,8 +124,8 @@ export function PdfEditorConfirmDialog({
             type="button"
             variant={destructive ? "destructive" : "default"}
             onClick={() => {
-              onConfirm()
-              onOpenChange(false)
+              onConfirm();
+              onOpenChange(false);
             }}
           >
             {confirmLabel}
@@ -132,44 +133,44 @@ export function PdfEditorConfirmDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Print                                                                      */
 /* -------------------------------------------------------------------------- */
-type PrintPageSelection = "all" | "current" | "custom"
+type PrintPageSelection = "all" | "current" | "custom";
 export function PdfEditorPrintDialog({
   documentId,
   open,
   onOpenChange,
 }: {
-  documentId: string
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  documentId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const { provides: print } = usePrint(documentId)
-  const { state: scrollState } = useScroll(documentId)
-  const { notify } = usePdfEditor()
-  const [selection, setSelection] = React.useState<PrintPageSelection>("all")
-  const [customPages, setCustomPages] = React.useState("")
-  const [includeAnnotations, setIncludeAnnotations] = React.useState(true)
-  const [isPrinting, setIsPrinting] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
-  const [previousOpen, setPreviousOpen] = React.useState(open)
+  const { provides: print } = usePrint(documentId);
+  const { state: scrollState } = useScroll(documentId);
+  const { notify } = usePdfEditor();
+  const [selection, setSelection] = React.useState<PrintPageSelection>("all");
+  const [customPages, setCustomPages] = React.useState("");
+  const [includeAnnotations, setIncludeAnnotations] = React.useState(true);
+  const [isPrinting, setIsPrinting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [previousOpen, setPreviousOpen] = React.useState(open);
   if (previousOpen !== open) {
-    setPreviousOpen(open)
+    setPreviousOpen(open);
     if (!open) {
-      setSelection("all")
-      setCustomPages("")
-      setIncludeAnnotations(true)
-      setIsPrinting(false)
-      setError(null)
+      setSelection("all");
+      setCustomPages("");
+      setIncludeAnnotations(true);
+      setIsPrinting(false);
+      setError(null);
     }
   }
   const canSubmit =
-    !isPrinting && (selection !== "custom" || customPages.trim().length > 0)
+    !isPrinting && (selection !== "custom" || customPages.trim().length > 0);
   const handlePrint = () => {
-    if (!print || !canSubmit) return
+    if (!print || !canSubmit) return;
     const options: PdfPrintOptions = {
       includeAnnotations,
       pageRange:
@@ -178,23 +179,23 @@ export function PdfEditorPrintDialog({
           : selection === "custom"
             ? customPages.trim()
             : undefined,
-    }
-    setIsPrinting(true)
-    setError(null)
+    };
+    setIsPrinting(true);
+    setError(null);
     print.print(options).wait(
       () => {
-        setIsPrinting(false)
-        onOpenChange(false)
+        setIsPrinting(false);
+        onOpenChange(false);
       },
       (failure) => {
-        setIsPrinting(false)
+        setIsPrinting(false);
         const message =
-          failure?.reason?.message ?? "The document could not be printed."
-        setError(message)
-        notify(message, "error")
-      }
-    )
-  }
+          failure?.reason?.message ?? "The document could not be printed.";
+        setError(message);
+        notify(message, "error");
+      },
+    );
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
@@ -232,7 +233,7 @@ export function PdfEditorPrintDialog({
               }
               onFocus={() => setSelection("custom")}
             />
-            <div className="text-xs text-muted-foreground">
+            <div className="text-muted-foreground text-xs">
               {scrollState.totalPages} pages in this document.
             </div>
           </PdfEditorSection>
@@ -244,7 +245,7 @@ export function PdfEditorPrintDialog({
             />
           </PdfEditorSection>
           {error ? (
-            <div className="text-xs text-destructive">{error}</div>
+            <div className="text-destructive text-xs">{error}</div>
           ) : null}
         </InlineDialogPanel>
         <DialogFooter>
@@ -267,59 +268,59 @@ export function PdfEditorPrintDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Capture                                                                    */
 /* -------------------------------------------------------------------------- */
 type CaptureResult = {
-  pageIndex: number
-  blob: Blob
-  imageType: string
-  url: string
-}
+  pageIndex: number;
+  blob: Blob;
+  imageType: string;
+  url: string;
+};
 export function PdfEditorCaptureDialog({ documentId }: { documentId: string }) {
-  const { provides: capture } = useCapture(documentId)
-  const { fileName, notify, onCapture } = usePdfEditor()
-  const [result, setResult] = React.useState<CaptureResult | null>(null)
-  const onCaptureRef = React.useRef(onCapture)
+  const { provides: capture } = useCapture(documentId);
+  const { fileName, notify, onCapture } = usePdfEditor();
+  const [result, setResult] = React.useState<CaptureResult | null>(null);
+  const onCaptureRef = React.useRef(onCapture);
   React.useEffect(() => {
-    onCaptureRef.current = onCapture
-  })
+    onCaptureRef.current = onCapture;
+  });
   React.useEffect(() => {
-    if (!capture) return
+    if (!capture) return;
     return capture.onCaptureArea((event) => {
-      onCaptureRef.current?.(event)
+      onCaptureRef.current?.(event);
       setResult((previous) => {
-        if (previous) URL.revokeObjectURL(previous.url)
+        if (previous) URL.revokeObjectURL(previous.url);
         return {
           pageIndex: event.pageIndex,
           blob: event.blob,
           imageType: event.imageType,
           url: URL.createObjectURL(event.blob),
-        }
-      })
-    })
-  }, [capture])
+        };
+      });
+    });
+  }, [capture]);
   React.useEffect(
     () => () => {
-      if (result) URL.revokeObjectURL(result.url)
+      if (result) URL.revokeObjectURL(result.url);
     },
-    [result]
-  )
-  const close = () => setResult(null)
-  const extension = result?.imageType.split("/")[1] ?? "png"
-  const captureFileName = `${fileName.replace(/\.pdf$/i, "")}-page-${(result?.pageIndex ?? 0) + 1}.${extension}`
+    [result],
+  );
+  const close = () => setResult(null);
+  const extension = result?.imageType.split("/")[1] ?? "png";
+  const captureFileName = `${fileName.replace(/\.pdf$/i, "")}-page-${(result?.pageIndex ?? 0) + 1}.${extension}`;
   const canCopy =
     typeof navigator !== "undefined" &&
     typeof window !== "undefined" &&
     "ClipboardItem" in window &&
-    Boolean(navigator.clipboard?.write)
+    Boolean(navigator.clipboard?.write);
   return (
     <Dialog
       open={result !== null}
       onOpenChange={(open) => {
-        if (!open) close()
+        if (!open) close();
       }}
     >
       <DialogContent className="max-w-2xl">
@@ -331,7 +332,7 @@ export function PdfEditorCaptureDialog({ documentId }: { documentId: string }) {
           </DialogDescription>
         </DialogHeader>
         <InlineDialogPanel>
-          <div className="grid place-items-center rounded-lg border bg-muted/40 p-3">
+          <div className="bg-muted/40 grid place-items-center rounded-lg border p-3">
             {result ? (
               <img
                 src={result.url}
@@ -347,14 +348,14 @@ export function PdfEditorCaptureDialog({ documentId }: { documentId: string }) {
               type="button"
               variant="outline"
               onClick={async () => {
-                if (!result) return
+                if (!result) return;
                 try {
                   await navigator.clipboard.write([
                     new ClipboardItem({ [result.imageType]: result.blob }),
-                  ])
-                  notify("Image copied to the clipboard.", "success")
+                  ]);
+                  notify("Image copied to the clipboard.", "success");
                 } catch {
-                  notify("The image could not be copied.", "error")
+                  notify("The image could not be copied.", "error");
                 }
               }}
             >
@@ -365,9 +366,9 @@ export function PdfEditorCaptureDialog({ documentId }: { documentId: string }) {
           <Button
             type="button"
             onClick={() => {
-              if (!result) return
-              downloadBlob(result.blob, captureFileName)
-              close()
+              if (!result) return;
+              downloadBlob(result.blob, captureFileName);
+              close();
             }}
           >
             <DownloadGlyph className="size-4" />
@@ -376,15 +377,15 @@ export function PdfEditorCaptureDialog({ documentId }: { documentId: string }) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Security                                                                   */
 /* -------------------------------------------------------------------------- */
 const PERMISSION_OPTIONS: Array<{
-  flag: PdfPermissionFlag
-  label: string
-  description: string
+  flag: PdfPermissionFlag;
+  label: string;
+  description: string;
 }> = [
   {
     flag: PdfPermissionFlag.Print,
@@ -426,7 +427,7 @@ const PERMISSION_OPTIONS: Array<{
     label: "Assemble pages",
     description: "Allow inserting, rotating, and deleting pages.",
   },
-]
+];
 function PasswordInput({
   id,
   value,
@@ -435,12 +436,12 @@ function PasswordInput({
   autoFocus,
   onEnter,
 }: {
-  id?: string
-  value: string
-  onChange: (value: string) => void
-  placeholder?: string
-  autoFocus?: boolean
-  onEnter?: () => void
+  id?: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  autoFocus?: boolean;
+  onEnter?: () => void;
 }) {
   return (
     <Input
@@ -454,106 +455,106 @@ function PasswordInput({
         onChange(event.target.value)
       }
       onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") onEnter?.()
+        if (event.key === "Enter") onEnter?.();
       }}
     />
-  )
+  );
 }
 export function PdfEditorSecurityDialog({
   documentId,
   open,
   onOpenChange,
 }: {
-  documentId: string
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  documentId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const { provides: documentManager } = useDocumentManagerCapability()
-  const documentState = useDocumentState(documentId)
-  const permissions = useDocumentPermissions(documentId)
-  const { notify } = usePdfEditor()
-  const document = documentState?.document ?? null
-  const isEncrypted = document?.isEncrypted ?? false
-  const isOwnerUnlocked = document?.isOwnerUnlocked ?? false
-  const needsOwnerUnlock = isEncrypted && !isOwnerUnlocked
-  const [unlockPassword, setUnlockPassword] = React.useState("")
-  const [isUnlocking, setIsUnlocking] = React.useState(false)
-  const [requireOpenPassword, setRequireOpenPassword] = React.useState(false)
-  const [openPassword, setOpenPassword] = React.useState("")
-  const [confirmOpenPassword, setConfirmOpenPassword] = React.useState("")
-  const [restrictPermissions, setRestrictPermissions] = React.useState(false)
-  const [ownerPassword, setOwnerPassword] = React.useState("")
-  const [confirmOwnerPassword, setConfirmOwnerPassword] = React.useState("")
+  const { provides: documentManager } = useDocumentManagerCapability();
+  const documentState = useDocumentState(documentId);
+  const permissions = useDocumentPermissions(documentId);
+  const { notify } = usePdfEditor();
+  const document = documentState?.document ?? null;
+  const isEncrypted = document?.isEncrypted ?? false;
+  const isOwnerUnlocked = document?.isOwnerUnlocked ?? false;
+  const needsOwnerUnlock = isEncrypted && !isOwnerUnlocked;
+  const [unlockPassword, setUnlockPassword] = React.useState("");
+  const [isUnlocking, setIsUnlocking] = React.useState(false);
+  const [requireOpenPassword, setRequireOpenPassword] = React.useState(false);
+  const [openPassword, setOpenPassword] = React.useState("");
+  const [confirmOpenPassword, setConfirmOpenPassword] = React.useState("");
+  const [restrictPermissions, setRestrictPermissions] = React.useState(false);
+  const [ownerPassword, setOwnerPassword] = React.useState("");
+  const [confirmOwnerPassword, setConfirmOwnerPassword] = React.useState("");
   const [allowedFlags, setAllowedFlags] = React.useState<
     Set<PdfPermissionFlag>
-  >(() => new Set(PERMISSION_OPTIONS.map((option) => option.flag)))
-  const [isApplying, setIsApplying] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
-  const [previousOpen, setPreviousOpen] = React.useState(open)
+  >(() => new Set(PERMISSION_OPTIONS.map((option) => option.flag)));
+  const [isApplying, setIsApplying] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const [previousOpen, setPreviousOpen] = React.useState(open);
   if (previousOpen !== open) {
-    setPreviousOpen(open)
+    setPreviousOpen(open);
     if (open) {
-      setUnlockPassword("")
-      setIsUnlocking(false)
-      setRequireOpenPassword(false)
-      setOpenPassword("")
-      setConfirmOpenPassword("")
-      setRestrictPermissions(false)
-      setOwnerPassword("")
-      setConfirmOwnerPassword("")
-      setAllowedFlags(new Set(PERMISSION_OPTIONS.map((option) => option.flag)))
-      setIsApplying(false)
-      setError(null)
+      setUnlockPassword("");
+      setIsUnlocking(false);
+      setRequireOpenPassword(false);
+      setOpenPassword("");
+      setConfirmOpenPassword("");
+      setRestrictPermissions(false);
+      setOwnerPassword("");
+      setConfirmOwnerPassword("");
+      setAllowedFlags(new Set(PERMISSION_OPTIONS.map((option) => option.flag)));
+      setIsApplying(false);
+      setError(null);
     }
   }
   const openPasswordValid =
     !requireOpenPassword ||
-    (openPassword.length > 0 && openPassword === confirmOpenPassword)
+    (openPassword.length > 0 && openPassword === confirmOpenPassword);
   const ownerPasswordValid =
     !restrictPermissions ||
-    (ownerPassword.length > 0 && ownerPassword === confirmOwnerPassword)
+    (ownerPassword.length > 0 && ownerPassword === confirmOwnerPassword);
   const canApply =
     !isApplying &&
     (requireOpenPassword || restrictPermissions) &&
     openPasswordValid &&
-    ownerPasswordValid
+    ownerPasswordValid;
   const handleUnlock = () => {
-    if (!documentManager || !unlockPassword.trim()) return
-    setIsUnlocking(true)
-    setError(null)
+    if (!documentManager || !unlockPassword.trim()) return;
+    setIsUnlocking(true);
+    setError(null);
     documentManager.unlockOwnerPermissions(documentId, unlockPassword).wait(
       (success) => {
-        setIsUnlocking(false)
+        setIsUnlocking(false);
         if (success) {
-          setUnlockPassword("")
-          notify("Owner permissions unlocked.", "success")
+          setUnlockPassword("");
+          notify("Owner permissions unlocked.", "success");
         } else {
-          setError("The owner password is incorrect.")
+          setError("The owner password is incorrect.");
         }
       },
       (failure) => {
-        setIsUnlocking(false)
+        setIsUnlocking(false);
         setError(
-          failure?.reason?.message ?? "The document could not be unlocked."
-        )
-      }
-    )
-  }
+          failure?.reason?.message ?? "The document could not be unlocked.",
+        );
+      },
+    );
+  };
   const handleApply = () => {
-    if (!documentManager || !canApply) return
-    let flags = PdfPermissionFlag.AllowAll as number
+    if (!documentManager || !canApply) return;
+    let flags = PdfPermissionFlag.AllowAll as number;
     if (restrictPermissions) {
-      flags = 0
-      for (const flag of allowedFlags) flags |= flag
+      flags = 0;
+      for (const flag of allowedFlags) flags |= flag;
     }
-    const userPassword = requireOpenPassword ? openPassword : ""
+    const userPassword = requireOpenPassword ? openPassword : "";
     const resolvedOwnerPassword = restrictPermissions
       ? ownerPassword
       : requireOpenPassword
         ? openPassword
-        : ""
-    setIsApplying(true)
-    setError(null)
+        : "";
+    setIsApplying(true);
+    setError(null);
     documentManager
       .setDocumentEncryption(documentId, {
         userPassword,
@@ -562,51 +563,51 @@ export function PdfEditorSecurityDialog({
       })
       .wait(
         (success) => {
-          setIsApplying(false)
+          setIsApplying(false);
           if (success) {
             notify(
               "Protection is applied the next time you download the document.",
-              "success"
-            )
-            onOpenChange(false)
+              "success",
+            );
+            onOpenChange(false);
           } else {
-            setError("The protection settings could not be applied.")
+            setError("The protection settings could not be applied.");
           }
         },
         (failure) => {
-          setIsApplying(false)
+          setIsApplying(false);
           setError(
             failure?.reason?.message ??
-              "The protection settings could not be applied."
-          )
-        }
-      )
-  }
+              "The protection settings could not be applied.",
+          );
+        },
+      );
+  };
   const handleRemove = () => {
-    if (!documentManager) return
-    setIsApplying(true)
-    setError(null)
+    if (!documentManager) return;
+    setIsApplying(true);
+    setError(null);
     documentManager.removeEncryption(documentId).wait(
       (success) => {
-        setIsApplying(false)
+        setIsApplying(false);
         if (success) {
           notify(
             "Protection is removed the next time you download the document.",
-            "success"
-          )
-          onOpenChange(false)
+            "success",
+          );
+          onOpenChange(false);
         } else {
-          setError("The protection could not be removed.")
+          setError("The protection could not be removed.");
         }
       },
       (failure) => {
-        setIsApplying(false)
+        setIsApplying(false);
         setError(
-          failure?.reason?.message ?? "The protection could not be removed."
-        )
-      }
-    )
-  }
+          failure?.reason?.message ?? "The protection could not be removed.",
+        );
+      },
+    );
+  };
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
@@ -638,30 +639,30 @@ export function PdfEditorSecurityDialog({
                 </Badge>
               ) : null}
             </div>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-muted-foreground">
+            <div className="text-muted-foreground grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
               {PERMISSION_OPTIONS.map((option) => {
-                const allowed = permissions.hasPermission(option.flag)
+                const allowed = permissions.hasPermission(option.flag);
                 return (
                   <div key={option.flag} className="flex items-center gap-1.5">
                     <span
                       aria-hidden="true"
                       className={cn(
                         "size-1.5 rounded-full",
-                        allowed ? "bg-emerald-500" : "bg-destructive"
+                        allowed ? "bg-emerald-500" : "bg-destructive",
                       )}
                     />
                     <span className={cn(!allowed && "line-through")}>
                       {option.label}
                     </span>
                   </div>
-                )
+                );
               })}
             </div>
           </PdfEditorSection>
 
           {needsOwnerUnlock ? (
             <PdfEditorSection title="Unlock owner permissions">
-              <div className="text-xs text-muted-foreground">
+              <div className="text-muted-foreground text-xs">
                 Enter the owner password to change protection settings.
               </div>
               <div className="flex gap-2">
@@ -704,7 +705,7 @@ export function PdfEditorSecurityDialog({
                   onChange={setConfirmOpenPassword}
                 />
                 {!openPasswordValid && confirmOpenPassword ? (
-                  <div className="text-xs text-destructive sm:col-span-2">
+                  <div className="text-destructive text-xs sm:col-span-2">
                     The passwords do not match.
                   </div>
                 ) : null}
@@ -734,7 +735,7 @@ export function PdfEditorSecurityDialog({
                     onChange={setConfirmOwnerPassword}
                   />
                   {!ownerPasswordValid && confirmOwnerPassword ? (
-                    <div className="text-xs text-destructive sm:col-span-2">
+                    <div className="text-destructive text-xs sm:col-span-2">
                       The passwords do not match.
                     </div>
                   ) : null}
@@ -746,13 +747,13 @@ export function PdfEditorSecurityDialog({
                       checked={allowedFlags.has(option.flag)}
                       onCheckedChange={(checked) =>
                         setAllowedFlags((previous) => {
-                          const next = new Set(previous)
+                          const next = new Set(previous);
                           if (checked) {
-                            next.add(option.flag)
+                            next.add(option.flag);
                           } else {
-                            next.delete(option.flag)
+                            next.delete(option.flag);
                           }
-                          return next
+                          return next;
                         })
                       }
                       label={option.label}
@@ -765,7 +766,7 @@ export function PdfEditorSecurityDialog({
           </PdfEditorSection>
 
           {error ? (
-            <div className="text-xs text-destructive">{error}</div>
+            <div className="text-destructive text-xs">{error}</div>
           ) : null}
         </InlineDialogPanel>
         <DialogFooter>
@@ -777,7 +778,7 @@ export function PdfEditorSecurityDialog({
               variant={"outline"}
               className={cn(
                 "border-destructive/32 text-destructive hover:bg-destructive/10",
-                "sm:mr-auto"
+                "sm:mr-auto",
               )}
             >
               Remove protection
@@ -803,19 +804,19 @@ export function PdfEditorSecurityDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Document properties (metadata)                                             */
 /* -------------------------------------------------------------------------- */
 type EditableMetadata = {
-  title: string
-  author: string
-  subject: string
-  keywords: string
-  creator: string
-  producer: string
-}
+  title: string;
+  author: string;
+  subject: string;
+  keywords: string;
+  creator: string;
+  producer: string;
+};
 const EMPTY_METADATA: EditableMetadata = {
   title: "",
   author: "",
@@ -823,55 +824,55 @@ const EMPTY_METADATA: EditableMetadata = {
   keywords: "",
   creator: "",
   producer: "",
-}
+};
 export function PdfEditorPropertiesDialog({
   documentId,
   open,
   onOpenChange,
 }: {
-  documentId: string
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  documentId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const { registry } = useRegistry()
-  const documentState = useDocumentState(documentId)
-  const permissions = useDocumentPermissions(documentId)
-  const { fileName, notify } = usePdfEditor()
-  const document = documentState?.document ?? null
+  const { registry } = useRegistry();
+  const documentState = useDocumentState(documentId);
+  const permissions = useDocumentPermissions(documentId);
+  const { fileName, notify } = usePdfEditor();
+  const document = documentState?.document ?? null;
   const [metadata, setMetadata] =
-    React.useState<EditableMetadata>(EMPTY_METADATA)
+    React.useState<EditableMetadata>(EMPTY_METADATA);
   const [dates, setDates] = React.useState<{
-    creationDate: Date | null
-    modificationDate: Date | null
-  }>({ creationDate: null, modificationDate: null })
+    creationDate: Date | null;
+    modificationDate: Date | null;
+  }>({ creationDate: null, modificationDate: null });
   const [isLoading, setIsLoading] = React.useState(
-    Boolean(open && registry && document)
-  )
-  const [isSaving, setIsSaving] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
+    Boolean(open && registry && document),
+  );
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
   const [metadataRequest, setMetadataRequest] = React.useState({
     document,
     open,
     registry,
-  })
+  });
   if (
     metadataRequest.document !== document ||
     metadataRequest.open !== open ||
     metadataRequest.registry !== registry
   ) {
-    setMetadataRequest({ document, open, registry })
-    setIsLoading(Boolean(open && registry && document))
-    setError(null)
+    setMetadataRequest({ document, open, registry });
+    setIsLoading(Boolean(open && registry && document));
+    setError(null);
   }
   React.useEffect(() => {
-    if (!open || !registry || !document) return
-    let cancelled = false
+    if (!open || !registry || !document) return;
+    let cancelled = false;
     registry
       .getEngine()
       .getMetadata(document)
       .wait(
         (result: PdfMetadataObject) => {
-          if (cancelled) return
+          if (cancelled) return;
           setMetadata({
             title: result.title ?? "",
             author: result.author ?? "",
@@ -879,32 +880,32 @@ export function PdfEditorPropertiesDialog({
             keywords: result.keywords ?? "",
             creator: result.creator ?? "",
             producer: result.producer ?? "",
-          })
+          });
           setDates({
             creationDate: result.creationDate ?? null,
             modificationDate: result.modificationDate ?? null,
-          })
-          setIsLoading(false)
+          });
+          setIsLoading(false);
         },
         (failure) => {
-          if (cancelled) return
+          if (cancelled) return;
           setError(
             failure?.reason?.message ??
-              "The document metadata could not be read."
-          )
-          setIsLoading(false)
-        }
-      )
+              "The document metadata could not be read.",
+          );
+          setIsLoading(false);
+        },
+      );
     return () => {
-      cancelled = true
-    }
-  }, [document, open, registry])
+      cancelled = true;
+    };
+  }, [document, open, registry]);
   const updateField = (key: keyof EditableMetadata, value: string) =>
-    setMetadata((previous) => ({ ...previous, [key]: value }))
+    setMetadata((previous) => ({ ...previous, [key]: value }));
   const handleSave = () => {
-    if (!registry || !document) return
-    setIsSaving(true)
-    setError(null)
+    if (!registry || !document) return;
+    setIsSaving(true);
+    setError(null);
     registry
       .getEngine()
       .setMetadata(document, {
@@ -918,20 +919,20 @@ export function PdfEditorPropertiesDialog({
       })
       .wait(
         () => {
-          setIsSaving(false)
-          notify("Document properties saved.", "success")
-          onOpenChange(false)
+          setIsSaving(false);
+          notify("Document properties saved.", "success");
+          onOpenChange(false);
         },
         (failure) => {
-          setIsSaving(false)
+          setIsSaving(false);
           setError(
             failure?.reason?.message ??
-              "The document metadata could not be saved."
-          )
-        }
-      )
-  }
-  const firstPage = document?.pages[0]
+              "The document metadata could not be saved.",
+          );
+        },
+      );
+  };
+  const firstPage = document?.pages[0];
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
@@ -967,7 +968,7 @@ export function PdfEditorPropertiesDialog({
                         value={metadata[key]}
                         disabled={!permissions.canModifyContents}
                         onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
+                          event: React.ChangeEvent<HTMLInputElement>,
                         ) => updateField(key, event.target.value)}
                         className={cn("h-8 px-2.5")}
                       />
@@ -998,7 +999,7 @@ export function PdfEditorPropertiesDialog({
                 </dl>
               </PdfEditorSection>
               {error ? (
-                <div className="text-xs text-destructive">{error}</div>
+                <div className="text-destructive text-xs">{error}</div>
               ) : null}
             </>
           )}
@@ -1023,44 +1024,44 @@ export function PdfEditorPropertiesDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Signature creation                                                         */
 /* -------------------------------------------------------------------------- */
-type SignatureCreationTab = "draw" | "type" | "upload"
-type SignatureTarget = "signature" | "initials"
+type SignatureCreationTab = "draw" | "type" | "upload";
+type SignatureTarget = "signature" | "initials";
 const SIGNATURE_COLORS = [
   { name: "Black", value: "#111827" },
   { name: "Blue", value: "#1d4ed8" },
   { name: "Red", value: "#dc2626" },
-]
+];
 function useSignatureFontsStylesheet(url: string | null, enabled: boolean) {
   React.useEffect(() => {
-    if (!enabled || !url || typeof document === "undefined") return
+    if (!enabled || !url || typeof document === "undefined") return;
     const existing = document.querySelector<HTMLLinkElement>(
-      `link[data-pdf-editor-signature-fonts="${CSS.escape(url)}"]`
-    )
-    if (existing) return
-    const link = document.createElement("link")
-    link.rel = "stylesheet"
-    link.href = url
-    link.dataset.pdfEditorSignatureFonts = url
-    document.head.append(link)
-  }, [enabled, url])
+      `link[data-pdf-editor-signature-fonts="${CSS.escape(url)}"]`,
+    );
+    if (existing) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = url;
+    link.dataset.pdfEditorSignatureFonts = url;
+    document.head.append(link);
+  }, [enabled, url]);
 }
 type SignatureUploadZoneProps = {
-  inputRef: ReturnType<typeof useSignatureUpload>["inputRef"]
-  accept: string
-  isDragging: boolean
-  previewUrl: string | null
-  placeholder: string
-  onOpen: () => void
-  onFileInputChange: (event: Event) => void
-  onDrop: (event: DragEvent) => void
-  onDragOver: (event: DragEvent) => void
-  onDragLeave: () => void
-}
+  inputRef: ReturnType<typeof useSignatureUpload>["inputRef"];
+  accept: string;
+  isDragging: boolean;
+  previewUrl: string | null;
+  placeholder: string;
+  onOpen: () => void;
+  onFileInputChange: (event: Event) => void;
+  onDrop: (event: DragEvent) => void;
+  onDragOver: (event: DragEvent) => void;
+  onDragLeave: () => void;
+};
 function SignatureUploadZone({
   inputRef,
   accept,
@@ -1087,19 +1088,19 @@ function SignatureUploadZone({
         type="button"
         onClick={onOpen}
         onDrop={(event) => {
-          event.preventDefault()
-          onDrop(event.nativeEvent)
+          event.preventDefault();
+          onDrop(event.nativeEvent);
         }}
         onDragOver={(event) => {
-          event.preventDefault()
-          onDragOver(event.nativeEvent)
+          event.preventDefault();
+          onDragOver(event.nativeEvent);
         }}
         onDragLeave={() => onDragLeave()}
         className={cn(
           "flex h-full w-full items-center justify-center rounded-md border-2 border-dashed transition-colors",
           isDragging
             ? "border-primary bg-primary/5"
-            : "border-input hover:border-muted-foreground/60"
+            : "border-input hover:border-muted-foreground/60",
         )}
       >
         {previewUrl ? (
@@ -1109,13 +1110,13 @@ function SignatureUploadZone({
             className="max-h-[90%] max-w-[90%] object-contain"
           />
         ) : (
-          <span className="px-4 text-center text-xs text-muted-foreground">
+          <span className="text-muted-foreground px-4 text-center text-xs">
             {placeholder}
           </span>
         )}
       </button>
     </>
-  )
+  );
 }
 function SignaturePad({
   tab,
@@ -1128,15 +1129,15 @@ function SignaturePad({
   upload,
   onResult,
 }: {
-  tab: SignatureCreationTab
-  color: string
-  fontFamily: string
-  placeholder: string
-  uploadPlaceholder: string
-  drawRef: React.MutableRefObject<SignatureDrawPadHandle | null>
-  typeRef: React.MutableRefObject<SignatureTypePadHandle | null>
-  upload: ReturnType<typeof useSignatureUpload>
-  onResult: (result: SignatureFieldDefinition | null) => void
+  tab: SignatureCreationTab;
+  color: string;
+  fontFamily: string;
+  placeholder: string;
+  uploadPlaceholder: string;
+  drawRef: React.MutableRefObject<SignatureDrawPadHandle | null>;
+  typeRef: React.MutableRefObject<SignatureTypePadHandle | null>;
+  upload: ReturnType<typeof useSignatureUpload>;
+  onResult: (result: SignatureFieldDefinition | null) => void;
 }) {
   return (
     <div className="h-full w-full">
@@ -1144,24 +1145,24 @@ function SignaturePad({
         <SignatureDrawPad
           onResult={onResult}
           padRef={(handle) => {
-            drawRef.current = handle
+            drawRef.current = handle;
           }}
           strokeColor={color}
           strokeWidth={3}
-          className="h-full w-full rounded-md border border-input bg-white"
+          className="border-input h-full w-full rounded-md border bg-white"
         />
       ) : null}
       {tab === "type" ? (
         <SignatureTypePad
           onResult={onResult}
           padRef={(handle) => {
-            typeRef.current = handle
+            typeRef.current = handle;
           }}
           fontFamily={fontFamily}
           fontSize={40}
           color={color}
           placeholder={placeholder}
-          className="h-full w-full rounded-md border border-input bg-white px-3 py-2 text-3xl text-slate-950 outline-none dark:bg-white dark:text-slate-950"
+          className="border-input h-full w-full rounded-md border bg-white px-3 py-2 text-3xl text-slate-950 outline-none dark:bg-white dark:text-slate-950"
         />
       ) : null}
       {tab === "upload" ? (
@@ -1179,89 +1180,89 @@ function SignaturePad({
         />
       ) : null}
     </div>
-  )
+  );
 }
 export function PdfEditorSignatureDialog({
   open,
   onOpenChange,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
-  const { provides: signatureCapability } = useSignatureCapability()
-  const { notify, signatureFontsStylesheetUrl } = usePdfEditor()
+  const { provides: signatureCapability } = useSignatureCapability();
+  const { notify, signatureFontsStylesheetUrl } = usePdfEditor();
   const supportsInitials =
     (signatureCapability?.mode ?? SignatureMode.SignatureOnly) ===
-    SignatureMode.SignatureAndInitials
-  const [tab, setTab] = React.useState<SignatureCreationTab>("draw")
-  const [color, setColor] = React.useState(SIGNATURE_COLORS[0].value)
+    SignatureMode.SignatureAndInitials;
+  const [tab, setTab] = React.useState<SignatureCreationTab>("draw");
+  const [color, setColor] = React.useState(SIGNATURE_COLORS[0].value);
   const [fontFamily, setFontFamily] = React.useState(
-    PDF_EDITOR_SIGNATURE_FONTS[0].family
-  )
+    PDF_EDITOR_SIGNATURE_FONTS[0].family,
+  );
   const [signature, setSignature] =
-    React.useState<SignatureFieldDefinition | null>(null)
+    React.useState<SignatureFieldDefinition | null>(null);
   const [initials, setInitials] =
-    React.useState<SignatureFieldDefinition | null>(null)
+    React.useState<SignatureFieldDefinition | null>(null);
   const [activeTarget, setActiveTarget] =
-    React.useState<SignatureTarget>("signature")
-  const signatureDrawRef = React.useRef<SignatureDrawPadHandle | null>(null)
-  const initialsDrawRef = React.useRef<SignatureDrawPadHandle | null>(null)
-  const signatureTypeRef = React.useRef<SignatureTypePadHandle | null>(null)
-  const initialsTypeRef = React.useRef<SignatureTypePadHandle | null>(null)
-  useSignatureFontsStylesheet(signatureFontsStylesheetUrl, open)
-  const signatureUpload = useSignatureUpload({ onResult: setSignature })
-  const initialsUpload = useSignatureUpload({ onResult: setInitials })
-  const clearSignatureUpload = signatureUpload.clear
-  const clearInitialsUpload = initialsUpload.clear
+    React.useState<SignatureTarget>("signature");
+  const signatureDrawRef = React.useRef<SignatureDrawPadHandle | null>(null);
+  const initialsDrawRef = React.useRef<SignatureDrawPadHandle | null>(null);
+  const signatureTypeRef = React.useRef<SignatureTypePadHandle | null>(null);
+  const initialsTypeRef = React.useRef<SignatureTypePadHandle | null>(null);
+  useSignatureFontsStylesheet(signatureFontsStylesheetUrl, open);
+  const signatureUpload = useSignatureUpload({ onResult: setSignature });
+  const initialsUpload = useSignatureUpload({ onResult: setInitials });
+  const clearSignatureUpload = signatureUpload.clear;
+  const clearInitialsUpload = initialsUpload.clear;
   const clearAll = React.useCallback(() => {
-    signatureDrawRef.current?.clear()
-    initialsDrawRef.current?.clear()
-    signatureTypeRef.current?.clear()
-    initialsTypeRef.current?.clear()
-    clearSignatureUpload()
-    clearInitialsUpload()
-    setSignature(null)
-    setInitials(null)
-  }, [clearInitialsUpload, clearSignatureUpload])
-  const [previousOpen, setPreviousOpen] = React.useState(open)
+    signatureDrawRef.current?.clear();
+    initialsDrawRef.current?.clear();
+    signatureTypeRef.current?.clear();
+    initialsTypeRef.current?.clear();
+    clearSignatureUpload();
+    clearInitialsUpload();
+    setSignature(null);
+    setInitials(null);
+  }, [clearInitialsUpload, clearSignatureUpload]);
+  const [previousOpen, setPreviousOpen] = React.useState(open);
   if (previousOpen !== open) {
-    setPreviousOpen(open)
+    setPreviousOpen(open);
     if (!open) {
-      setTab("draw")
-      setColor(SIGNATURE_COLORS[0].value)
-      setFontFamily(PDF_EDITOR_SIGNATURE_FONTS[0].family)
-      setActiveTarget("signature")
-      setSignature(null)
-      setInitials(null)
+      setTab("draw");
+      setColor(SIGNATURE_COLORS[0].value);
+      setFontFamily(PDF_EDITOR_SIGNATURE_FONTS[0].family);
+      setActiveTarget("signature");
+      setSignature(null);
+      setInitials(null);
     }
   }
   const handleTabChange = (nextTab: SignatureCreationTab) => {
-    clearAll()
-    setTab(nextTab)
-  }
-  const canSave = Boolean(signature || initials)
+    clearAll();
+    setTab(nextTab);
+  };
+  const canSave = Boolean(signature || initials);
   const handleSave = () => {
-    const entrySignature = signature ?? initials
-    if (!entrySignature || !signatureCapability) return
+    const entrySignature = signature ?? initials;
+    if (!entrySignature || !signatureCapability) return;
     signatureCapability.addEntry({
       signature: entrySignature,
       ...(initials ? { initials } : {}),
-    })
-    notify(signature ? "Signature saved." : "Initials saved.", "success")
-    onOpenChange(false)
-  }
+    });
+    notify(signature ? "Signature saved." : "Initials saved.", "success");
+    onOpenChange(false);
+  };
   const tabs: Array<{
-    id: SignatureCreationTab
-    label: string
+    id: SignatureCreationTab;
+    label: string;
   }> = [
     { id: "draw", label: "Draw" },
     { id: "type", label: "Type" },
     { id: "upload", label: "Upload" },
-  ]
+  ];
   const fontOptions = PDF_EDITOR_SIGNATURE_FONTS.map((font) => ({
     label: font.name,
     value: font.family,
-  }))
+  }));
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
@@ -1272,7 +1273,7 @@ export function PdfEditorSignatureDialog({
           </DialogDescription>
         </DialogHeader>
         <InlineDialogPanel className="space-y-4">
-          <div className="flex items-center gap-1 rounded-lg bg-muted p-0.5">
+          <div className="bg-muted flex items-center gap-1 rounded-lg p-0.5">
             {tabs.map((item) => (
               <button
                 key={item.id}
@@ -1282,7 +1283,7 @@ export function PdfEditorSignatureDialog({
                   "flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                   tab === item.id
                     ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {item.label}
@@ -1293,7 +1294,7 @@ export function PdfEditorSignatureDialog({
           <div className="space-y-2">
             <div className="flex items-center justify-between gap-3">
               {supportsInitials ? (
-                <div className="flex items-center gap-1 rounded-lg bg-muted p-0.5">
+                <div className="bg-muted flex items-center gap-1 rounded-lg p-0.5">
                   {(["signature", "initials"] as const).map((target) => (
                     <button
                       key={target}
@@ -1304,7 +1305,7 @@ export function PdfEditorSignatureDialog({
                         "rounded-md px-3 py-1 text-xs font-medium transition-colors",
                         activeTarget === target
                           ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
+                          : "text-muted-foreground hover:text-foreground",
                       )}
                     >
                       {target === "signature" ? "Signature" : "Initials"}
@@ -1320,15 +1321,15 @@ export function PdfEditorSignatureDialog({
                 size="xs"
                 onClick={() => {
                   if (activeTarget === "signature") {
-                    if (tab === "draw") signatureDrawRef.current?.clear()
-                    else if (tab === "type") signatureTypeRef.current?.clear()
-                    else clearSignatureUpload()
-                    setSignature(null)
+                    if (tab === "draw") signatureDrawRef.current?.clear();
+                    else if (tab === "type") signatureTypeRef.current?.clear();
+                    else clearSignatureUpload();
+                    setSignature(null);
                   } else {
-                    if (tab === "draw") initialsDrawRef.current?.clear()
-                    else if (tab === "type") initialsTypeRef.current?.clear()
-                    else clearInitialsUpload()
-                    setInitials(null)
+                    if (tab === "draw") initialsDrawRef.current?.clear();
+                    else if (tab === "type") initialsTypeRef.current?.clear();
+                    else clearInitialsUpload();
+                    setInitials(null);
                   }
                 }}
               >
@@ -1338,7 +1339,7 @@ export function PdfEditorSignatureDialog({
             <div
               className={cn(
                 "h-36 w-full",
-                activeTarget !== "signature" && "hidden"
+                activeTarget !== "signature" && "hidden",
               )}
             >
               <SignaturePad
@@ -1357,7 +1358,7 @@ export function PdfEditorSignatureDialog({
               <div
                 className={cn(
                   "w-full",
-                  activeTarget !== "initials" && "hidden"
+                  activeTarget !== "initials" && "hidden",
                 )}
               >
                 <div className="aspect-[20/7] h-36 max-w-full">
@@ -1380,7 +1381,7 @@ export function PdfEditorSignatureDialog({
           <div className="flex flex-wrap items-center gap-4">
             {tab !== "upload" ? (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">Color</span>
+                <span className="text-muted-foreground text-xs">Color</span>
                 <div className="flex items-center gap-1.5">
                   {SIGNATURE_COLORS.map((option) => (
                     <PdfEditorSwatch
@@ -1402,7 +1403,7 @@ export function PdfEditorSignatureDialog({
             ) : null}
             {tab === "type" ? (
               <div className="flex items-center gap-2">
-                <span className="text-xs text-muted-foreground">Font</span>
+                <span className="text-muted-foreground text-xs">Font</span>
                 <Select
                   items={fontOptions}
                   value={fontFamily}
@@ -1439,21 +1440,21 @@ export function PdfEditorSignatureDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Links                                                                      */
 /* -------------------------------------------------------------------------- */
-type LinkTab = "url" | "page"
+type LinkTab = "url" | "page";
 function readLinkTarget(target: PdfLinkTarget | undefined): {
-  tab: LinkTab
-  url: string
-  pageNumber: number | null
+  tab: LinkTab;
+  url: string;
+  pageNumber: number | null;
 } {
-  if (!target) return { tab: "url", url: "", pageNumber: null }
+  if (!target) return { tab: "url", url: "", pageNumber: null };
   if (target.type === "action") {
     if (target.action.type === PdfActionType.URI) {
-      return { tab: "url", url: target.action.uri, pageNumber: null }
+      return { tab: "url", url: target.action.uri, pageNumber: null };
     }
     if (
       target.action.type === PdfActionType.Goto ||
@@ -1463,15 +1464,15 @@ function readLinkTarget(target: PdfLinkTarget | undefined): {
         tab: "page",
         url: "",
         pageNumber: target.action.destination.pageIndex + 1,
-      }
+      };
     }
-    return { tab: "url", url: "", pageNumber: null }
+    return { tab: "url", url: "", pageNumber: null };
   }
   return {
     tab: "page",
     url: "",
     pageNumber: target.destination.pageIndex + 1,
-  }
+  };
 }
 export function PdfEditorLinkDialog({
   documentId,
@@ -1479,63 +1480,63 @@ export function PdfEditorLinkDialog({
   onOpenChange,
   source,
 }: {
-  documentId: string
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  source: "annotation" | "selection"
+  documentId: string;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  source: "annotation" | "selection";
 }) {
-  const { provides: annotationCapability } = useAnnotationCapability()
-  const { provides: selectionCapability } = useSelectionCapability()
-  const { state: scrollState } = useScroll(documentId)
-  const { notify } = usePdfEditor()
-  const [tab, setTab] = React.useState<LinkTab>("url")
-  const [url, setUrl] = React.useState("")
-  const [pageNumber, setPageNumber] = React.useState(1)
-  const totalPages = Math.max(scrollState.totalPages, 1)
+  const { provides: annotationCapability } = useAnnotationCapability();
+  const { provides: selectionCapability } = useSelectionCapability();
+  const { state: scrollState } = useScroll(documentId);
+  const { notify } = usePdfEditor();
+  const [tab, setTab] = React.useState<LinkTab>("url");
+  const [url, setUrl] = React.useState("");
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const totalPages = Math.max(scrollState.totalPages, 1);
   const annotationScope = React.useMemo(
     () => annotationCapability?.forDocument(documentId) ?? null,
-    [annotationCapability, documentId]
-  )
+    [annotationCapability, documentId],
+  );
   const selectionScope = React.useMemo(
     () => selectionCapability?.forDocument(documentId) ?? null,
-    [documentId, selectionCapability]
-  )
+    [documentId, selectionCapability],
+  );
   const [linkRequest, setLinkRequest] = React.useState({
     annotationScope,
     open: false,
     source,
-  })
+  });
   if (
     linkRequest.annotationScope !== annotationScope ||
     linkRequest.open !== open ||
     linkRequest.source !== source
   ) {
-    setLinkRequest({ annotationScope, open, source })
+    setLinkRequest({ annotationScope, open, source });
     if (open) {
       const selected =
         source === "annotation"
           ? annotationScope?.getSelectedAnnotation()
-          : null
+          : null;
       const existing =
         selected?.object.type === PdfAnnotationSubtype.LINK
           ? readLinkTarget((selected.object as PdfLinkAnnoObject).target)
-          : { tab: "url" as const, url: "", pageNumber: 1 }
-      setTab(existing.tab)
-      setUrl(existing.url)
-      setPageNumber(existing.pageNumber ?? 1)
+          : { tab: "url" as const, url: "", pageNumber: 1 };
+      setTab(existing.tab);
+      setUrl(existing.url);
+      setPageNumber(existing.pageNumber ?? 1);
     }
   }
   const buildTarget = (): PdfLinkTarget | null => {
     if (tab === "url") {
-      const trimmed = url.trim()
-      if (!trimmed) return null
+      const trimmed = url.trim();
+      if (!trimmed) return null;
       const normalized = /^[a-z][a-z0-9+.-]*:/i.test(trimmed)
         ? trimmed
-        : `https://${trimmed}`
+        : `https://${trimmed}`;
       return {
         type: "action",
         action: { type: PdfActionType.URI, uri: normalized },
-      }
+      };
     }
     return {
       type: "destination",
@@ -1544,24 +1545,24 @@ export function PdfEditorLinkDialog({
         zoom: { mode: PdfZoomMode.FitPage },
         view: [],
       },
-    }
-  }
+    };
+  };
   const handleSubmit = () => {
-    const target = buildTarget()
-    if (!target || !annotationScope) return
+    const target = buildTarget();
+    if (!target || !annotationScope) return;
     const selected =
-      source === "annotation" ? annotationScope.getSelectedAnnotation() : null
+      source === "annotation" ? annotationScope.getSelectedAnnotation() : null;
     if (selected && selected.object.type === PdfAnnotationSubtype.LINK) {
       annotationScope.updateAnnotation(
         selected.object.pageIndex,
         selected.object.id,
         {
           target,
-        } as Partial<PdfLinkAnnoObject>
-      )
-      notify("Link updated.", "success")
-      onOpenChange(false)
-      return
+        } as Partial<PdfLinkAnnoObject>,
+      );
+      notify("Link updated.", "success");
+      onOpenChange(false);
+      return;
     }
     if (selected) {
       const rects =
@@ -1569,7 +1570,7 @@ export function PdfEditorLinkDialog({
         Array.isArray(selected.object.segmentRects) &&
         selected.object.segmentRects.length > 0
           ? selected.object.segmentRects
-          : [selected.object.rect]
+          : [selected.object.rect];
       for (const rect of rects) {
         annotationScope.createAnnotation<PdfLinkAnnoObject>(
           selected.object.pageIndex,
@@ -1585,21 +1586,21 @@ export function PdfEditorLinkDialog({
             strokeColor: "#2563eb",
             strokeWidth: 2,
             created: new Date(),
-          }
-        )
+          },
+        );
       }
-      notify("Link added.", "success")
-      onOpenChange(false)
-      return
+      notify("Link added.", "success");
+      onOpenChange(false);
+      return;
     }
-    const formattedSelection = selectionScope?.getFormattedSelection() ?? []
+    const formattedSelection = selectionScope?.getFormattedSelection() ?? [];
     if (formattedSelection.length === 0) {
-      notify("Select text or an annotation first.", "error")
-      return
+      notify("Select text or an annotation first.", "error");
+      return;
     }
     const applyLinks = (text: string[]) => {
       for (const page of formattedSelection) {
-        const highlightId = uuidV4()
+        const highlightId = uuidV4();
         annotationScope.createAnnotation(page.pageIndex, {
           id: highlightId,
           created: new Date(),
@@ -1612,7 +1613,7 @@ export function PdfEditorLinkDialog({
           strokeColor: "#ffffff",
           opacity: 0,
           custom: { text: text.join("\n") },
-        })
+        });
         for (const rect of page.segmentRects) {
           annotationScope.createAnnotation<PdfLinkAnnoObject>(page.pageIndex, {
             id: uuidV4(),
@@ -1626,21 +1627,21 @@ export function PdfEditorLinkDialog({
             strokeColor: "#2563eb",
             strokeWidth: 2,
             created: new Date(),
-          })
+          });
         }
       }
-      selectionScope?.clear()
-      notify("Link added.", "success")
-      onOpenChange(false)
-    }
-    const textTask = selectionScope?.getSelectedText()
+      selectionScope?.clear();
+      notify("Link added.", "success");
+      onOpenChange(false);
+    };
+    const textTask = selectionScope?.getSelectedText();
     if (textTask) {
-      textTask.wait(applyLinks, () => applyLinks([]))
+      textTask.wait(applyLinks, () => applyLinks([]));
     } else {
-      applyLinks([])
+      applyLinks([]);
     }
-  }
-  const canSubmit = tab === "url" ? url.trim().length > 0 : pageNumber >= 1
+  };
+  const canSubmit = tab === "url" ? url.trim().length > 0 : pageNumber >= 1;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
@@ -1653,7 +1654,7 @@ export function PdfEditorLinkDialog({
           </DialogDescription>
         </DialogHeader>
         <InlineDialogPanel className="space-y-4">
-          <div className="flex items-center gap-1 rounded-lg bg-muted p-0.5">
+          <div className="bg-muted flex items-center gap-1 rounded-lg p-0.5">
             {(
               [
                 ["url", "Web address"],
@@ -1668,7 +1669,7 @@ export function PdfEditorLinkDialog({
                   "flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
                   tab === id
                     ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {label}
@@ -1689,7 +1690,7 @@ export function PdfEditorLinkDialog({
                   setUrl(event.target.value)
                 }
                 onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (event.key === "Enter" && canSubmit) handleSubmit()
+                  if (event.key === "Enter" && canSubmit) handleSubmit();
                 }}
               />
             </div>
@@ -1725,17 +1726,17 @@ export function PdfEditorLinkDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Keyboard shortcuts                                                         */
 /* -------------------------------------------------------------------------- */
 export const PDF_EDITOR_SHORTCUTS: Array<{
-  group: string
+  group: string;
   items: Array<{
-    keys: string[]
-    label: string
-  }>
+    keys: string[];
+    label: string;
+  }>;
 }> = [
   {
     group: "Document",
@@ -1765,13 +1766,13 @@ export const PDF_EDITOR_SHORTCUTS: Array<{
       { keys: ["mod+A"], label: "Select all annotations on the page" },
     ],
   },
-]
+];
 export function PdfEditorShortcutsDialog({
   open,
   onOpenChange,
 }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -1807,7 +1808,7 @@ export function PdfEditorShortcutsDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Password prompt (inline)                                                   */
@@ -1815,50 +1816,50 @@ export function PdfEditorShortcutsDialog({
 export function PdfEditorPasswordPrompt({
   documentState,
 }: {
-  documentState: DocumentState
+  documentState: DocumentState;
 }) {
-  const { provides: documentManager } = useDocumentManagerCapability()
-  const [password, setPassword] = React.useState("")
-  const [isRetrying, setIsRetrying] = React.useState(false)
-  const isPasswordError = documentState.errorCode === PdfErrorCode.Password
-  const isIncorrect = isPasswordError && documentState.passwordProvided
+  const { provides: documentManager } = useDocumentManagerCapability();
+  const [password, setPassword] = React.useState("");
+  const [isRetrying, setIsRetrying] = React.useState(false);
+  const isPasswordError = documentState.errorCode === PdfErrorCode.Password;
+  const isIncorrect = isPasswordError && documentState.passwordProvided;
   const handleRetry = () => {
-    if (!documentManager || !password.trim()) return
-    setIsRetrying(true)
+    if (!documentManager || !password.trim()) return;
+    setIsRetrying(true);
     documentManager.retryDocument(documentState.id, { password }).wait(
       () => {
-        setPassword("")
-        setIsRetrying(false)
+        setPassword("");
+        setIsRetrying(false);
       },
-      () => setIsRetrying(false)
-    )
-  }
+      () => setIsRetrying(false),
+    );
+  };
   if (!isPasswordError) {
     return (
       <div className="grid h-full place-items-center p-6">
         <div className="max-w-sm space-y-2 text-center">
-          <div className="text-sm font-medium text-foreground">
+          <div className="text-foreground text-sm font-medium">
             The document could not be opened
           </div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-muted-foreground text-sm">
             {documentState.error ?? "An unknown error occurred."}
           </div>
         </div>
       </div>
-    )
+    );
   }
   return (
     <div className="grid h-full place-items-center p-6">
-      <div className="w-full max-w-sm space-y-4 rounded-xl border bg-background p-5 shadow-sm">
+      <div className="bg-background w-full max-w-sm space-y-4 rounded-xl border p-5 shadow-sm">
         <div className="flex items-start gap-3">
-          <div className="grid size-9 shrink-0 place-items-center rounded-full bg-muted text-muted-foreground">
+          <div className="bg-muted text-muted-foreground grid size-9 shrink-0 place-items-center rounded-full">
             <LockGlyph className="size-4" />
           </div>
           <div className="space-y-1">
-            <div className="text-sm font-medium text-foreground">
+            <div className="text-foreground text-sm font-medium">
               Password required
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-muted-foreground text-xs">
               {isIncorrect
                 ? "The password was incorrect. Try again."
                 : "This document is protected. Enter the password to open it."}
@@ -1884,9 +1885,9 @@ export function PdfEditorPasswordPrompt({
         </div>
       </div>
     </div>
-  )
+  );
 }
-export { ignore as ignorePdfTask }
+export { ignore as ignorePdfTask };
 function InlineDialogPanel({
   className,
   children,
@@ -1902,7 +1903,7 @@ function InlineDialogPanel({
         {children}
       </div>
     </ScrollArea>
-  )
+  );
 }
 function InlineLoadingButton({
   loading,
@@ -1911,7 +1912,7 @@ function InlineLoadingButton({
   className,
   ...props
 }: React.ComponentProps<typeof Button> & {
-  loading?: boolean
+  loading?: boolean;
 }) {
   return (
     <Button
@@ -1925,14 +1926,19 @@ function InlineLoadingButton({
         <InlineSpinner className="pointer-events-none absolute" />
       ) : null}
     </Button>
-  )
+  );
 }
 function InlineSpinner({ className, ...props }: InlineRegistryIconProps) {
   return (
-    <LoaderCircle role="status" aria-label="Loading" className={cn("size-4 animate-spin", className)} {...props} />
-  )
+    <LoaderCircle
+      role="status"
+      aria-label="Loading"
+      className={cn("size-4 animate-spin", className)}
+      {...props}
+    />
+  );
 }
 type InlineRegistryIconProps = Omit<
   React.ComponentProps<"svg">,
   "children" | "strokeWidth"
-> & { strokeWidth?: number }
+> & { strokeWidth?: number };

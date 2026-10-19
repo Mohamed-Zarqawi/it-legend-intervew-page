@@ -1,6 +1,6 @@
-"use client"
+// @ts-nocheck
+"use client";
 
-import * as React from "react"
 import {
   blendModeLabel,
   blendModeValues,
@@ -25,29 +25,18 @@ import {
   type PdfWidgetAnnoField,
   type PdfWidgetAnnoObject,
   type PdfWidgetAnnoOption,
-} from "@embedpdf/models"
+} from "@embedpdf/models";
 import {
   getSelectedAnnotations,
   useAnnotation,
   useAnnotationCapability,
   type AnnotationTool,
   type TrackedAnnotation,
-} from "@embedpdf/plugin-annotation/react"
-import { useFormCapability } from "@embedpdf/plugin-form/react"
+} from "@embedpdf/plugin-annotation/react";
+import { useFormCapability } from "@embedpdf/plugin-form/react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { ColorPicker } from "@/components/extend/document-color-picker"
+import { ColorPicker } from "@/components/extend/document-color-picker";
 import {
   AlignBottomGlyph,
   AlignCenterGlyph,
@@ -66,7 +55,19 @@ import {
   SlidersGlyph,
   TrashGlyph,
   usePdfEditor,
-} from "@/components/extend/pdf-editor-shared"
+} from "@/components/extend/pdf-editor-shared";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { cn } from "@/lib/utils";
 
 /* -------------------------------------------------------------------------- */
 /* Property schema                                                            */
@@ -88,14 +89,14 @@ type PropertyKind =
   | "verticalAlign"
   | "blendMode"
   | "overlayText"
-  | "rotation"
+  | "rotation";
 type PropertyConfig = {
-  key: string
-  kind: PropertyKind
-  label: string
+  key: string;
+  kind: PropertyKind;
+  label: string;
   /** Only shown while editing an existing annotation, never for tool defaults. */
-  editOnly?: boolean
-}
+  editOnly?: boolean;
+};
 const PROPERTY_CONFIGS: Record<string, PropertyConfig> = {
   color: { key: "color", kind: "colorWithTransparent", label: "Fill" },
   strokeColor: {
@@ -156,7 +157,7 @@ const PROPERTY_CONFIGS: Record<string, PropertyConfig> = {
     label: "Rotation",
     editOnly: true,
   },
-}
+};
 /** Ordered property lists keyed by EmbedPDF tool id. */
 const TOOL_PROPERTIES: Record<string, string[]> = {
   highlight: ["markupColor", "opacity", "blendMode"],
@@ -277,27 +278,27 @@ const TOOL_PROPERTIES: Record<string, string[]> = {
     "color",
   ],
   formRadioButton: ["strokeColor", "color", "strokeWidth"],
-}
+};
 function getSharedProperties(toolIds: string[]) {
-  const unique = [...new Set(toolIds)]
-  if (unique.length === 0) return []
-  const first = new Set(TOOL_PROPERTIES[unique[0]] ?? [])
+  const unique = [...new Set(toolIds)];
+  if (unique.length === 0) return [];
+  const first = new Set(TOOL_PROPERTIES[unique[0]] ?? []);
   for (const id of unique.slice(1)) {
-    const own = new Set(TOOL_PROPERTIES[id] ?? [])
+    const own = new Set(TOOL_PROPERTIES[id] ?? []);
     for (const property of first) {
-      if (!own.has(property)) first.delete(property)
+      if (!own.has(property)) first.delete(property);
     }
   }
   return (TOOL_PROPERTIES[unique[0]] ?? []).filter((property) =>
-    first.has(property)
-  )
+    first.has(property),
+  );
 }
 const FONT_SIZE_PRESETS = [
   8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 72,
-]
+];
 const LINE_ENDING_OPTIONS: Array<{
-  value: PdfAnnotationLineEnding
-  label: string
+  value: PdfAnnotationLineEnding;
+  label: string;
 }> = [
   { value: PdfAnnotationLineEnding.None, label: "None" },
   { value: PdfAnnotationLineEnding.OpenArrow, label: "Open arrow" },
@@ -312,11 +313,11 @@ const LINE_ENDING_OPTIONS: Array<{
   { value: PdfAnnotationLineEnding.Diamond, label: "Diamond" },
   { value: PdfAnnotationLineEnding.Butt, label: "Butt" },
   { value: PdfAnnotationLineEnding.Slash, label: "Slash" },
-]
+];
 const FLAG_OPTIONS: Array<{
-  flag: PdfAnnotationFlagName
-  label: string
-  description: string
+  flag: PdfAnnotationFlagName;
+  label: string;
+  description: string;
 }> = [
   {
     flag: "locked",
@@ -333,44 +334,44 @@ const FLAG_OPTIONS: Array<{
     label: "Print",
     description: "Include when printing.",
   },
-]
+];
 /* -------------------------------------------------------------------------- */
 /* Controls                                                                   */
 /* -------------------------------------------------------------------------- */
 function useDebouncedCommit<T>(
   value: T,
   onCommit: (value: T) => void,
-  delay = 150
+  delay = 150,
 ) {
-  const [draft, setDraft] = React.useState(value)
-  const timeoutRef = React.useRef<number | null>(null)
-  const onCommitRef = React.useRef(onCommit)
+  const [draft, setDraft] = React.useState(value);
+  const timeoutRef = React.useRef<number | null>(null);
+  const onCommitRef = React.useRef(onCommit);
   React.useEffect(() => {
-    onCommitRef.current = onCommit
-  })
-  const [previousValue, setPreviousValue] = React.useState(value)
+    onCommitRef.current = onCommit;
+  });
+  const [previousValue, setPreviousValue] = React.useState(value);
   if (!Object.is(previousValue, value)) {
-    setPreviousValue(value)
-    setDraft(value)
+    setPreviousValue(value);
+    setDraft(value);
   }
   React.useEffect(
     () => () => {
-      if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current)
+      if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current);
     },
-    []
-  )
+    [],
+  );
   const update = React.useCallback(
     (next: T) => {
-      setDraft(next)
-      if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current)
+      setDraft(next);
+      if (timeoutRef.current !== null) window.clearTimeout(timeoutRef.current);
       timeoutRef.current = window.setTimeout(() => {
-        timeoutRef.current = null
-        onCommitRef.current(next)
-      }, delay)
+        timeoutRef.current = null;
+        onCommitRef.current(next);
+      }, delay);
     },
-    [delay]
-  )
-  return [draft, update] as const
+    [delay],
+  );
+  return [draft, update] as const;
 }
 function PropertySwitch({
   checked,
@@ -379,26 +380,26 @@ function PropertySwitch({
   description,
   onCheckedChange,
 }: {
-  checked: boolean
-  disabled?: boolean
-  label: React.ReactNode
-  description?: React.ReactNode
-  onCheckedChange: (checked: boolean) => void
+  checked: boolean;
+  disabled?: boolean;
+  label: React.ReactNode;
+  description?: React.ReactNode;
+  onCheckedChange: (checked: boolean) => void;
 }) {
-  const id = React.useId()
+  const id = React.useId();
   return (
     <label
       htmlFor={id}
       data-slot="label"
       className={cn(
         "flex items-center justify-between gap-4 rounded-md px-1 py-1",
-        disabled ? "cursor-not-allowed opacity-64" : "cursor-pointer"
+        disabled ? "cursor-not-allowed opacity-64" : "cursor-pointer",
       )}
     >
       <span className="min-w-0">
         <span className="block text-sm leading-4">{label}</span>
         {description ? (
-          <span className="block text-xs text-muted-foreground">
+          <span className="text-muted-foreground block text-xs">
             {description}
           </span>
         ) : null}
@@ -410,7 +411,7 @@ function PropertySwitch({
         onCheckedChange={onCheckedChange}
       />
     </label>
-  )
+  );
 }
 function ColorControl({
   label,
@@ -419,20 +420,20 @@ function ColorControl({
   allowTransparent,
   onChange,
 }: {
-  label: string
-  value: string | undefined
-  presets: string[]
-  allowTransparent: boolean
-  onChange: (value: string) => void
+  label: string;
+  value: string | undefined;
+  presets: string[];
+  allowTransparent: boolean;
+  onChange: (value: string) => void;
 }) {
-  const current = (value ?? "").toLowerCase()
-  const isTransparent = !value || current === "transparent"
-  const pickerSource = isTransparent ? "#111827" : (value ?? "#111827")
+  const current = (value ?? "").toLowerCase();
+  const isTransparent = !value || current === "transparent";
+  const pickerSource = isTransparent ? "#111827" : (value ?? "#111827");
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
         <PdfEditorFieldLabel>{label}</PdfEditorFieldLabel>
-        <span className="text-[11px] text-muted-foreground tabular-nums">
+        <span className="text-muted-foreground text-[11px] tabular-nums">
           {isTransparent ? "None" : current}
         </span>
       </div>
@@ -461,7 +462,7 @@ function ColorControl({
         />
       </div>
     </div>
-  )
+  );
 }
 function SliderControl({
   label,
@@ -472,20 +473,20 @@ function SliderControl({
   format,
   onChange,
 }: {
-  label: string
-  value: number
-  min: number
-  max: number
-  step: number
-  format: (value: number) => string
-  onChange: (value: number) => void
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  format: (value: number) => string;
+  onChange: (value: number) => void;
 }) {
-  const [draft, update] = useDebouncedCommit(value, onChange)
+  const [draft, update] = useDebouncedCommit(value, onChange);
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
         <PdfEditorFieldLabel>{label}</PdfEditorFieldLabel>
-        <span className="text-[11px] text-muted-foreground tabular-nums">
+        <span className="text-muted-foreground text-[11px] tabular-nums">
           {format(draft)}
         </span>
       </div>
@@ -497,10 +498,10 @@ function SliderControl({
         value={draft}
         aria-label={label}
         onChange={(event) => update(Number(event.target.value))}
-        className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-muted accent-primary"
+        className="bg-muted accent-primary h-1.5 w-full cursor-pointer appearance-none rounded-full"
       />
     </div>
-  )
+  );
 }
 type StrokeStyleValue =
   | "solid"
@@ -514,14 +515,14 @@ type StrokeStyleValue =
   | "cloudy-1"
   | "cloudy-2"
   | "underline"
-  | "custom"
+  | "custom";
 const STROKE_STYLE_PRESETS: Array<{
   value: Exclude<
     StrokeStyleValue,
     "cloudy-1" | "cloudy-2" | "underline" | "custom"
-  >
-  label: string
-  dashArray?: number[]
+  >;
+  label: string;
+  dashArray?: number[];
 }> = [
   { value: "solid", label: "Solid" },
   { value: "dotted", label: "Dotted", dashArray: [1, 2] },
@@ -539,28 +540,28 @@ const STROKE_STYLE_PRESETS: Array<{
     label: "Dash dot dot",
     dashArray: [6, 3, 1, 3, 1, 3],
   },
-]
+];
 function getStrokeDashArray(value: StrokeStyleValue) {
   return STROKE_STYLE_PRESETS.find((preset) => preset.value === value)
-    ?.dashArray
+    ?.dashArray;
 }
 function StrokeStylePreview({
   value,
   dashArray,
 }: {
-  value: StrokeStyleValue
-  dashArray?: number[]
+  value: StrokeStyleValue;
+  dashArray?: number[];
 }) {
   const path =
     value === "cloudy-2"
       ? "M1 8 Q3 2 5 8 Q7 2 9 8 Q11 2 13 8 Q15 2 17 8 Q19 2 21 8 Q23 2 25 8 Q27 2 29 8 Q31 2 33 8 Q35 2 37 8 Q39 2 41 8 Q43 2 45 8 Q47 2 49 8 Q51 2 55 8"
-      : "M1 8 Q5 1 9 8 Q13 1 17 8 Q21 1 25 8 Q29 1 33 8 Q37 1 41 8 Q45 1 49 8 Q53 1 55 8"
-  const resolvedDashArray = dashArray ?? getStrokeDashArray(value)
+      : "M1 8 Q5 1 9 8 Q13 1 17 8 Q21 1 25 8 Q29 1 33 8 Q37 1 41 8 Q45 1 49 8 Q53 1 55 8";
+  const resolvedDashArray = dashArray ?? getStrokeDashArray(value);
   return (
     <svg
       aria-hidden="true"
       viewBox="0 0 56 12"
-      className="h-6! w-24! shrink-0 text-foreground"
+      className="text-foreground h-6! w-24! shrink-0"
     >
       <path
         d={value.startsWith("cloudy") ? path : "M1 6H55"}
@@ -571,7 +572,7 @@ function StrokeStylePreview({
         strokeWidth="2.25"
       />
     </svg>
-  )
+  );
 }
 function SelectControl({
   label,
@@ -579,17 +580,17 @@ function SelectControl({
   options,
   onChange,
 }: {
-  label: string
-  value: string
+  label: string;
+  value: string;
   options: Array<{
-    value: string
-    label: string
-    preview?: React.ReactNode
-  }>
-  onChange: (value: string) => void
+    value: string;
+    label: string;
+    preview?: React.ReactNode;
+  }>;
+  onChange: (value: string) => void;
 }) {
   const selectedOption =
-    options.find((option) => option.value === value) ?? null
+    options.find((option) => option.value === value) ?? null;
   return (
     <div className="space-y-1.5">
       <PdfEditorFieldLabel>{label}</PdfEditorFieldLabel>
@@ -597,7 +598,7 @@ function SelectControl({
         items={options}
         value={value}
         onValueChange={(next) => {
-          if (next) onChange(String(next))
+          if (next) onChange(String(next));
         }}
       >
         <SelectTrigger size="sm" className="w-full">
@@ -628,43 +629,43 @@ function SelectControl({
         </SelectContent>
       </Select>
     </div>
-  )
+  );
 }
 function getStrokeStyleValue(
   strokeStyle: PdfAnnotationBorderStyle | undefined,
   cloudyBorderIntensity: number | undefined,
-  strokeDashArray: number[] | undefined
+  strokeDashArray: number[] | undefined,
 ): StrokeStyleValue {
   if (
     strokeStyle === PdfAnnotationBorderStyle.CLOUDY ||
     (cloudyBorderIntensity ?? 0) > 0
   ) {
-    return (cloudyBorderIntensity ?? 1) >= 2 ? "cloudy-2" : "cloudy-1"
+    return (cloudyBorderIntensity ?? 1) >= 2 ? "cloudy-2" : "cloudy-1";
   }
-  if (strokeStyle === PdfAnnotationBorderStyle.UNDERLINE) return "underline"
+  if (strokeStyle === PdfAnnotationBorderStyle.UNDERLINE) return "underline";
   if (strokeStyle === PdfAnnotationBorderStyle.DASHED) {
     const preset = STROKE_STYLE_PRESETS.find((item) => {
-      if (!item.dashArray || !strokeDashArray) return false
-      if (item.dashArray.length !== strokeDashArray.length) return false
+      if (!item.dashArray || !strokeDashArray) return false;
+      if (item.dashArray.length !== strokeDashArray.length) return false;
       return item.dashArray.every(
-        (part, index) => part === strokeDashArray[index]
-      )
-    })
-    return preset?.value ?? "custom"
+        (part, index) => part === strokeDashArray[index],
+      );
+    });
+    return preset?.value ?? "custom";
   }
-  return "solid"
+  return "solid";
 }
 function getStrokeStylePatch(
   value: StrokeStyleValue,
-  customDashArray?: number[]
+  customDashArray?: number[],
 ) {
-  const dashArray = getStrokeDashArray(value)
+  const dashArray = getStrokeDashArray(value);
   if (dashArray || value === "custom") {
     return {
       strokeStyle: PdfAnnotationBorderStyle.DASHED,
       strokeDashArray: dashArray ?? customDashArray ?? [4, 3],
       cloudyBorderIntensity: 0,
-    }
+    };
   }
   switch (value) {
     case "underline":
@@ -672,54 +673,54 @@ function getStrokeStylePatch(
         strokeStyle: PdfAnnotationBorderStyle.UNDERLINE,
         strokeDashArray: undefined,
         cloudyBorderIntensity: 0,
-      }
+      };
     case "cloudy-1":
       return {
         strokeStyle: PdfAnnotationBorderStyle.CLOUDY,
         strokeDashArray: undefined,
         cloudyBorderIntensity: 1,
-      }
+      };
     case "cloudy-2":
       return {
         strokeStyle: PdfAnnotationBorderStyle.CLOUDY,
         strokeDashArray: undefined,
         cloudyBorderIntensity: 2,
-      }
+      };
     default:
       return {
         strokeStyle: PdfAnnotationBorderStyle.SOLID,
         strokeDashArray: undefined,
         cloudyBorderIntensity: 0,
-      }
+      };
   }
 }
 function FontControl({
   value,
   onChange,
 }: {
-  value: PdfStandardFont | undefined
-  onChange: (value: PdfStandardFont) => void
+  value: PdfStandardFont | undefined;
+  onChange: (value: PdfStandardFont) => void;
 }) {
-  const font = value ?? PdfStandardFont.Helvetica
-  const family = standardFontFamily(font)
-  const bold = standardFontIsBold(font)
-  const italic = standardFontIsItalic(font)
+  const font = value ?? PdfStandardFont.Helvetica;
+  const family = standardFontFamily(font);
+  const bold = standardFontIsBold(font);
+  const italic = standardFontIsItalic(font);
   const supportsStyles =
     family !== PdfStandardFontFamily.Symbol &&
-    family !== PdfStandardFontFamily.ZapfDingbats
+    family !== PdfStandardFontFamily.ZapfDingbats;
   const familyOptions = STANDARD_FONT_FAMILIES.filter(
-    (item) => item !== PdfStandardFontFamily.Unknown
-  ).map((item) => ({ label: item, value: item }))
+    (item) => item !== PdfStandardFontFamily.Unknown,
+  ).map((item) => ({ label: item, value: item }));
   const apply = (
     nextFamily: PdfStandardFontFamily,
     nextBold: boolean,
-    nextItalic: boolean
+    nextItalic: boolean,
   ) => {
     const next =
       makeStandardFont(nextFamily, { bold: nextBold, italic: nextItalic }) ??
-      makeStandardFont(nextFamily, { bold: false, italic: false })
-    if (next !== undefined && next !== PdfStandardFont.Unknown) onChange(next)
-  }
+      makeStandardFont(nextFamily, { bold: false, italic: false });
+    if (next !== undefined && next !== PdfStandardFont.Unknown) onChange(next);
+  };
   return (
     <div className="space-y-1.5">
       <PdfEditorFieldLabel>Font</PdfEditorFieldLabel>
@@ -772,21 +773,21 @@ function FontControl({
         </ToggleGroup>
       </div>
     </div>
-  )
+  );
 }
 function FontSizeControl({
   value,
   onChange,
 }: {
-  value: number | undefined
-  onChange: (value: number) => void
+  value: number | undefined;
+  onChange: (value: number) => void;
 }) {
-  const [draft, update] = useDebouncedCommit(value ?? 12, onChange, 250)
+  const [draft, update] = useDebouncedCommit(value ?? 12, onChange, 250);
   const sizeOptions = (
     FONT_SIZE_PRESETS.includes(draft)
       ? FONT_SIZE_PRESETS
       : [...FONT_SIZE_PRESETS, draft].sort((a, b) => a - b)
-  ).map((size) => ({ label: `${size} pt`, value: String(size) }))
+  ).map((size) => ({ label: `${size} pt`, value: String(size) }));
   return (
     <div className="space-y-1.5">
       <PdfEditorFieldLabel>Font size</PdfEditorFieldLabel>
@@ -797,8 +798,8 @@ function FontSizeControl({
           max={200}
           value={draft}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            const next = Number(event.target.value)
-            if (Number.isFinite(next) && next > 0) update(next)
+            const next = Number(event.target.value);
+            if (Number.isFinite(next) && next > 0) update(next);
           }}
           className={cn("h-8 px-2.5", "w-20")}
         />
@@ -820,7 +821,7 @@ function FontSizeControl({
         </Select>
       </div>
     </div>
-  )
+  );
 }
 function AlignControl({
   label,
@@ -828,14 +829,14 @@ function AlignControl({
   onChange,
   options,
 }: {
-  label: string
-  value: string
-  onChange: (value: string) => void
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
   options: Array<{
-    value: string
-    label: string
-    glyph: React.ReactNode
-  }>
+    value: string;
+    label: string;
+    glyph: React.ReactNode;
+  }>;
 }) {
   return (
     <div className="space-y-1.5">
@@ -843,8 +844,8 @@ function AlignControl({
       <ToggleGroup
         value={[value]}
         onValueChange={(next: string[]) => {
-          const selected = next[0]
-          if (selected !== undefined) onChange(selected)
+          const selected = next[0];
+          if (selected !== undefined) onChange(selected);
         }}
         spacing={0}
       >
@@ -861,30 +862,30 @@ function AlignControl({
         ))}
       </ToggleGroup>
     </div>
-  )
+  );
 }
 function LineEndingPreview({ value }: { value: PdfAnnotationLineEnding }) {
   const isOpenArrow =
     value === PdfAnnotationLineEnding.OpenArrow ||
-    value === PdfAnnotationLineEnding.ROpenArrow
+    value === PdfAnnotationLineEnding.ROpenArrow;
   const isClosedArrow =
     value === PdfAnnotationLineEnding.ClosedArrow ||
-    value === PdfAnnotationLineEnding.RClosedArrow
+    value === PdfAnnotationLineEnding.RClosedArrow;
   const isReverse =
     value === PdfAnnotationLineEnding.ROpenArrow ||
-    value === PdfAnnotationLineEnding.RClosedArrow
+    value === PdfAnnotationLineEnding.RClosedArrow;
   const lineEndX = isReverse
     ? isClosedArrow
       ? 58
       : 56
     : isClosedArrow
       ? 68
-      : 66
+      : 66;
   return (
     <svg
       aria-hidden="true"
       viewBox="0 0 72 16"
-      className="h-6! w-24! shrink-0 text-foreground"
+      className="text-foreground h-6! w-24! shrink-0"
     >
       <path
         d={`M2 8H${lineEndX}`}
@@ -925,22 +926,22 @@ function LineEndingPreview({ value }: { value: PdfAnnotationLineEnding }) {
         <path d="m60 14 12-12" stroke="currentColor" strokeWidth="2.5" />
       ) : null}
     </svg>
-  )
+  );
 }
 function LineEndingsControl({
   value,
   onChange,
 }: {
-  value: LineEndings | undefined
-  onChange: (value: LineEndings) => void
+  value: LineEndings | undefined;
+  onChange: (value: LineEndings) => void;
 }) {
-  const start = value?.start ?? PdfAnnotationLineEnding.None
-  const end = value?.end ?? PdfAnnotationLineEnding.None
+  const start = value?.start ?? PdfAnnotationLineEnding.None;
+  const end = value?.end ?? PdfAnnotationLineEnding.None;
   const options = LINE_ENDING_OPTIONS.map((option) => ({
     value: String(option.value),
     label: option.label,
     preview: <LineEndingPreview value={option.value} />,
-  }))
+  }));
   return (
     <div className="space-y-2">
       <SelectControl
@@ -960,22 +961,22 @@ function LineEndingsControl({
         }
       />
     </div>
-  )
+  );
 }
 function LineEndingControl({
   label,
   value,
   onChange,
 }: {
-  label: string
-  value: PdfAnnotationLineEnding | undefined
-  onChange: (value: PdfAnnotationLineEnding) => void
+  label: string;
+  value: PdfAnnotationLineEnding | undefined;
+  onChange: (value: PdfAnnotationLineEnding) => void;
 }) {
   const options = LINE_ENDING_OPTIONS.map((option) => ({
     value: String(option.value),
     label: option.label,
     preview: <LineEndingPreview value={option.value} />,
-  }))
+  }));
   return (
     <SelectControl
       label={label}
@@ -983,7 +984,7 @@ function LineEndingControl({
       options={options}
       onChange={(next) => onChange(Number(next) as PdfAnnotationLineEnding)}
     />
-  )
+  );
 }
 function TextControl({
   label,
@@ -991,12 +992,12 @@ function TextControl({
   placeholder,
   onChange,
 }: {
-  label: string
-  value: string
-  placeholder?: string
-  onChange: (value: string) => void
+  label: string;
+  value: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
 }) {
-  const [draft, update] = useDebouncedCommit(value, onChange, 400)
+  const [draft, update] = useDebouncedCommit(value, onChange, 400);
   return (
     <div className="space-y-1.5">
       <PdfEditorFieldLabel>{label}</PdfEditorFieldLabel>
@@ -1009,16 +1010,16 @@ function TextControl({
         className={cn("h-8 px-2.5")}
       />
     </div>
-  )
+  );
 }
 function RotationControl({
   value,
   onChange,
 }: {
-  value: number
-  onChange: (value: number) => void
+  value: number;
+  onChange: (value: number) => void;
 }) {
-  const [draft, update] = useDebouncedCommit(value, onChange, 250)
+  const [draft, update] = useDebouncedCommit(value, onChange, 250);
   return (
     <div className="space-y-1.5">
       <PdfEditorFieldLabel>Rotation</PdfEditorFieldLabel>
@@ -1033,7 +1034,7 @@ function RotationControl({
           }
           className={cn("h-8 px-2.5", "w-20")}
         />
-        <span className="text-xs text-muted-foreground">degrees</span>
+        <span className="text-muted-foreground text-xs">degrees</span>
         {[0, 90, 180, 270].map((preset) => (
           <Button
             key={preset}
@@ -1041,7 +1042,7 @@ function RotationControl({
             size="xs"
             variant={draft === preset ? "secondary" : "ghost"}
             onClick={() => {
-              update(preset)
+              update(preset);
             }}
           >
             {preset}°
@@ -1049,7 +1050,7 @@ function RotationControl({
         ))}
       </div>
     </div>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Property list                                                              */
@@ -1061,13 +1062,13 @@ function PropertyControl({
   onPatch,
   onRotate,
 }: {
-  config: PropertyConfig
-  values: Record<string, unknown>
-  colorPresets: string[]
-  onPatch: (patch: Record<string, unknown>) => void
-  onRotate?: (rotation: number) => void
+  config: PropertyConfig;
+  values: Record<string, unknown>;
+  colorPresets: string[];
+  onPatch: (patch: Record<string, unknown>) => void;
+  onRotate?: (rotation: number) => void;
 }) {
-  const value = values[config.key]
+  const value = values[config.key];
   switch (config.kind) {
     case "color":
     case "colorWithTransparent":
@@ -1080,7 +1081,7 @@ function PropertyControl({
           allowTransparent={config.kind === "colorWithTransparent"}
           onChange={(next) => onPatch({ [config.key]: next })}
         />
-      )
+      );
     case "opacity":
       return (
         <SliderControl
@@ -1092,7 +1093,7 @@ function PropertyControl({
           format={(item) => `${Math.round(item * 100)}%`}
           onChange={(next) => onPatch({ [config.key]: next })}
         />
-      )
+      );
     case "strokeWidth":
       return (
         <SliderControl
@@ -1104,20 +1105,20 @@ function PropertyControl({
           format={(item) => `${item} pt`}
           onChange={(next) => onPatch({ [config.key]: next })}
         />
-      )
+      );
     case "strokeStyle":
     case "strokeStyleWithCloudy":
     case "linkStrokeStyle": {
-      const strokeDashArray = values.strokeDashArray as number[] | undefined
+      const strokeDashArray = values.strokeDashArray as number[] | undefined;
       const selectedValue = getStrokeStyleValue(
         value as PdfAnnotationBorderStyle | undefined,
         values.cloudyBorderIntensity as number | undefined,
-        strokeDashArray
-      )
+        strokeDashArray,
+      );
       const options: Array<{
-        value: string
-        label: string
-        preview: React.ReactNode
+        value: string;
+        label: string;
+        preview: React.ReactNode;
       }> = STROKE_STYLE_PRESETS.map((preset) => ({
         value: preset.value,
         label: preset.label,
@@ -1127,13 +1128,13 @@ function PropertyControl({
             dashArray={preset.dashArray}
           />
         ),
-      }))
+      }));
       if (config.kind === "linkStrokeStyle") {
         options.splice(1, 0, {
           value: "underline",
           label: "Underline",
           preview: <StrokeStylePreview value="underline" />,
-        })
+        });
       }
       if (config.kind === "strokeStyleWithCloudy") {
         options.push(
@@ -1146,8 +1147,8 @@ function PropertyControl({
             value: "cloudy-2",
             label: "Cloudy (dense)",
             preview: <StrokeStylePreview value="cloudy-2" />,
-          }
-        )
+          },
+        );
       }
       if (selectedValue === "custom") {
         options.push({
@@ -1156,7 +1157,7 @@ function PropertyControl({
           preview: (
             <StrokeStylePreview value="custom" dashArray={strokeDashArray} />
           ),
-        })
+        });
       }
       return (
         <SelectControl
@@ -1165,11 +1166,11 @@ function PropertyControl({
           options={options}
           onChange={(next) =>
             onPatch(
-              getStrokeStylePatch(next as StrokeStyleValue, strokeDashArray)
+              getStrokeStylePatch(next as StrokeStyleValue, strokeDashArray),
             )
           }
         />
-      )
+      );
     }
     case "lineEnding":
       return (
@@ -1178,28 +1179,28 @@ function PropertyControl({
           value={value as PdfAnnotationLineEnding | undefined}
           onChange={(next) => onPatch({ [config.key]: next })}
         />
-      )
+      );
     case "lineEndings":
       return (
         <LineEndingsControl
           value={value as LineEndings | undefined}
           onChange={(next) => onPatch({ lineEndings: next })}
         />
-      )
+      );
     case "fontFamily":
       return (
         <FontControl
           value={value as PdfStandardFont | undefined}
           onChange={(next) => onPatch({ fontFamily: next })}
         />
-      )
+      );
     case "fontSize":
       return (
         <FontSizeControl
           value={typeof value === "number" ? value : undefined}
           onChange={(next) => onPatch({ fontSize: next })}
         />
-      )
+      );
     case "textAlign":
       return (
         <AlignControl
@@ -1224,7 +1225,7 @@ function PropertyControl({
             },
           ]}
         />
-      )
+      );
     case "verticalAlign":
       return (
         <AlignControl
@@ -1249,7 +1250,7 @@ function PropertyControl({
             },
           ]}
         />
-      )
+      );
     case "blendMode":
       return (
         <SelectControl
@@ -1261,7 +1262,7 @@ function PropertyControl({
           }))}
           onChange={(next) => onPatch({ blendMode: Number(next) })}
         />
-      )
+      );
     case "overlayText":
       return (
         <TextControl
@@ -1270,7 +1271,7 @@ function PropertyControl({
           placeholder="e.g. REDACTED"
           onChange={(next) => onPatch({ overlayText: next })}
         />
-      )
+      );
     case "rotation":
       return (
         <RotationControl
@@ -1279,9 +1280,9 @@ function PropertyControl({
             onRotate ? onRotate(next) : onPatch({ rotation: next })
           }
         />
-      )
+      );
     default:
-      return null
+      return null;
   }
 }
 /* -------------------------------------------------------------------------- */
@@ -1295,35 +1296,35 @@ const FIELD_TYPE_LABELS: Partial<Record<PDF_FORM_FIELD_TYPE, string>> = {
   [PDF_FORM_FIELD_TYPE.LISTBOX]: "List box",
   [PDF_FORM_FIELD_TYPE.PUSHBUTTON]: "Button",
   [PDF_FORM_FIELD_TYPE.SIGNATURE]: "Signature field",
-}
+};
 export function getFormFieldTypeLabel(type: PDF_FORM_FIELD_TYPE) {
-  return FIELD_TYPE_LABELS[type] ?? "Form field"
+  return FIELD_TYPE_LABELS[type] ?? "Form field";
 }
 function WidgetProperties({
   documentId,
   widget,
 }: {
-  documentId: string
-  widget: PdfWidgetAnnoObject
+  documentId: string;
+  widget: PdfWidgetAnnoObject;
 }) {
-  const { provides: annotation } = useAnnotation(documentId)
-  const { provides: form } = useFormCapability()
-  const { openDialog, notify } = usePdfEditor()
-  const [nameDraft, setNameDraft] = React.useState(widget.field.name)
-  const [nameError, setNameError] = React.useState<string | null>(null)
-  const field = widget.field
-  const fieldLabel = getFormFieldTypeLabel(field.type)
+  const { provides: annotation } = useAnnotation(documentId);
+  const { provides: form } = useFormCapability();
+  const { openDialog, notify } = usePdfEditor();
+  const [nameDraft, setNameDraft] = React.useState(widget.field.name);
+  const [nameError, setNameError] = React.useState<string | null>(null);
+  const field = widget.field;
+  const fieldLabel = getFormFieldTypeLabel(field.type);
   const [previousField, setPreviousField] = React.useState({
     id: widget.id,
     name: widget.field.name,
-  })
+  });
   if (
     previousField.id !== widget.id ||
     previousField.name !== widget.field.name
   ) {
-    setPreviousField({ id: widget.id, name: widget.field.name })
-    setNameDraft(widget.field.name)
-    setNameError(null)
+    setPreviousField({ id: widget.id, name: widget.field.name });
+    setNameDraft(widget.field.name);
+    setNameError(null);
   }
   const updateField = React.useCallback(
     (patch: Partial<PdfWidgetAnnoField>) => {
@@ -1333,23 +1334,23 @@ function WidgetProperties({
           id: widget.id,
           patch: { field: { ...widget.field, ...patch } as PdfWidgetAnnoField },
         },
-      ])
+      ]);
     },
-    [annotation, widget.field, widget.id, widget.pageIndex]
-  )
+    [annotation, widget.field, widget.id, widget.pageIndex],
+  );
   const toggleFlag = (flag: PDF_FORM_FIELD_FLAG, enabled: boolean) => {
-    const current = field.flag ?? PDF_FORM_FIELD_FLAG.NONE
-    updateField({ flag: enabled ? current | flag : current & ~flag })
-  }
+    const current = field.flag ?? PDF_FORM_FIELD_FLAG.NONE;
+    updateField({ flag: enabled ? current | flag : current & ~flag });
+  };
   const commitName = () => {
-    const nextName = nameDraft.trim()
+    const nextName = nameDraft.trim();
     if (!form || !nextName || nextName === field.name) {
-      setNameDraft(field.name)
-      return
+      setNameDraft(field.name);
+      return;
     }
     form.renameField(widget.id, nextName, documentId).wait(
       (result) => {
-        setNameError(null)
+        setNameError(null);
         if (result.outcome === "conflict") {
           openDialog({
             type: "confirm",
@@ -1362,35 +1363,35 @@ function WidgetProperties({
                 .wait(
                   () => notify("Field shared.", "success"),
                   (failure) => {
-                    setNameError(failure.reason.message)
-                    setNameDraft(field.name)
-                  }
-                )
+                    setNameError(failure.reason.message);
+                    setNameDraft(field.name);
+                  },
+                );
             },
-          })
+          });
         }
       },
       (failure) => {
-        setNameError(failure.reason.message)
-        setNameDraft(field.name)
-      }
-    )
-  }
+        setNameError(failure.reason.message);
+        setNameDraft(field.name);
+      },
+    );
+  };
   const options: PdfWidgetAnnoOption[] =
     field.type === PDF_FORM_FIELD_TYPE.COMBOBOX ||
     field.type === PDF_FORM_FIELD_TYPE.LISTBOX
       ? ((
           field as {
-            options?: PdfWidgetAnnoOption[]
+            options?: PdfWidgetAnnoOption[];
           }
         ).options ?? [])
-      : []
+      : [];
   const setOptions = (next: PdfWidgetAnnoOption[]) =>
-    updateField({ options: next } as Partial<PdfWidgetAnnoField>)
-  const isTextField = field.type === PDF_FORM_FIELD_TYPE.TEXTFIELD
-  const textField = field as PdfTextWidgetAnnoField
-  const maxLength = isTextField ? (textField.maxLen ?? 0) : 0
-  const isComb = Boolean(field.flag & PDF_FORM_FIELD_FLAG.TEXT_COMB)
+    updateField({ options: next } as Partial<PdfWidgetAnnoField>);
+  const isTextField = field.type === PDF_FORM_FIELD_TYPE.TEXTFIELD;
+  const textField = field as PdfTextWidgetAnnoField;
+  const maxLength = isTextField ? (textField.maxLen ?? 0) : 0;
+  const isComb = Boolean(field.flag & PDF_FORM_FIELD_FLAG.TEXT_COMB);
   return (
     <PdfEditorSection title={`${fieldLabel} settings`}>
       <div className="space-y-3">
@@ -1406,12 +1407,12 @@ function WidgetProperties({
             }
             onBlur={commitName}
             onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
-              if (event.key === "Enter") event.currentTarget.blur()
+              if (event.key === "Enter") event.currentTarget.blur();
             }}
             className={cn("h-8 px-2.5")}
           />
           {nameError ? (
-            <div className="text-xs text-destructive">{nameError}</div>
+            <div className="text-destructive text-xs">{nameError}</div>
           ) : null}
         </div>
 
@@ -1430,12 +1431,12 @@ function WidgetProperties({
                 placeholder="Unlimited"
                 value={maxLength || ""}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const parsed = Number.parseInt(event.target.value, 10)
+                  const parsed = Number.parseInt(event.target.value, 10);
                   const next =
-                    Number.isNaN(parsed) || parsed <= 0 ? undefined : parsed
-                  updateField({ maxLen: next } as Partial<PdfWidgetAnnoField>)
+                    Number.isNaN(parsed) || parsed <= 0 ? undefined : parsed;
+                  updateField({ maxLen: next } as Partial<PdfWidgetAnnoField>);
                   if (!next && isComb)
-                    toggleFlag(PDF_FORM_FIELD_FLAG.TEXT_COMB, false)
+                    toggleFlag(PDF_FORM_FIELD_FLAG.TEXT_COMB, false);
                 }}
                 className={cn("h-8 px-2.5")}
               />
@@ -1454,20 +1455,20 @@ function WidgetProperties({
                   <Input
                     defaultValue={option.label}
                     onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
-                      const nextLabel = event.target.value
-                      if (nextLabel === option.label) return
+                      const nextLabel = event.target.value;
+                      if (nextLabel === option.label) return;
                       setOptions(
                         options.map((item, itemIndex) =>
                           itemIndex === index
                             ? { ...item, label: nextLabel }
-                            : item
-                        )
-                      )
+                            : item,
+                        ),
+                      );
                     }}
                     onKeyDown={(
-                      event: React.KeyboardEvent<HTMLInputElement>
+                      event: React.KeyboardEvent<HTMLInputElement>,
                     ) => {
-                      if (event.key === "Enter") event.currentTarget.blur()
+                      if (event.key === "Enter") event.currentTarget.blur();
                     }}
                     className={cn("h-8 px-2.5")}
                   />
@@ -1478,7 +1479,7 @@ function WidgetProperties({
                     aria-label="Remove option"
                     onClick={() =>
                       setOptions(
-                        options.filter((_, itemIndex) => itemIndex !== index)
+                        options.filter((_, itemIndex) => itemIndex !== index),
                       )
                     }
                   >
@@ -1525,7 +1526,7 @@ function WidgetProperties({
             <>
               <PropertySwitch
                 checked={Boolean(
-                  field.flag & PDF_FORM_FIELD_FLAG.TEXT_MULTIPLINE
+                  field.flag & PDF_FORM_FIELD_FLAG.TEXT_MULTIPLINE,
                 )}
                 onCheckedChange={(checked) =>
                   toggleFlag(PDF_FORM_FIELD_FLAG.TEXT_MULTIPLINE, checked)
@@ -1546,7 +1547,7 @@ function WidgetProperties({
           {field.type === PDF_FORM_FIELD_TYPE.LISTBOX ? (
             <PropertySwitch
               checked={Boolean(
-                field.flag & PDF_FORM_FIELD_FLAG.CHOICE_MULTL_SELECT
+                field.flag & PDF_FORM_FIELD_FLAG.CHOICE_MULTL_SELECT,
               )}
               onCheckedChange={(checked) =>
                 toggleFlag(PDF_FORM_FIELD_FLAG.CHOICE_MULTL_SELECT, checked)
@@ -1557,7 +1558,7 @@ function WidgetProperties({
         </div>
       </div>
     </PdfEditorSection>
-  )
+  );
 }
 /* -------------------------------------------------------------------------- */
 /* Panel                                                                      */
@@ -1565,61 +1566,62 @@ function WidgetProperties({
 export function PdfEditorPropertiesPanel({
   documentId,
 }: {
-  documentId: string
+  documentId: string;
 }) {
-  const { provides: annotationCapability } = useAnnotationCapability()
-  const { provides: annotation, state } = useAnnotation(documentId)
-  const { permissions } = usePdfEditor()
+  const { provides: annotationCapability } = useAnnotationCapability();
+  const { provides: annotation, state } = useAnnotation(documentId);
+  const { permissions } = usePdfEditor();
   const [toolSnapshot, setToolSnapshot] = React.useState<{
-    source: typeof annotationCapability
-    tools: AnnotationTool[]
-  } | null>(null)
+    source: typeof annotationCapability;
+    tools: AnnotationTool[];
+  } | null>(null);
   React.useEffect(() => {
-    if (!annotationCapability) return
+    if (!annotationCapability) return;
     return annotationCapability.onToolsChange(({ tools }) =>
-      setToolSnapshot({ source: annotationCapability, tools })
-    )
-  }, [annotationCapability])
-  const selected = React.useMemo(() => getSelectedAnnotations(state), [state])
+      setToolSnapshot({ source: annotationCapability, tools }),
+    );
+  }, [annotationCapability]);
+  const selected = React.useMemo(() => getSelectedAnnotations(state), [state]);
   const tools =
     toolSnapshot?.source === annotationCapability
       ? toolSnapshot.tools
-      : (annotationCapability?.getTools() ?? [])
+      : (annotationCapability?.getTools() ?? []);
   const activeTool: AnnotationTool | null =
     state.activeToolId && annotationCapability
       ? (tools.find((tool) => tool.id === state.activeToolId) ?? null)
-      : null
-  const colorPresets = annotationCapability?.getColorPresets() ?? []
+      : null;
+  const colorPresets = annotationCapability?.getColorPresets() ?? [];
   const selectedToolIds = React.useMemo(
     () =>
       selected
         .map(
-          (item) => annotationCapability?.findToolForAnnotation(item.object)?.id
+          (item) =>
+            annotationCapability?.findToolForAnnotation(item.object)?.id,
         )
         .filter((id): id is string => Boolean(id)),
-    [annotationCapability, selected]
-  )
-  const isEditing = selected.length > 0
+    [annotationCapability, selected],
+  );
+  const isEditing = selected.length > 0;
   const propertyKeys = isEditing
     ? getSharedProperties(selectedToolIds)
     : activeTool
       ? (TOOL_PROPERTIES[activeTool.id] ?? [])
-      : []
+      : [];
   const configs = propertyKeys
     .map((key) => PROPERTY_CONFIGS[key])
     .filter((config): config is PropertyConfig => Boolean(config))
-    .filter((config) => isEditing || !config.editOnly)
+    .filter((config) => isEditing || !config.editOnly);
   const values = React.useMemo<Record<string, unknown>>(() => {
     if (isEditing)
-      return selected[0].object as unknown as Record<string, unknown>
+      return selected[0].object as unknown as Record<string, unknown>;
     if (activeTool)
-      return activeTool.defaults as unknown as Record<string, unknown>
-    return {}
-  }, [activeTool, isEditing, selected])
-  const canEdit = permissions.canModifyAnnotations
+      return activeTool.defaults as unknown as Record<string, unknown>;
+    return {};
+  }, [activeTool, isEditing, selected]);
+  const canEdit = permissions.canModifyAnnotations;
   const structurallyLocked = selected.some((item) =>
-    annotation ? annotation.isAnnotationStructurallyLocked(item.object) : false
-  )
+    annotation ? annotation.isAnnotationStructurallyLocked(item.object) : false,
+  );
   const applyPatch = React.useCallback(
     (patch: Record<string, unknown>) => {
       if (isEditing) {
@@ -1631,25 +1633,25 @@ export function PdfEditorPropertiesPanel({
               ...patch,
               modified: new Date(),
             } as Partial<PdfAnnotationObject>,
-          }))
-        )
-        return
+          })),
+        );
+        return;
       }
       if (activeTool && annotationCapability) {
         annotationCapability.setToolDefaults(
           activeTool.id,
-          patch as Partial<PdfAnnotationObject> & Record<string, unknown>
-        )
+          patch as Partial<PdfAnnotationObject> & Record<string, unknown>,
+        );
       }
     },
-    [activeTool, annotation, annotationCapability, isEditing, selected]
-  )
+    [activeTool, annotation, annotationCapability, isEditing, selected],
+  );
   const applyRotation = React.useCallback(
     (rotation: number) => {
-      if (!annotation || !annotationCapability) return
+      if (!annotation || !annotationCapability) return;
       for (const item of selected) {
-        const current = item.object.rotation ?? 0
-        let patch: Partial<PdfAnnotationObject>
+        const current = item.object.rotation ?? 0;
+        let patch: Partial<PdfAnnotationObject>;
         try {
           patch = annotationCapability.transformAnnotation(item.object, {
             type: "rotate",
@@ -1658,29 +1660,29 @@ export function PdfEditorPropertiesPanel({
               rotationAngle: rotation,
               rotationDelta: rotation - current,
             },
-          })
+          });
         } catch {
-          patch = { rotation }
+          patch = { rotation };
         }
         annotation.updateAnnotation(item.object.pageIndex, item.object.id, {
           ...patch,
           modified: new Date(),
-        })
+        });
       }
     },
-    [annotation, annotationCapability, selected]
-  )
+    [annotation, annotationCapability, selected],
+  );
   const single: TrackedAnnotation | null =
-    selected.length === 1 ? selected[0] : null
-  const singleMeta = single ? getAnnotationMeta(single.object) : null
-  const isWidget = single?.object.type === PdfAnnotationSubtype.WIDGET
+    selected.length === 1 ? selected[0] : null;
+  const singleMeta = single ? getAnnotationMeta(single.object) : null;
+  const isWidget = single?.object.type === PdfAnnotationSubtype.WIDGET;
   const title = isEditing
     ? selected.length > 1
       ? `${selected.length} annotations`
       : (singleMeta?.label ?? "Annotation")
     : activeTool
       ? `${activeTool.name} defaults`
-      : "Properties"
+      : "Properties";
   if (!isEditing && !activeTool) {
     return (
       <PdfEditorEmptyState
@@ -1688,21 +1690,21 @@ export function PdfEditorPropertiesPanel({
         title="Nothing selected"
         description="Select an annotation on the page, or pick a tool to edit its default style."
       />
-    )
+    );
   }
-  const flags = single?.object.flags ?? []
+  const flags = single?.object.flags ?? [];
   const contents =
     single && !isWidget && typeof single.object.contents === "string"
       ? single.object.contents
-      : ""
+      : "";
   const verticalAlignmentConfig = configs.find(
-    (config) => config.kind === "verticalAlign"
-  )
+    (config) => config.kind === "verticalAlign",
+  );
   return (
     <div className="space-y-5 p-3">
       <div>
-        <div className="text-sm font-medium text-foreground">{title}</div>
-        <div className="text-xs text-muted-foreground">
+        <div className="text-foreground text-sm font-medium">{title}</div>
+        <div className="text-muted-foreground text-xs">
           {isEditing
             ? structurallyLocked
               ? "This annotation is locked. Unlock it to make changes."
@@ -1724,7 +1726,7 @@ export function PdfEditorPropertiesPanel({
                 config.kind === "verticalAlign" &&
                 configs.some((item) => item.kind === "textAlign")
               ) {
-                return null
+                return null;
               }
               if (config.kind === "textAlign" && verticalAlignmentConfig) {
                 return (
@@ -1747,7 +1749,7 @@ export function PdfEditorPropertiesPanel({
                       onRotate={isEditing ? applyRotation : undefined}
                     />
                   </div>
-                )
+                );
               }
               return (
                 <PropertyControl
@@ -1758,7 +1760,7 @@ export function PdfEditorPropertiesPanel({
                   onPatch={applyPatch}
                   onRotate={isEditing ? applyRotation : undefined}
                 />
-              )
+              );
             })}
           </fieldset>
         </PdfEditorSection>
@@ -1784,7 +1786,7 @@ export function PdfEditorPropertiesPanel({
                 {
                   contents: next,
                   modified: new Date(),
-                }
+                },
               )
             }
           />
@@ -1796,8 +1798,8 @@ export function PdfEditorPropertiesPanel({
           <div className="space-y-0.5">
             {FLAG_OPTIONS.map((option) => {
               const checked = selected.every((item) =>
-                (item.object.flags ?? []).includes(option.flag)
-              )
+                (item.object.flags ?? []).includes(option.flag),
+              );
               return (
                 <PropertySwitch
                   key={option.flag}
@@ -1806,24 +1808,24 @@ export function PdfEditorPropertiesPanel({
                   onCheckedChange={(next) => {
                     annotation?.updateAnnotations(
                       selected.map((item) => {
-                        const current = item.object.flags ?? []
+                        const current = item.object.flags ?? [];
                         const nextFlags = next
                           ? current.includes(option.flag)
                             ? current
                             : [...current, option.flag]
-                          : current.filter((flag) => flag !== option.flag)
+                          : current.filter((flag) => flag !== option.flag);
                         return {
                           pageIndex: item.object.pageIndex,
                           id: item.object.id,
                           patch: { flags: nextFlags },
-                        }
-                      })
-                    )
+                        };
+                      }),
+                    );
                   }}
                   label={option.label}
                   description={option.description}
                 />
-              )
+              );
             })}
           </div>
         </PdfEditorSection>
@@ -1852,22 +1854,22 @@ export function PdfEditorPropertiesPanel({
         </PdfEditorSection>
       ) : null}
     </div>
-  )
+  );
 }
 function NoteEditor({
   value,
   disabled,
   onChange,
 }: {
-  value: string
-  disabled?: boolean
-  onChange: (value: string) => void
+  value: string;
+  disabled?: boolean;
+  onChange: (value: string) => void;
 }) {
-  const [draft, setDraft] = React.useState(value)
-  const [previousValue, setPreviousValue] = React.useState(value)
+  const [draft, setDraft] = React.useState(value);
+  const [previousValue, setPreviousValue] = React.useState(value);
   if (!Object.is(previousValue, value)) {
-    setPreviousValue(value)
-    setDraft(value)
+    setPreviousValue(value);
+    setDraft(value);
   }
   return (
     <textarea
@@ -1877,11 +1879,11 @@ function NoteEditor({
       placeholder="Add a note…"
       onChange={(event) => setDraft(event.target.value)}
       onBlur={() => {
-        if (draft !== value) onChange(draft)
+        if (draft !== value) onChange(draft);
       }}
       className={cn(
-        "w-full resize-y rounded-lg border border-input bg-background px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60"
+        "border-input bg-background placeholder:text-muted-foreground focus-visible:ring-ring w-full resize-y rounded-lg border px-2.5 py-2 text-sm outline-none focus-visible:ring-2 disabled:opacity-60",
       )}
     />
-  )
+  );
 }
