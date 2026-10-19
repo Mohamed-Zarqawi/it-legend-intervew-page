@@ -4,14 +4,17 @@ import {
   getCourseProgress,
   toggleLessonProgress,
 } from "@/services/lessonServices/lesson.service";
+import { Database } from "@/types/database.types";
 import { useQuery } from "@tanstack/react-query";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 // ------------------- get course lessons -------------------
 
+type Lessons = Database["public"]["Tables"]["lessons"]["Row"];
+
 export const useGetAllCourseLessons = (courseId: string) => {
-  return useQuery({
+  return useQuery<Lessons[]>({
     queryKey: ["courses", courseId],
     queryFn: () => getAllCourseLessons(courseId),
     enabled: !!courseId,

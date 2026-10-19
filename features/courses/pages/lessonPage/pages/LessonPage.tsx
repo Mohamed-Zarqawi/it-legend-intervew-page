@@ -21,6 +21,7 @@ import LeaderBoard from "../components/LeaderBoard";
 import MobileTopics from "../components/MobileTopics";
 import Topics from "../components/Topics";
 import {
+  useGetAllCourseLessons,
   useGetCourseLesson,
   useGetCourseProgress,
   useToggleLessonProgress,
@@ -44,12 +45,24 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
   const { data: course, isLoading: isCourseLoading } =
     useGetOneCourse(courseId);
 
-  const { data: progressData } = useGetCourseProgress(courseId, userId);
+  const { data: progressData, isLoading: isProgressDataLoading } =
+    useGetCourseProgress(courseId, userId);
 
   const { mutate: toggleProgress, isPending: isToggling } =
     useToggleLessonProgress();
 
-  if (isLessonLoading) {
+  const { data: lessons, isLoading: isAllCourseLessonsLoading } =
+    useGetAllCourseLessons(courseId);
+
+  console.log(lessons);
+
+  const isLoading =
+    isLessonLoading ||
+    isCourseLoading ||
+    isProgressDataLoading ||
+    isAllCourseLessonsLoading;
+
+  if (isLoading) {
     return <div className="p-10 text-center">Loading lesson...</div>;
   }
 
@@ -195,6 +208,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
                 fullScreen={fullScreen}
                 courseId={courseId}
                 currentLessonId={lessonId}
+                lessons={lessons}
                 lessonWeek={lesson.week}
                 progressData={progressData}
               />
@@ -208,6 +222,7 @@ const LessonPage = ({ courseId, lessonId, userId }: LessonPageProps) => {
             fullScreen={fullScreen}
             courseId={courseId}
             currentLessonId={lessonId}
+            lessons={lessons}
             lessonWeek={lesson.week}
             progressData={progressData}
           />

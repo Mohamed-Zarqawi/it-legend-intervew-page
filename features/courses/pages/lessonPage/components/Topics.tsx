@@ -18,14 +18,17 @@ import {
   PlayCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { useGetAllCourseLessons } from "../pages/hooks/useLesson";
 import { ExamDialog } from "./ExamDialog";
+import PdfModalViewer from "./PdfViewer";
+
+type Lesson = Database["public"]["Tables"]["lessons"]["Row"];
 
 interface TopicsProps {
   fullScreen?: boolean;
   courseId: string;
   currentLessonId: string;
   lessonWeek?: string;
+  lessons?: Lesson[];
   progressData?: {
     completed_lesson_ids?: string[];
     completed_count?: number;
@@ -34,16 +37,14 @@ interface TopicsProps {
   };
 }
 
-type Lesson = Database["public"]["Tables"]["lessons"]["Row"];
-
 const Topics = ({
   fullScreen,
   lessonWeek,
   courseId,
+  lessons,
   currentLessonId,
   progressData,
 }: TopicsProps) => {
-  const { data: lessons, isLoading, error } = useGetAllCourseLessons(courseId);
   const groupedLessons = (lessons ?? []).reduce<Record<string, Lesson[]>>(
     (acc, lesson) => {
       const weekKey = lesson.week ? `${lesson.week}` : "Other Lessons";
@@ -101,7 +102,7 @@ const Topics = ({
                     <ChevronDownIcon className="ml-auto duration-300 group-data-[state=open]:rotate-180" />
                   </Button>
                 </CollapsibleTrigger>
-                <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down flex flex-col divide-y overflow-hidden px-4 pb-4">
+                <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down flex w-full flex-col divide-y overflow-hidden px-4 pb-4">
                   {weekLessons.map((lesson) => {
                     const isCurrent = lesson.id === currentLessonId;
                     const isCompleted = completedIds.includes(lesson.id);
@@ -110,7 +111,7 @@ const Topics = ({
                       <Link
                         key={lesson.id}
                         href={`/courses/${courseId}/${lesson.id}`}
-                        className={`border-border hover:bg-primary/10 flex items-center justify-between gap-2 px-2 py-4 transition-colors ${
+                        className={`border-border hover:bg-primary/10 flex w-full items-center justify-between gap-2 px-2 py-4 transition-colors ${
                           isCurrent ? "bg-primary/10" : ""
                         }`}
                       >
@@ -142,7 +143,10 @@ const Topics = ({
                     );
                   })}
 
-                  <ExamDialog week={week} courseId={courseId} />
+                  <div className="mt-4 flex w-full items-center gap-2">
+                    <ExamDialog week={week} courseId={courseId} />
+                    <PdfModalViewer url="https://prfteutwyqdfyoodyasu.supabase.co/storage/v1/object/public/pdfs/d20d27a0-da2c-45be-a9ea-e54ccee30980.pdf" />
+                  </div>
                 </CollapsibleContent>
               </Collapsible>
             );

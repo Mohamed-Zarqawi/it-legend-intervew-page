@@ -101,7 +101,7 @@ export const ExamDialog = ({ courseId, week }: ExamDialogProps) => {
   const isLoading = isCurrentUserLoading || isExamLoading || isUserExamLoading;
 
   return (
-    <div className="pt-4">
+    <div className="w-full">
       <Dialog>
         <DialogTrigger asChild>
           <Button className="w-full">

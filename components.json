@@ -21,5 +21,7 @@
   },
   "menuColor": "default",
   "menuAccent": "subtle",
-  "registries": {}
+  "registries": {
+    "@extend": "https://ui.extend.ai/r/{name}.json"
+  }
 }

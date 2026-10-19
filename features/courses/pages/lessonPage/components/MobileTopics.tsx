@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { useGetAllCourseLessons } from "../pages/hooks/useLesson";
 import { ExamDialog } from "./ExamDialog";
+import PdfModalViewer from "./PdfViewer";
 
 interface MobileTopicsProps {
   fullScreen?: boolean;
@@ -134,7 +135,11 @@ const MobileTopics = ({
                     </Link>
                   );
                 })}
-                <ExamDialog week={week} courseId={courseId} />
+
+                <div className="mt-4 flex w-full items-center gap-2">
+                  <ExamDialog week={week} courseId={courseId} />
+                  <PdfModalViewer url="https://prfteutwyqdfyoodyasu.supabase.co/storage/v1/object/public/pdfs/d20d27a0-da2c-45be-a9ea-e54ccee30980.pdf" />
+                </div>
               </CollapsibleContent>
             </Collapsible>
           );
